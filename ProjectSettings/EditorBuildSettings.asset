@@ -4,4 +4,19 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/VillageScene.unity
+    guid: e09bbfd36a873b44186924ed909cf533
+  - enabled: 1
+    path: Assets/Scenes/PathScene.unity
+    guid: 50188c8e18e54104eb8999a78d45d1be
+  - enabled: 1
+    path: Assets/Scenes/FightScene.unity
+    guid: f42a6de2cc26880458e4c2dae1acf2f9
+  - enabled: 1
+    path: Assets/Scenes/PuzzleScene.unity
+    guid: ecf24fafa8d814c428e2cda4269fb1d4
+  - enabled: 1
+    path: Assets/Scenes/LootScene.unity
+    guid: 5b2af679646069c4fa8ee33e0b1e6047

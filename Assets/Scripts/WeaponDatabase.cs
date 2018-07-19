@@ -38,6 +38,7 @@ public class WeaponDatabase : MonoBehaviour
                 (int)weaponData[i]["attack"],
                 (int)weaponData[i]["special"],
                 (int)weaponData[i]["durability"],
+                (int)weaponData[i]["size"],
                 weaponData[i]["slug"].ToString()));
         }
     }
@@ -50,13 +51,14 @@ public class Weapons
     public int Rarity { get; set; }
     public int Attack { get; set; }
     public int Special { get; set; }
-    public int Durability { get; set; }  
+    public int Durability { get; set; }
+    public int Size { get; set; }
     public string Slug { get; set; }
     public Sprite Sprite { get; set; }
 
 
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int durability, string slug)
+    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug)
     {
         this.ID = id;
         this.Title = title;
@@ -64,6 +66,7 @@ public class Weapons
         this.Attack = attack;
         this.Special = special;
         this.Durability = durability;
+        this.Size = size;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
 
