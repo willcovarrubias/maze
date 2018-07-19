@@ -1,0 +1,20 @@
+
+[
+	{
+		"id": 0,
+		"title": "Apple",
+		"rarity": 0,
+		"healing": 5,
+		"size": 1,
+		"slug": "00"
+	},
+	{
+		"id": 1,
+		"title": "Rotten Apple",
+		"rarity": 0,
+		"healing": 2,
+		"size": 1,
+		"slug": "01"
+	}
+]
+	
