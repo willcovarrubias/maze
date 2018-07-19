@@ -10,32 +10,34 @@ public class CharacterDatabase : MonoBehaviour
 {
     private List<Character> enemyDatabase = new List<Character>();
     private List<Character> heroDatabase = new List<Character>();
-    private JsonData characterData;
+    private JsonData enemyData;
+    private JsonData heroData;
 
     void Start()
     {
-        characterData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
-        AddToDatabase();
-        //load heros here from editable JSON 
+        enemyData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
+        heroData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Heroes.json"));
+        AddToDatabase(enemyData, enemyDatabase);
+        AddToDatabase(heroData, heroDatabase); //NOTE: Make sure heroes.json has at least []
         CreateHero();
     }
 
-    void AddToDatabase()
+    void AddToDatabase(JsonData json, List<Character> characters)
     {
-        for (int i = 0; i < characterData.Count; i++)
+        for (int i = 0; i < json.Count; i++)
         {
-            enemyDatabase.Add(new Character((int)characterData[i]["id"],
-                characterData[i]["name"].ToString(),
-                (int)characterData[i]["hp"],
-                (int)characterData[i]["mp"],
-                (int)characterData[i]["attack"],
-                (int)characterData[i]["special"],
-                (int)characterData[i]["defense"],
-                (int)characterData[i]["luck"],
-                (int)characterData[i]["items"],
-                (int)characterData[i]["exp"],
-                (int)characterData[i]["lives"],
-                characterData[i]["slug"].ToString()));
+            characters.Add(new Character((int)json[i]["id"],
+                json[i]["name"].ToString(),
+                (int)json[i]["hp"],
+                (int)json[i]["mp"],
+                (int)json[i]["attack"],
+                (int)json[i]["special"],
+                (int)json[i]["defense"],
+                (int)json[i]["luck"],
+                (int)json[i]["items"],
+                (int)json[i]["exp"],
+                (int)json[i]["lives"],
+                json[i]["slug"].ToString()));
         }
     }
 
@@ -45,15 +47,16 @@ public class CharacterDatabase : MonoBehaviour
         {
             id = GetCurrentTime(),
             name = GetRandomName(),
-            hp = UnityEngine.Random.Range(10, 20),
-            mp = UnityEngine.Random.Range(10, 20),
-            attack = UnityEngine.Random.Range(10, 20),
-            special = UnityEngine.Random.Range(10, 20),
-            defense = UnityEngine.Random.Range(10, 20),
-            luck = UnityEngine.Random.Range(10, 20),
-            items = UnityEngine.Random.Range(10, 20),
+            hp = UnityEngine.Random.Range(3, 20),
+            mp = UnityEngine.Random.Range(3, 20),
+            attack = UnityEngine.Random.Range(3, 20),
+            special = UnityEngine.Random.Range(3, 20),
+            defense = UnityEngine.Random.Range(3, 20),
+            luck = UnityEngine.Random.Range(3, 20),
+            items = UnityEngine.Random.Range(3, 20),
             exp = 0,
-            lives = 3
+            lives = 3,
+            slug = "00"
         };
         heroDatabase.Add(newCharacter);
         HeroToJson(newCharacter);
@@ -85,6 +88,16 @@ public class CharacterDatabase : MonoBehaviour
             writer.WriteLine("]");
             writer.Close();
         }
+        else if (lines.Length == 1)
+        {
+            string[] newArray = new string[0];
+            File.WriteAllLines(path, newArray);
+            StreamWriter writer = new StreamWriter(path, true);
+            writer.WriteLine("[");
+            writer.WriteLine(json_hero);
+            writer.WriteLine("]");
+            writer.Close();
+        }
         else
         {
             string[] newArray = new string[lines.Length - 1];
@@ -99,7 +112,13 @@ public class CharacterDatabase : MonoBehaviour
             writer.WriteLine("]");
             writer.Close();
         }
+    }
 
+    public void DeleteHero()
+    {
+        //use hero list
+        //delete from list
+        //add all characters back into the json file
     }
 }
 
