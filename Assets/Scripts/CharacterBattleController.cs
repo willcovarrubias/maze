@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class CharacterBattleController : MonoBehaviour {
 
- 
+    private void Start()
+    {
+        Debug.Log("You're in the Fight scene!");
+    }
+
     public void Attack()
     {
     }
@@ -19,5 +23,15 @@ public class CharacterBattleController : MonoBehaviour {
 
     public void Special()
     {
+    }
+
+    public void GoToVillage()
+    {
+        Application.LoadLevel("VillageScene");
+    }
+
+    public void GoToPathRoom()
+    {
+        Application.LoadLevel("PathScene");
     }
 }

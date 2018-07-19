@@ -29,6 +29,7 @@ public class GameMaster : MonoBehaviour {
     public void EnterLabyrinth() //TODO: Need to add a confirmation to this, so players don't accidentally enter the labyrinth  when they didn't mean to.
     {
         Debug.Log("Are you sure you want to enter the Labyrinth?");
+        Application.LoadLevel("PathScene");
     }
 
     public void BlacksmithMenu()//This'll pop up a menu that'll allow the player to upgrade the smith but also purchase weapons.
@@ -48,6 +49,7 @@ public class GameMaster : MonoBehaviour {
         Debug.Log("You  have accessed the Item Shop Menu.");
 
     }
+
 
 
 }
