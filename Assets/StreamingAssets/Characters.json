@@ -1,0 +1,27 @@
+
+[
+	{
+		"id": 0000,
+		"name": "Enemy 1",
+		"hp": 20,
+		"mp": 20,
+		"attack": 1,
+		"special": 1,
+		"defense": 10,
+		"luck": 1,
+		"items": 20,
+		"slug": "02"
+	},
+	{
+		"id": 0001,
+		"name": "Enemy 2",
+		"hp": 20,
+		"mp": 20,
+		"attack": 1,
+		"special": 1,
+		"defense": 10,
+		"luck": 1,
+		"items": 20,
+		"slug": "02"
+	}
+]
