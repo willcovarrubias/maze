@@ -6,7 +6,7 @@ public class LootSceneController : MonoBehaviour {
 
     private void Start()
     {
-        Debug.Log("You're in the loot scene!");
+        Debug.Log("You're in the loot scene!!");
     }
 
     public void GoToPathScene()
