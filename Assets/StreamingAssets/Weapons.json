@@ -2,31 +2,21 @@
 [
 	{
 		"id": 0,
-		"type": "Weapon",
-		"title": "Player 1 Weapon 1. Testing out additional text to see how it flows.",
-		"life": 10,
-		"mana": 1,
+		"title": "First weapon.",
+		"rarity": 0,
 		"attack": 1,
-		"magicAttack": 1,
-		"defense": 1,
-		"speed": 1,
-		"expToCap": 10,
-		"characterOwner": "Memo",
+		"special": 1,
+		"durability": 10,
 		"slug": "01"
 	},
 	{
-		"id": 0,
-		"type": "Weapon",
-		"title": "Player 1 Weapon 1. Testing out additional text to see how it flows.",
-		"life": 10,
-		"mana": 1,
+		"id": 1,
+		"title": "Second weapon.",
+		"rarity": 0,
 		"attack": 1,
-		"magicAttack": 1,
-		"defense": 1,
-		"speed": 1,
-		"expToCap": 10,
-		"characterOwner": "Memo",
-		"slug": "01"
+		"special": 1,
+		"durability": 10,
+		"slug": "02"
 	}
 ]
 	
