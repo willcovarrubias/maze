@@ -4,7 +4,7 @@ using LitJson;
 using System.Collections.Generic;
 using System.IO;
 
-public class MaterialsDatabase : MonoBehaviour
+public class MaterialDatabase : MonoBehaviour
 {
     ItemDatabase itemDatabase = new ItemDatabase();
     private JsonData itemsData;

@@ -22,11 +22,20 @@ public class ItemDatabase : MonoBehaviour
     public void AddToDatabase(Items item)
     {
         database.Add(item);
+        //Debug.Log(item.Title);
     }
 
     public List<Items> GetDatabase()
     {
         return database;
+    }
+
+    public void DisplayAllItems()
+    {
+        for (int i = 0; i < database.Count; i++)
+        {
+            Debug.Log(database[i].Title);
+        }
     }
 }
 
