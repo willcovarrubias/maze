@@ -1,0 +1,18 @@
+
+[
+	{
+		"id": 3000,
+		"title": "Wood",
+		"rarity": 0,
+		"size": 1,
+		"slug": "00"
+	},
+	{
+		"id": 3001,
+		"title": "Iron",
+		"rarity": 0,
+		"size": 1,
+		"slug": "01"
+	}
+]
+	
