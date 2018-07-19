@@ -1,0 +1,22 @@
+
+[
+	{
+		"id": 0,
+		"title": "First weapon.",
+		"rarity": 0,
+		"attack": 1,
+		"special": 1,
+		"durability": 10,
+		"slug": "01"
+	},
+	{
+		"id": 1,
+		"title": "Second weapon.",
+		"rarity": 0,
+		"attack": 1,
+		"special": 1,
+		"durability": 10,
+		"slug": "02"
+	}
+]
+	
