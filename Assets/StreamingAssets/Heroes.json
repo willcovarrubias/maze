@@ -1,0 +1,6 @@
+[
+{"id":1532042697,"name":"Felske","hp":14,"mp":13,"attack":11,"special":14,"defense":18,"luck":11,"items":19,"exp":0,"lives":3,"slug":null,"sprite":null}
+,{"id":1532042705,"name":"Edelsten","hp":12,"mp":10,"attack":18,"special":11,"defense":17,"luck":11,"items":14,"exp":0,"lives":3,"slug":null,"sprite":null}
+,{"id":1532042712,"name":"Nafis","hp":19,"mp":14,"attack":18,"special":13,"defense":12,"luck":18,"items":11,"exp":0,"lives":3,"slug":null,"sprite":null}
+,{"id":1532042718,"name":"Ronen","hp":12,"mp":18,"attack":17,"special":17,"defense":17,"luck":16,"items":15,"exp":0,"lives":3,"slug":null,"sprite":null}
+]
