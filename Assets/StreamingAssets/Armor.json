@@ -1,0 +1,22 @@
+
+[
+	{
+		"id": 4000,
+		"title": "Leather Shirt",
+		"rarity": 0,
+		"defense": 1,
+		"appendage": "chest",
+		"size": 3,
+		"slug": "01"
+	},
+	{
+		"id": 4001,
+		"title": "Leather Hat",
+		"rarity": 0,
+		"defense": 1,
+		"appendage": "head",
+		"size": 2,
+		"slug": "02"
+	}
+]
+	
