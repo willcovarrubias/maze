@@ -6,12 +6,12 @@ using System.IO;
 
 public class WeaponDatabase : MonoBehaviour
 {
-    private List<Weapons> database = new List<Weapons>();
-    private JsonData weaponData;
+    ItemDatabase itemDatabase = new ItemDatabase();
+    private JsonData itemsData;
 
     void Start()
     {
-        weaponData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
+        itemsData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
         ConstructWeaponDatabase();
 
         //Debug.Log (FetchWeaponByID(1).Title);
@@ -19,44 +19,35 @@ public class WeaponDatabase : MonoBehaviour
 
     public Weapons FetchWeaponByID(int id)
     {
-        for (int i = 0; i < database.Count; i++)
+        for (int i = 0; i < itemDatabase.GetDatabase().Count; i++)
         {
-            if (database[i].ID == id)
-                return database[i];
+            if (itemDatabase.GetDatabase()[i].ID == id)
+                return (Weapons)itemDatabase.GetDatabase()[i];
         }
         return null;
-
     }
 
     void ConstructWeaponDatabase()
     {
-        for (int i = 0; i < weaponData.Count; i++)
+        for (int i = 0; i < itemsData.Count; i++)
         {
-                database.Add(new Weapons((int)weaponData[i]["id"],      
-                weaponData[i]["title"].ToString(),
-                (int)weaponData[i]["rarity"],
-                (int)weaponData[i]["attack"],
-                (int)weaponData[i]["special"],
-                (int)weaponData[i]["durability"],
-                (int)weaponData[i]["size"],
-                weaponData[i]["slug"].ToString()));
+            itemDatabase.AddToDatabase(new Weapons((int)itemsData[i]["id"],
+                itemsData[i]["title"].ToString(),
+                (int)itemsData[i]["rarity"],
+                (int)itemsData[i]["attack"],
+                (int)itemsData[i]["special"],
+                (int)itemsData[i]["durability"],
+                (int)itemsData[i]["size"],
+                itemsData[i]["slug"].ToString()));
         }
     }
 }
 
-public class Weapons
+public class Weapons : Items
 {
-    public int ID { get; set; }   
-    public string Title { get; set; }
-    public int Rarity { get; set; }
     public int Attack { get; set; }
     public int Special { get; set; }
     public int Durability { get; set; }
-    public int Size { get; set; }
-    public string Slug { get; set; }
-    public Sprite Sprite { get; set; }
-
-
 
     public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug)
     {
@@ -69,7 +60,6 @@ public class Weapons
         this.Size = size;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
-
     }
 
     public Weapons()
