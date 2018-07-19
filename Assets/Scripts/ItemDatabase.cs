@@ -18,6 +18,16 @@ public class ItemDatabase : MonoBehaviour
         }
         return null;
     }
+
+    public void AddToDatabase(Items item)
+    {
+        database.Add(item);
+    }
+
+    public List<Items> GetDatabase()
+    {
+        return database;
+    }
 }
 
 public class Items

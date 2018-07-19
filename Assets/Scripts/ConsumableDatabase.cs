@@ -6,7 +6,7 @@ using System.IO;
 
 public class ConsumableDatabase : MonoBehaviour
 {
-    private List<Items> database = new List<Items>();
+    ItemDatabase itemDatabase = new ItemDatabase();
     private JsonData itemsData;
 
     void Start()
@@ -19,23 +19,13 @@ public class ConsumableDatabase : MonoBehaviour
     {
         for (int i = 0; i < itemsData.Count; i++)
         {
-            database.Add(new Consumable((int)itemsData[i]["id"],
+            itemDatabase.AddToDatabase(new Consumable((int)itemsData[i]["id"],
                 itemsData[i]["title"].ToString(),
                 (int)itemsData[i]["rarity"],
                 (int)itemsData[i]["size"],
                 (int)itemsData[i]["healing"],
                 itemsData[i]["slug"].ToString()));
         }
-    }
-
-    public Items FetchItemByID(int id)
-    {
-        for (int i = 0; i < database.Count; i++)
-        {
-            if (database[i].ID == id)
-                return database[i];
-        }
-        return null;
     }
 }
 
