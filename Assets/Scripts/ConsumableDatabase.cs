@@ -39,7 +39,6 @@ public class ConsumableDatabase : MonoBehaviour
     }
 }
 
-
 public class Consumable : Items
 {
     public int Healing { get; set; }

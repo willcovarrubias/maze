@@ -6,7 +6,6 @@ public class InventoryManager : MonoBehaviour
 {
     int maxInventorySize;
     int currentSize;
-    public List<Weapons> weapons = new List<Weapons>();
     public List<Items> items = new List<Items>();
 
     void Start()
