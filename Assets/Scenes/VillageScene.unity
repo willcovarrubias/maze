@@ -2666,6 +2666,7 @@ GameObject:
   - component: {fileID: 1718982546}
   - component: {fileID: 1718982545}
   - component: {fileID: 1718982547}
+  - component: {fileID: 1718982548}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -2684,6 +2685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2889003172ae3d4f945834ac1d8d8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCount: -1
 --- !u!4 &1718982542
 Transform:
   m_ObjectHideFlags: 0
@@ -2750,6 +2752,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dbaa771b41c2442db9eedf170774fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1718982548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1718982540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f2769ce4db61f4692bde4a1ea99a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1886379532

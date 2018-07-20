@@ -22,7 +22,7 @@ public class ItemDatabase : MonoBehaviour
     public void AddToDatabase(Items item)
     {
         database.Add(item);
-        //Debug.Log(item.Title);
+        //Debug.Log(item.ID + " " + database.Count);
     }
 
     public List<Items> GetDatabase()
@@ -37,6 +37,50 @@ public class ItemDatabase : MonoBehaviour
             Debug.Log(database[i].Title);
         }
     }
+
+    //TODO: Make sure to use mazeRoomNumber and rarity someway in the furture
+    List<Items> GetRandomItemsForChest(/*int mazeRoomNumber*/)
+    {
+        List<Items> chestItems = new List<Items>();
+        int numberOfItems = Random.Range(1, 11);
+        for (int i = 0; i < numberOfItems; i++)
+        {
+            float randomValue = Random.value;
+            if (randomValue >= 0.6f)
+            {
+                chestItems.Add(FetchItemByID(GetComponent<ConsumableDatabase>().GetRandomConsumableID()));
+            }
+            else if (randomValue >= 0.2f && randomValue < 0.6f)
+            {
+                chestItems.Add(FetchItemByID(GetComponent<MaterialDatabase>().GetRandomMaterialID()));
+            }
+            else if (randomValue >= 0.1f && randomValue < 0.2f)
+            {
+                chestItems.Add(FetchItemByID(GetComponent<WeaponDatabase>().GetRandomWeaponID()));
+            }
+            else
+            {
+                chestItems.Add(FetchItemByID(GetComponent<ArmorDatabase>().GetRandomArmorID()));
+            }
+        }
+        /*
+        for (int i = 0; i < chestItems.Count; i++)
+        {
+            Debug.Log(chestItems[i].Title);
+        }
+        */
+        return chestItems;
+    }
+
+    /*
+    private void Update()
+    {
+        if (Input.GetKeyDown("p"))
+        {
+            GetRandomItemsForChest();
+        }
+    }
+    */
 }
 
 public class Items

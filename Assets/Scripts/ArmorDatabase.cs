@@ -6,7 +6,7 @@ using System.IO;
 
 public class ArmorDatabase : MonoBehaviour
 {
-    ItemDatabase itemDatabase = new ItemDatabase();
+    List<int> armorIDs = new List<int>();
     private JsonData itemsData;
 
     void Start()
@@ -19,14 +19,22 @@ public class ArmorDatabase : MonoBehaviour
     {
         for (int i = 0; i < itemsData.Count; i++)
         {
-            itemDatabase.AddToDatabase(new Armor((int)itemsData[i]["id"],
+            Armor armor = new Armor((int)itemsData[i]["id"],
                 itemsData[i]["title"].ToString(),
                 (int)itemsData[i]["rarity"],
                 (int)itemsData[i]["size"],
                 (int)itemsData[i]["defense"],
                 itemsData[i]["appendage"].ToString(),
-                itemsData[i]["slug"].ToString()));
+                itemsData[i]["slug"].ToString());
+            GetComponent<ItemDatabase>().AddToDatabase(armor);
+            armorIDs.Add(armor.ID);
         }
+    }
+
+    //TODO: use mazeRoomNumber and rarity in the future
+    public int GetRandomArmorID(/*int mazeRoomNumber*/)
+    {
+        return armorIDs[Random.Range(0, armorIDs.Count)];
     }
 }
 
