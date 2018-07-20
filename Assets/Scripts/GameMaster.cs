@@ -6,6 +6,8 @@ public class GameMaster : MonoBehaviour {
 
     public static GameMaster gameMaster;
 
+    public int roomCount = -1;
+
     public void Awake()
     {
         if (gameMaster == null)
