@@ -6,7 +6,7 @@ using System;
 
 public class WeaponManager : MonoBehaviour
 {
-
+    GameMaster gameMaster;
     GameObject slotPanel;
     WeaponDatabase weaponDB;
     public GameObject slotToAddWeapon;
@@ -19,7 +19,8 @@ public class WeaponManager : MonoBehaviour
 
     void Start()
     {
-        weaponDB = GetComponent<WeaponDatabase>();
+        gameMaster = GameMaster.gameMaster;
+        weaponDB = gameMaster.GetComponent<WeaponDatabase>();
 
         slotAmount = 10;
         for (int i = 0; i < slotAmount; i++)
@@ -45,7 +46,7 @@ public class WeaponManager : MonoBehaviour
                 weapons[i] = weaponToAdd;
                 GameObject weaponObj = Instantiate(weaponObjectPrefab);
                 weaponObj.transform.SetParent(slots[i].transform);
-                //weaponObj.transform.localPosition = Vector2.zero;
+                weaponObj.transform.localPosition = Vector2.zero;
                 //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
                 weaponObj.name = weaponToAdd.Title;
                 Debug.Log("Title: " + weaponToAdd.Title);
