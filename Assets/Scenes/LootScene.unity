@@ -932,7 +932,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -336}
   m_SizeDelta: {x: 350, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1144709310
@@ -1410,7 +1410,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1643066652}
-  - component: {fileID: 1643066651}
   - component: {fileID: 1643066650}
   m_Layer: 0
   m_Name: DeleteAfter!
@@ -1435,17 +1434,6 @@ MonoBehaviour:
   weaponObjectPrefab: {fileID: 1105495652822476, guid: 92f5fbc8919f5274a9f4114b1d41e25c,
     type: 2}
   slots: []
---- !u!114 &1643066651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1643066649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2f2769ce4db61f4692bde4a1ea99a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1643066652
 Transform:
   m_ObjectHideFlags: 0
@@ -1491,7 +1479,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -363}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2049437017
