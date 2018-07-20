@@ -19,8 +19,21 @@ public class CharacterDatabase : MonoBehaviour
         heroData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Heroes.json"));
         AddToDatabase(enemyData, enemyDatabase);
         AddToDatabase(heroData, heroDatabase); //NOTE: Make sure heroes.json has at least []
-        CreateHero();
     }
+
+    /*
+    private void Update()
+    {
+        if (Input.GetKeyDown("c"))
+        {
+            CreateHero();
+        }
+        if (Input.GetKeyDown("d"))
+        {
+            //DeleteHero();
+        }
+    }
+    */
 
     void AddToDatabase(JsonData json, List<Character> characters)
     {
@@ -107,18 +120,39 @@ public class CharacterDatabase : MonoBehaviour
             }
             File.WriteAllLines(path, newArray);
             StreamWriter writer = new StreamWriter(path, true);
-            writer.Write(",");
+            if (!newArray[newArray.Length - 1].EndsWith(",", StringComparison.Ordinal))
+            {
+                writer.Write(",");
+            }
             writer.WriteLine(json_hero);
             writer.WriteLine("]");
             writer.Close();
         }
     }
 
-    public void DeleteHero()
+    public void DeleteHero(Character character)
     {
-        //use hero list
-        //delete from list
-        //add all characters back into the json file
+        string path = "Assets/StreamingAssets/Heroes.json";
+        for (int i = 0; i < heroDatabase.Count; i++)
+        {
+            if (heroDatabase[i].id == character.id)
+            {
+                heroDatabase.RemoveAt(i);
+                break;
+            }
+        }
+        string[] newJsonArray = new string[heroDatabase.Count + 1];
+        newJsonArray[0] = "[";
+        for (int i = 0; i < heroDatabase.Count - 1; i++)
+        {
+            if (heroDatabase.Count > 0 && i != heroDatabase.Count - 1 && i != 0)
+            {
+                newJsonArray[i + 1] = ",";
+            }
+            newJsonArray[i + 1] += JsonMapper.ToJson(heroDatabase[i]);
+        }
+        newJsonArray[heroDatabase.Count] = "]";
+        File.WriteAllLines(path, newJsonArray);
     }
 }
 
