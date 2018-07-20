@@ -8,52 +8,58 @@ public class WeaponManager : MonoBehaviour
 {
 
     GameObject slotPanel;
-    WeaponDatabase database;
+    WeaponDatabase weaponDB;
     public GameObject slotToAddWeapon;
-    public GameObject weaponToDisplay;
+    public GameObject weaponObjectPrefab;
 
     int slotAmount;
    
-    public List<Weapons> weapon = new List<Weapons>();
+    public List<Weapons> weapons = new List<Weapons>();
     public List<GameObject> slots = new List<GameObject>();
 
     void Start()
     {
-        database = GetComponent<WeaponDatabase>();
+        weaponDB = GetComponent<WeaponDatabase>();
 
         slotAmount = 10;
         for (int i = 0; i < slotAmount; i++)
         {
-            weapon.Add(new Weapons());
+            weapons.Add(new Weapons());
      
             slots.Add(Instantiate(slotToAddWeapon));
+            
         }
+
+        AddItem(2000);
+        AddItem(2001);
+    
     }
 
-    public void AddWeaponToCharacter(int id)
+    public void AddItem(int id)
     {
-        Weapons weaponToSet = database.FetchWeaponByID(id);
-        for (int i = 0; i < weapon.Count; i++)
+        Weapons weaponToAdd = weaponDB.FetchWeaponByID(id);
+        for (int i = 0; i < weapons.Count; i++)
         {
-            if (weapon[i].ID == -1)
+            if (weapons[i].ID == -1)
             {
-                weapon[i] = weaponToSet;
-                GameObject armorObj = Instantiate(weaponToDisplay);
-                armorObj.transform.SetParent(slots[i].transform);
-
-                armorObj.name = weaponToSet.Title;
-                armorObj.GetComponent<SpriteRenderer>().sprite = weaponToSet.Sprite;
-
+                weapons[i] = weaponToAdd;
+                GameObject weaponObj = Instantiate(weaponObjectPrefab);
+                weaponObj.transform.SetParent(slots[i].transform);
+                //weaponObj.transform.localPosition = Vector2.zero;
+                //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
+                weaponObj.name = weaponToAdd.Title;
+                Debug.Log("Title: " + weaponToAdd.Title);
+              
                 break;
             }
         }
     }
 
-   
+
 
     public Weapons SetActiveWeapon(int id)
     {
-        Weapons numberToSendOff = database.FetchWeaponByID(id);
+        Weapons numberToSendOff = weaponDB.FetchWeaponByID(id);
 
         return numberToSendOff;
     }

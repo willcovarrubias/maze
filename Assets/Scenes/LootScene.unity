@@ -1047,6 +1047,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec1ab3c9e81cd94cb03eaf2afdd0018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lootRoom1ChestLayout: {fileID: 1144709308}
+  lootRoom2ChestLayout: {fileID: 1808908459}
   chest: {fileID: 66398908}
 --- !u!4 &1162445813
 Transform:
@@ -1400,6 +1402,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1643066649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1643066652}
+  - component: {fileID: 1643066651}
+  - component: {fileID: 1643066650}
+  m_Layer: 0
+  m_Name: DeleteAfter!
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1643066650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1643066649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16443e43294e28245a52ada9d0279d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotToAddWeapon: {fileID: 1107622514891612, guid: d12b0ebc72d7a184595d0de557ef8663,
+    type: 2}
+  weaponObjectPrefab: {fileID: 1105495652822476, guid: 92f5fbc8919f5274a9f4114b1d41e25c,
+    type: 2}
+  slots: []
+--- !u!114 &1643066651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1643066649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f2769ce4db61f4692bde4a1ea99a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1643066652
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1643066649}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 963.7847, y: 2062.8237, z: -57.79579}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1808908459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,7 +1473,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1808908460
 RectTransform:
   m_ObjectHideFlags: 0
