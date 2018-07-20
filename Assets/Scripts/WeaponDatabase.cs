@@ -6,7 +6,7 @@ using System.IO;
 
 public class WeaponDatabase : MonoBehaviour
 {
-    ItemDatabase itemDatabase = new ItemDatabase();
+    List<int> weaponIDs = new List<int>();
     private JsonData itemsData;
 
     void Start()
@@ -19,10 +19,10 @@ public class WeaponDatabase : MonoBehaviour
 
     public Weapons FetchWeaponByID(int id)
     {
-        for (int i = 0; i < itemDatabase.GetDatabase().Count; i++)
+        for (int i = 0; i < GetComponent<ItemDatabase>().GetDatabase().Count; i++)
         {
-            if (itemDatabase.GetDatabase()[i].ID == id)
-                return (Weapons)itemDatabase.GetDatabase()[i];
+            if (GetComponent<ItemDatabase>().GetDatabase()[i].ID == id)
+                return (Weapons)GetComponent<ItemDatabase>().GetDatabase()[i];
         }
         return null;
     }
@@ -31,15 +31,23 @@ public class WeaponDatabase : MonoBehaviour
     {
         for (int i = 0; i < itemsData.Count; i++)
         {
-            itemDatabase.AddToDatabase(new Weapons((int)itemsData[i]["id"],
+            Weapons weapon = new Weapons((int)itemsData[i]["id"],
                 itemsData[i]["title"].ToString(),
                 (int)itemsData[i]["rarity"],
                 (int)itemsData[i]["attack"],
                 (int)itemsData[i]["special"],
                 (int)itemsData[i]["durability"],
                 (int)itemsData[i]["size"],
-                itemsData[i]["slug"].ToString()));
+                itemsData[i]["slug"].ToString());
+            GetComponent<ItemDatabase>().AddToDatabase(weapon);
+            weaponIDs.Add(weapon.ID);
         }
+    }
+
+    //TODO: use mazeRoomNumber and rarity in the future
+    public int GetRandomWeaponID(/*int mazeRoomNumber*/)
+    {
+        return weaponIDs[Random.Range(0, weaponIDs.Count)];
     }
 }
 
