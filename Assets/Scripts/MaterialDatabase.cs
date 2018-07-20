@@ -6,7 +6,7 @@ using System.IO;
 
 public class MaterialDatabase : MonoBehaviour
 {
-    ItemDatabase itemDatabase = new ItemDatabase();
+    List<int> materialIDs = new List<int>();
     private JsonData itemsData;
 
     void Start()
@@ -19,12 +19,20 @@ public class MaterialDatabase : MonoBehaviour
     {
         for (int i = 0; i < itemsData.Count; i++)
         {
-            itemDatabase.AddToDatabase(new Material((int)itemsData[i]["id"],
+            Material material = new Material((int)itemsData[i]["id"],
                 itemsData[i]["title"].ToString(),
                 (int)itemsData[i]["rarity"],
                 (int)itemsData[i]["size"],
-                itemsData[i]["slug"].ToString()));
+                itemsData[i]["slug"].ToString());
+            GetComponent<ItemDatabase>().AddToDatabase(material);
+            materialIDs.Add(material.ID);
         }
+    }
+
+    //TODO: use mazeRoomNumber and rarity in the future
+    public int GetRandomMaterialID(/*int mazeRoomNumber*/)
+    {
+        return materialIDs[Random.Range(0, materialIDs.Count)];
     }
 }
 

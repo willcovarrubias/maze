@@ -6,7 +6,7 @@ using System.IO;
 
 public class ConsumableDatabase : MonoBehaviour
 {
-    ItemDatabase itemDatabase = new ItemDatabase();
+    List<int> consumablesIDs = new List<int>();
     private JsonData itemsData;
 
     void Start()
@@ -19,13 +19,22 @@ public class ConsumableDatabase : MonoBehaviour
     {
         for (int i = 0; i < itemsData.Count; i++)
         {
-            itemDatabase.AddToDatabase(new Consumable((int)itemsData[i]["id"],
+            Consumable item = new Consumable((int)itemsData[i]["id"],
                 itemsData[i]["title"].ToString(),
                 (int)itemsData[i]["rarity"],
                 (int)itemsData[i]["size"],
                 (int)itemsData[i]["healing"],
-                itemsData[i]["slug"].ToString()));
+                itemsData[i]["slug"].ToString());
+
+            GetComponent<ItemDatabase>().AddToDatabase(item);
+            consumablesIDs.Add(item.ID);
         }
+    }
+
+    //TODO: use mazeRoomNumber and rarity in the future
+    public int GetRandomConsumableID(/*int mazeRoomNumber*/)
+    {
+        return consumablesIDs[Random.Range(0, consumablesIDs.Count)];
     }
 }
 
