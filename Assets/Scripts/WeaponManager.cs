@@ -7,7 +7,8 @@ using System;
 public class WeaponManager : MonoBehaviour
 {
     GameMaster gameMaster;
-    GameObject slotPanel;
+    //public GameObject treasureChestPanel;
+    public GameObject slotPanel;
     WeaponDatabase weaponDB;
     public GameObject slotToAddWeapon;
     public GameObject weaponObjectPrefab;
@@ -22,12 +23,13 @@ public class WeaponManager : MonoBehaviour
         gameMaster = GameMaster.gameMaster;
         weaponDB = gameMaster.GetComponent<WeaponDatabase>();
 
-        slotAmount = 10;
+        slotAmount = 6;
         for (int i = 0; i < slotAmount; i++)
         {
             weapons.Add(new Weapons());
      
             slots.Add(Instantiate(slotToAddWeapon));
+            slots[i].transform.SetParent(slotPanel.transform);
             
         }
 
@@ -46,9 +48,10 @@ public class WeaponManager : MonoBehaviour
                 weapons[i] = weaponToAdd;
                 GameObject weaponObj = Instantiate(weaponObjectPrefab);
                 weaponObj.transform.SetParent(slots[i].transform);
-                weaponObj.transform.localPosition = Vector2.zero;
+                weaponObj.transform.position = Vector2.zero;
                 //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
                 weaponObj.name = weaponToAdd.Title;
+                weaponObj.GetComponent<Text>().text = weaponToAdd.Title;
                 Debug.Log("Title: " + weaponToAdd.Title);
               
                 break;
