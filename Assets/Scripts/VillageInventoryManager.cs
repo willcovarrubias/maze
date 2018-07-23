@@ -93,29 +93,29 @@ public class VillageInventoryManager : MonoBehaviour
         int i;
         for (i = 0; i < villageItems.Count; i++)
         {
-            PlayerPrefs.SetInt("Item ID" + i, villageItems[i].Item.ID);
-            PlayerPrefs.SetInt("Item Count" + i, villageItems[i].Count);
+            PlayerPrefs.SetInt("Village Item ID" + i, villageItems[i].Item.ID);
+            PlayerPrefs.SetInt("Village Item Count" + i, villageItems[i].Count);
             if (IsWeapon(villageItems[i].Item.ID))
             {
                 Weapons weapon = (Weapons)villageItems[i].Item;
-                PlayerPrefs.SetInt("Item Duribility", weapon.Durability);
+                PlayerPrefs.SetInt("Village Item Duribility", weapon.Durability);
             }
         }
-        PlayerPrefs.SetInt("Item Count", i);
+        PlayerPrefs.SetInt("Village Item Count", i);
         PlayerPrefs.Save();
     }
 
     public void LoadFromPlayerPrefs()
     {
-        int itemCount = PlayerPrefs.GetInt("Item Count");
+        int itemCount = PlayerPrefs.GetInt("Village Item Count");
         villageItems.Clear();
         for (int i = 0; i < itemCount; i++)
         {
-            int id = PlayerPrefs.GetInt("Item ID" + i);
-            int count = PlayerPrefs.GetInt("Item Count" + i);
+            int id = PlayerPrefs.GetInt("Village Item ID" + i);
+            int count = PlayerPrefs.GetInt("Village Item Count" + i);
             if (IsWeapon(id))
             {
-                int duribility = PlayerPrefs.GetInt("Item Duribility");
+                int duribility = PlayerPrefs.GetInt("Village Item Duribility");
                 Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(id);
                 Inventory loadedItem = new Inventory(weapon, count);
                 weapon.Durability = duribility;
