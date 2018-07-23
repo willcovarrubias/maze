@@ -12,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     {
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
-        //LoadInventory();
+        LoadInventory();
     }
 
     /*
