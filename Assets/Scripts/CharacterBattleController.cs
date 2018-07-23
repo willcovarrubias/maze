@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterBattleController : MonoBehaviour {
 
@@ -27,11 +28,11 @@ public class CharacterBattleController : MonoBehaviour {
 
     public void GoToVillage()
     {
-        Application.LoadLevel("VillageScene");
+        SceneManager.LoadScene("VillageScene");
     }
 
     public void GoToPathRoom()
     {
-        Application.LoadLevel("PathScene");
+        SceneManager.LoadScene("PathScene");
     }
 }

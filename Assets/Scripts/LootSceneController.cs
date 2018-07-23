@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LootSceneController : MonoBehaviour {
 
@@ -29,7 +30,7 @@ public class LootSceneController : MonoBehaviour {
 
     public void GoToPathScene()
     {
-        Application.LoadLevel("PathScene");
+        SceneManager.LoadScene("PathScene");
     }
 
     public void OpenChestUI()

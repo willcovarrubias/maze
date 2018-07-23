@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PathSceneManager : MonoBehaviour {
 
@@ -53,15 +54,15 @@ public class PathSceneManager : MonoBehaviour {
 
         if (roomType == 0)
         {
-            Application.LoadLevel("FightScene");
+            SceneManager.LoadScene("FightScene");
         }
         else if (roomType == 1)
         {
-            Application.LoadLevel("PuzzleScene");
+            SceneManager.LoadScene("PuzzleScene");
         }
         else
         {
-            Application.LoadLevel("LootScene");
+            SceneManager.LoadScene("LootScene");
         }
     }
 
@@ -77,6 +78,6 @@ public class PathSceneManager : MonoBehaviour {
 
     public void ReturnToVillage()
     {
-        Application.LoadLevel("VillageScene");
+        SceneManager.LoadScene("VillageScene");
     }
 }

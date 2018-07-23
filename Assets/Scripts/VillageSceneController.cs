@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class VillageSceneController : MonoBehaviour {
 
@@ -33,7 +34,7 @@ public class VillageSceneController : MonoBehaviour {
     public void EnterLabyrinthConfirmation()
     {
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
-        Application.LoadLevel("PathScene");
+        SceneManager.LoadScene("PathScene");
 
     }
     public void EnterLabyrinthCancel()
