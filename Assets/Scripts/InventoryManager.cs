@@ -45,3 +45,15 @@ public class InventoryManager : MonoBehaviour
         return currentSize;
     }
 }
+
+public class PlayerInventory
+{
+    public Items Item { get; set; }
+    public int Count { get; set; }
+
+    public PlayerInventory(Items item, int count)
+    {
+        this.Item = item;
+        this.Count = count;
+    }
+}
