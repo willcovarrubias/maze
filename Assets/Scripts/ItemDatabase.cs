@@ -14,7 +14,9 @@ public class ItemDatabase : MonoBehaviour
         for (int i = 0; i < database.Count; i++)
         {
             if (database[i].ID == id)
+            {
                 return database[i];
+            }
         }
         return null;
     }
