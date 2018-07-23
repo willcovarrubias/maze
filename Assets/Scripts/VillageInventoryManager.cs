@@ -6,6 +6,11 @@ public class VillageInventoryManager : MonoBehaviour
 {
     List<Inventory> villageItems = new List<Inventory>();
 
+    private void Start()
+    {
+        LoadFromPlayerPrefs();
+    }
+
     /*
     private void Update()
     {
