@@ -29,16 +29,20 @@ public class WeaponManager : MonoBehaviour
             weapons.Add(new Weapons());
      
             slots.Add(Instantiate(slotToAddWeapon));
+
+            //Adds an ID to each slot when it generates the slots. Used for drag/drop.
+            slots[i].GetComponent<ItemSlot>().id = i;
+
             slots[i].transform.SetParent(slotPanel.transform);
             
         }
 
-        AddItem(2000);
-        AddItem(2001);
+        AddWeapon(2000);
+        AddWeapon(2001);
     
     }
 
-    public void AddItem(int id)
+    public void AddWeapon(int id)
     {
         Weapons weaponToAdd = weaponDB.FetchWeaponByID(id);
         for (int i = 0; i < weapons.Count; i++)
@@ -47,6 +51,11 @@ public class WeaponManager : MonoBehaviour
             {
                 weapons[i] = weaponToAdd;
                 GameObject weaponObj = Instantiate(weaponObjectPrefab);
+
+                //Added this for testing.
+                weaponObj.GetComponent<ItemData>().weapons = weaponToAdd;
+                weaponObj.GetComponent<ItemData>().slotID = i;
+
                 weaponObj.transform.SetParent(slots[i].transform);
                 weaponObj.transform.position = Vector2.zero;
                 //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
