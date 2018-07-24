@@ -50,8 +50,9 @@ public class InventoryManager : MonoBehaviour
     */
 
 
-    public void AddItemToInventory(Items item)
+    public void AddItemToInventory(int id)
     {
+        Items item = GetComponent<ItemDatabase>().FetchItemByID(id);
         if (currentSize + item.Size <= maxInventorySize)
         {
             if (IsWeapon(item.ID))
