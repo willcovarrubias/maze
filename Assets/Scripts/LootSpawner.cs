@@ -1,51 +1,53 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class WeaponManager : MonoBehaviour
-{
+public class LootSpawner : MonoBehaviour {
+    //Mostly a test script that calls the WeaponManager to spawn weapons as loot in a chest.
+
     GameMaster gameMaster;
-    //public GameObject treasureChestPanel;
+    WeaponManager wm;
+    WeaponDatabase weaponDB;
 
-    //Inventory testing using WeaponManager. TODO: Replace this with real inventory manager later.
-    public GameObject inventoryPanel;
-
+    int slotAmount;
 
     public GameObject slotPanel;
-    WeaponDatabase weaponDB;
     public GameObject slotToAddWeapon;
     public GameObject weaponObjectPrefab;
 
-    int slotAmount;
-   
     public List<Weapons> weapons = new List<Weapons>();
     public List<GameObject> slots = new List<GameObject>();
 
     void Start()
     {
+        //Test stuff.
         gameMaster = GameMaster.gameMaster;
-        weaponDB = gameMaster.GetComponent<WeaponDatabase>();
+        wm = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
+        weaponDB = gameMaster.GetComponent<WeaponDatabase>(); //this might not work
 
-        slotAmount = 10;
+        slotAmount = 4;
         for (int i = 0; i < slotAmount; i++)
         {
             weapons.Add(new Weapons());
-     
+
             slots.Add(Instantiate(slotToAddWeapon));
 
             //Adds an ID to each slot when it generates the slots. Used for drag/drop.
             slots[i].GetComponent<ItemSlot>().id = i;
 
             slots[i].transform.SetParent(slotPanel.transform);
-            
+
         }
-        
-    
+
+        AddWeaponToChestPool(2000);
+        AddWeaponToChestPool(2000);
+        AddWeaponToChestPool(2001);
+
+
     }
 
-    public void AddWeapon(int id)
+    public void AddWeaponToChestPool(int id)
     {
         Weapons weaponToAdd = weaponDB.FetchWeaponByID(id);
         for (int i = 0; i < weapons.Count; i++)
@@ -60,28 +62,14 @@ public class WeaponManager : MonoBehaviour
                 weaponObj.GetComponent<ItemData>().slotID = i;
 
                 weaponObj.transform.SetParent(slots[i].transform);
-                weaponObj.transform.localPosition = Vector2.zero;
+                weaponObj.transform.position = Vector2.zero;
                 //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
                 weaponObj.name = weaponToAdd.Title;
                 weaponObj.GetComponent<Text>().text = weaponToAdd.Title;
                 Debug.Log("Title: " + weaponToAdd.Title);
-              
+
                 break;
             }
         }
     }
-
-
-
-
-    public void OpenInventoryPanelUI()
-    {
-        inventoryPanel.SetActive(true);
-    }
-
-    public void CloseInventoryPanelUI()
-    {
-        inventoryPanel.SetActive(false);
-    }
-
 }
