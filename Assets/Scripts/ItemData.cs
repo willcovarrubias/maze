@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemData : MonoBehaviour, IPointerDownHandler {//, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler {
+public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
@@ -17,19 +17,18 @@ public class ItemData : MonoBehaviour, IPointerDownHandler {//, IBeginDragHandle
 
     GameObject gameMaster;
 
-    public int thisWeaponsID;
+    public int thisItemsID;
     private Vector2 offsetToReturnItem;
 
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         //inventoryManager = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
-        IdentifyThisWeapon();
     }
         
-    /*public void OnBeginDrag(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        if (weapons != null && !itemCameFromLoot)
+        if (gameMaster != null && !itemCameFromLoot)
         {
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent);
@@ -38,7 +37,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler {//, IBeginDragHandle
         }
         else
         {
-            Debug.Log("Unable to find Weapons DB!");
+            Debug.Log("Unable to find the GameMaster!!");
         }
 
     }
@@ -57,26 +56,19 @@ public class ItemData : MonoBehaviour, IPointerDownHandler {//, IBeginDragHandle
     {
         if (!itemCameFromLoot)
         {
-            this.transform.SetParent(gameMaster.GetComponent<>.slots[slotID].transform);
-            this.transform.position = inventoryManager.slots[slotID].transform.position;
+            this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
+            this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
-        }
-    }*/
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        //Debug.Log("Is this being called?" + gameMaster.GetComponent<InventoryManager>.);
-        if (itemCameFromLoot)
-        {           
-            //Add item to player's inventory if possible.
-            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisWeaponsID);
-            gameMaster.GetComponent<InventoryManager>().PrintInventory();
         }
     }
 
-    public void IdentifyThisWeapon()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        
-        //thisWeaponsID = gameMaster.GetComponent<InventoryManager>()
+        if (itemCameFromLoot)
+        {           
+            //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
+            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisItemsID);
+            gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+        }
     }
 }

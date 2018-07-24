@@ -339,6 +339,7 @@ MonoBehaviour:
   slotPanel: {fileID: 1178400180220256}
   slot: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663, type: 2}
   itemPrefab: {fileID: 1444504196538504, guid: c35001eb86a28374f9b30d4547db93d3, type: 2}
+  slotAmount: 0
   slots: []
 --- !u!114 &114866429875699282
 MonoBehaviour:
@@ -417,7 +418,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 114684132351431212}
         m_MethodName: CloseInventoryPanelUI
         m_Mode: 1
         m_Arguments:

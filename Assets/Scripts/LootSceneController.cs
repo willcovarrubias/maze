@@ -120,7 +120,7 @@ public class LootSceneController : MonoBehaviour {
                 //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
                 itemObject.name = chestItems[i].Title;
                 itemObject.GetComponent<Text>().text = chestItems[i].Title;
-                itemObject.GetComponent<ItemData>().thisWeaponsID = chestItems[i].ID;
+                itemObject.GetComponent<ItemData>().thisItemsID = chestItems[i].ID;
                 //Debug.Log("Title: " + itemsToAdd.Title);
 
                 //break;
