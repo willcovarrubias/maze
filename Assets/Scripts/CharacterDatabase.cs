@@ -12,6 +12,9 @@ public class CharacterDatabase : MonoBehaviour
     private List<Character> heroDatabase = new List<Character>();
     private JsonData enemyData;
     private JsonData heroData;
+    Character currentCharacter;
+    static int maxAmountOfHeroes = 4;
+    int currentAmountOfHeroes = 0;
 
     void Start()
     {
@@ -90,6 +93,11 @@ public class CharacterDatabase : MonoBehaviour
 
     public void HeroToJson(Character hero)
     {
+        //PlayerPrefs.SetInt("Hero " + heroNum + " ID", hero.id);
+        //PlayerPrefs.SetString("Hero " + heroNum + " Name", hero.name);
+        //PlayerPrefs.SetString("Hero " + heroNum + " Name", hero.name);
+
+        /*
         string path = "Assets/StreamingAssets/Heroes.json";
         string json_hero = JsonMapper.ToJson(hero);
         string[] lines = File.ReadAllLines(path);
@@ -128,6 +136,7 @@ public class CharacterDatabase : MonoBehaviour
             writer.WriteLine("]");
             writer.Close();
         }
+        */
     }
 
     public void DeleteHero(Character character)
@@ -153,6 +162,17 @@ public class CharacterDatabase : MonoBehaviour
         }
         newJsonArray[heroDatabase.Count] = "]";
         File.WriteAllLines(path, newJsonArray);
+    }
+
+    public void ChangeCurrentCharacter(int id)
+    {
+        for (int i = 0; i < heroDatabase.Count; i++)
+        {
+            if (heroDatabase[i].id == id)
+            {
+                currentCharacter = heroDatabase[i];
+            }
+        }
     }
 }
 

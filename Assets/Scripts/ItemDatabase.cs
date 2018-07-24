@@ -6,7 +6,7 @@ using System.IO;
 
 public class ItemDatabase : MonoBehaviour
 {
-    private List<Items> database = new List<Items>();
+    private List<Items> database = new List<Items>(); // make database a dictionary <int ID, Items item> for better search?
     private JsonData itemsData;
 
     public Items FetchItemByID(int id)
