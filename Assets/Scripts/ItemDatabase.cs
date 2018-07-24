@@ -41,7 +41,7 @@ public class ItemDatabase : MonoBehaviour
     }
 
     //TODO: Make sure to use mazeRoomNumber and rarity someway in the furture
-    List<Items> GetRandomItemsForChest(/*int mazeRoomNumber*/)
+    public List<Items> GetRandomItemsForChest(/*int mazeRoomNumber*/)
     {
         List<Items> chestItems = new List<Items>();
         int numberOfItems = Random.Range(1, 11);
