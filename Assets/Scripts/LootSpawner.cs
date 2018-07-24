@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LootSpawner : MonoBehaviour {
     //Mostly a test script that calls the WeaponManager to spawn weapons as loot in a chest.
+    //TODO: Check if this is even still necessary. Likely can just delete it.
 
     GameMaster gameMaster;
     WeaponManager wm;
@@ -40,13 +41,12 @@ public class LootSpawner : MonoBehaviour {
 
         }
 
-        AddWeaponToChestPool(2000);
-        AddWeaponToChestPool(2000);
-        AddWeaponToChestPool(2001);
+  
 
 
     }
 
+    /*
     public void AddWeaponToChestPool(int id)
     {
         Weapons weaponToAdd = weaponDB.FetchWeaponByID(id);
@@ -71,5 +71,5 @@ public class LootSpawner : MonoBehaviour {
                 break;
             }
         }
-    }
+    }*/
 }

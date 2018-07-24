@@ -274,9 +274,15 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 1324740837896656, guid: 38ad271bcd792874493c3a4342348643, type: 2}
-      propertyPath: m_IsActive
+    - target: {fileID: 224585525886735612, guid: 38ad271bcd792874493c3a4342348643,
+        type: 2}
+      propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224279112062669966, guid: 38ad271bcd792874493c3a4342348643,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 38ad271bcd792874493c3a4342348643, type: 2}
@@ -1106,8 +1112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lootRoom1ChestLayout: {fileID: 1144709308}
   lootRoom2ChestLayout: {fileID: 1808908459}
-  chest: {fileID: 1172980675}
-  inventoryPanel: {fileID: 1172980675}
+  chestPanel: {fileID: 1172980675}
   slotPanel: {fileID: 2107704912}
   slot: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663, type: 2}
   itemPrefab: {fileID: 1444504196538504, guid: 56fadf847fb832d40951e54a1ec6c088, type: 2}
@@ -1562,7 +1567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16443e43294e28245a52ada9d0279d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryPanel: {fileID: 0}
   slotPanel: {fileID: 2107704912}
   slotToAddWeapon: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663,
     type: 2}

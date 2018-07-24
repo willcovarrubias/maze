@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -8,11 +9,27 @@ public class InventoryManager : MonoBehaviour
     int currentSize;
     public List<Inventory> playerItems = new List<Inventory>();
 
+    //UI Stuff.
+    public GameObject inventoryPanel;
+    public GameObject slotPanel;
+    public GameObject slot;
+    public GameObject itemPrefab;
+    public int slotAmount;
+    public List<GameObject> slots = new List<GameObject>();
+
     void Start()
     {
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
+
+
+        /*slotAmount = 10;
+        for (int i = 0; i < slotAmount; i++)
+        {
+            
+
+        }*/
     }
 
     /*
@@ -69,17 +86,39 @@ public class InventoryManager : MonoBehaviour
                     {
                         playerItems[i].Count++;
                         currentSize += item.Size;
+
+                        
+
                         return;
                     }
                 }
                 Inventory newItem = new Inventory(item, 1);
                 playerItems.Add(newItem);
                 currentSize += item.Size;
+
+
+                
             }
+
+            //Will's testing:
+            
+            GameObject itemObject = Instantiate(itemPrefab);
+
+            //Added this for testing.
+            // weaponObj.GetComponent<ItemData>().weapons = weaponToAdd;
+            //weaponObj.GetComponent<ItemData>().slotID = i;
+            AddDynamicSlot();
+            //weaponObj.transform.SetParent(slots[i].transform);
+            itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+            itemObject.transform.localPosition = Vector2.zero;
+            //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
+            itemObject.name = item.Title;
+            itemObject.GetComponent<Text>().text = item.Title;
+            //End.
         }
     }
 
-    public void RemoveItemFromInventory(Inventory item)
+    public void RemoveItemFromInventory(Inventory item) //TODO: Also remove slot when removing items. But also make sure that the slot IDs play nice.
     {
         currentSize -= item.Item.Size;
         if (IsWeapon(item.Item.ID))
@@ -100,6 +139,14 @@ public class InventoryManager : MonoBehaviour
                     break;
                 }
             }
+        }
+    }
+
+    public void PrintInventory()
+    {
+        for (int i = 0; i < playerItems.Count; i++)
+        {
+            Debug.Log("THis is the current inventory!: " + playerItems[i].Item.Title + " Count: " + playerItems[i].Count);
         }
     }
 
@@ -165,5 +212,25 @@ public class InventoryManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void AddDynamicSlot()
+    {
+        slots.Add(Instantiate(slot));
+        slotAmount++;
+        //Adds an ID to each slot when it generates the slots. Used for drag/drop.
+        slots[slotAmount - 1].GetComponent<ItemSlot>().id = slotAmount - 1;
+        slots[slotAmount - 1].name = "Slot" + (slotAmount - 1);
+        slots[slotAmount - 1].transform.SetParent(slotPanel.transform);
+    }
+
+    public void OpenInventoryPanelUI()
+    {
+        inventoryPanel.SetActive(true);
+    }
+
+    public void CloseInventoryPanelUI()
+    {
+        inventoryPanel.SetActive(false);
     }
 }

@@ -12,7 +12,8 @@ public class LootSceneController : MonoBehaviour {
     GameObject gameMaster;
     List<Items> chestItems = new List<Items>();
 
-    public GameObject inventoryPanel;
+    public GameObject chestPanel;
+    //public GameObject inventoryPanel;
 
     public GameObject slotPanel;
     public GameObject slot;
@@ -84,13 +85,15 @@ public class LootSceneController : MonoBehaviour {
 
     public void OpenChestUI()
     {
-        inventoryPanel.SetActive(true);
+        chestPanel.SetActive(true);
+        gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
         //chest.SetActive(true);
     }
 
     public void CloseChestUI()
     {
-        inventoryPanel.SetActive(false);
+        chestPanel.SetActive(false);
+        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
         //chest.SetActive(false);
     }
 
@@ -117,6 +120,7 @@ public class LootSceneController : MonoBehaviour {
                 //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
                 itemObject.name = chestItems[i].Title;
                 itemObject.GetComponent<Text>().text = chestItems[i].Title;
+                itemObject.GetComponent<ItemData>().thisItemsID = chestItems[i].ID;
                 //Debug.Log("Title: " + itemsToAdd.Title);
 
                 //break;

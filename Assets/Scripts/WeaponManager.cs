@@ -10,7 +10,7 @@ public class WeaponManager : MonoBehaviour
     //public GameObject treasureChestPanel;
 
     //Inventory testing using WeaponManager. TODO: Replace this with real inventory manager later.
-    public GameObject inventoryPanel;
+    
 
 
     public GameObject slotPanel;
@@ -45,6 +45,7 @@ public class WeaponManager : MonoBehaviour
     
     }
 
+    /*
     public void AddWeapon(int id)
     {
         Weapons weaponToAdd = weaponDB.FetchWeaponByID(id);
@@ -69,19 +70,11 @@ public class WeaponManager : MonoBehaviour
                 break;
             }
         }
-    }
+    }*/
 
 
 
 
-    public void OpenInventoryPanelUI()
-    {
-        inventoryPanel.SetActive(true);
-    }
-
-    public void CloseInventoryPanelUI()
-    {
-        inventoryPanel.SetActive(false);
-    }
+    
 
 }

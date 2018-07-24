@@ -29,22 +29,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1324740837896656
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4521060545981082}
-  - component: {fileID: 114156417666389724}
-  m_Layer: 0
-  m_Name: DeleteAfter-InventoryTester
-  m_TagString: WeaponManager
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1486915783470432
 GameObject:
   m_ObjectHideFlags: 1
@@ -113,6 +97,7 @@ GameObject:
   - component: {fileID: 114299191141224206}
   - component: {fileID: 114028497205679706}
   - component: {fileID: 114684132351431212}
+  - component: {fileID: 114924705026149886}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: GameController
@@ -148,22 +133,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4521060545981082}
   - {fileID: 224023132688410128}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4521060545981082
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1324740837896656}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4256562907309706}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114028497205679706
@@ -248,24 +219,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114156417666389724
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1324740837896656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16443e43294e28245a52ada9d0279d5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryPanel: {fileID: 1486915783470432}
-  slotPanel: {fileID: 1178400180220256}
-  slotToAddWeapon: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663,
-    type: 2}
-  weaponObjectPrefab: {fileID: 1444504196538504, guid: c35001eb86a28374f9b30d4547db93d3,
-    type: 2}
-  slots: []
 --- !u!114 &114213649346247158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -382,6 +335,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef53672c9da8b49ff940cd5adf6718e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryPanel: {fileID: 1486915783470432}
+  slotPanel: {fileID: 1178400180220256}
+  slot: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663, type: 2}
+  itemPrefab: {fileID: 1444504196538504, guid: c35001eb86a28374f9b30d4547db93d3, type: 2}
+  slotAmount: 0
+  slots: []
 --- !u!114 &114866429875699282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -459,7 +418,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114156417666389724}
+      - m_Target: {fileID: 114684132351431212}
         m_MethodName: CloseInventoryPanelUI
         m_Mode: 1
         m_Arguments:
@@ -472,6 +431,17 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114924705026149886
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1940643736799540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d39e42684dc4898a0a33f5de04d11c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114958948796013350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -555,7 +525,7 @@ RectTransform:
   m_Children:
   - {fileID: 224615350810988830}
   m_Father: {fileID: 4256562907309706}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
