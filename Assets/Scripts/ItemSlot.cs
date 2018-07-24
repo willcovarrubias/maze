@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour, IDropHandler {
+public class ItemSlot : MonoBehaviour { //, IDropHandler {
 
     public int id;
     private WeaponManager wm;
@@ -11,10 +11,10 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     void Start()
     {
         //For the sake of testing, I created a tag in the Editor called WeaponsManager. Probably should find a better way to reference later.
-        wm = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
+        //wm = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
     }
 
-    public void OnDrop(PointerEventData eventData)
+   /* public void OnDrop(PointerEventData eventData)
     {
         ItemData droppedItem = eventData.pointerDrag.GetComponent<ItemData>();
         if (wm.weapons[id].ID == -1)
@@ -37,6 +37,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
             wm.weapons[droppedItem.slotID] = oldWeapon.GetComponent<ItemData>().weapons;
             wm.weapons[id] = droppedItem.weapons;
         }
-    }
+    }*/
 
 }

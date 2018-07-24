@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -8,11 +9,32 @@ public class InventoryManager : MonoBehaviour
     int currentSize;
     public List<Inventory> playerItems = new List<Inventory>();
 
+    //UI Stuff.
+    public GameObject inventoryPanel;
+    public GameObject slotPanel;
+    public GameObject slot;
+    public GameObject itemPrefab;
+    int slotAmount;
+    public List<GameObject> slots = new List<GameObject>();
+
     void Start()
     {
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
+
+
+        slotAmount = 10;
+        for (int i = 0; i < slotAmount; i++)
+        {
+            slots.Add(Instantiate(slot));
+
+            //Adds an ID to each slot when it generates the slots. Used for drag/drop.
+            //slots[i].GetComponent<ItemSlot>().id = i;
+
+            slots[i].transform.SetParent(slotPanel.transform);
+
+        }
     }
 
     /*
@@ -69,12 +91,30 @@ public class InventoryManager : MonoBehaviour
                     {
                         playerItems[i].Count++;
                         currentSize += item.Size;
+
+                        //Will's testing:
+                        GameObject weaponObj = Instantiate(itemPrefab);
+
+                        //Added this for testing.
+                        // weaponObj.GetComponent<ItemData>().weapons = weaponToAdd;
+                        //weaponObj.GetComponent<ItemData>().slotID = i;
+
+                        weaponObj.transform.SetParent(slots[i].transform);
+                        weaponObj.transform.localPosition = Vector2.zero;
+                        //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
+                        weaponObj.name = item.Title;
+                        weaponObj.GetComponent<Text>().text = item.Title;
+                        //End.
+
                         return;
                     }
                 }
                 Inventory newItem = new Inventory(item, 1);
                 playerItems.Add(newItem);
                 currentSize += item.Size;
+
+
+                
             }
         }
     }
@@ -100,6 +140,14 @@ public class InventoryManager : MonoBehaviour
                     break;
                 }
             }
+        }
+    }
+
+    public void PrintInventory()
+    {
+        for (int i = 0; i < playerItems.Count; i++)
+        {
+            Debug.Log("THis is the current inventory!: " + playerItems[i].Item.Title + " Count: " + playerItems[i].Count);
         }
     }
 
@@ -165,5 +213,16 @@ public class InventoryManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+
+    public void OpenInventoryPanelUI()
+    {
+        inventoryPanel.SetActive(true);
+    }
+
+    public void CloseInventoryPanelUI()
+    {
+        inventoryPanel.SetActive(false);
     }
 }

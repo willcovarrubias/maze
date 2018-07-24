@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler {
+public class ItemData : MonoBehaviour, IPointerDownHandler {//, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler {
 
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
@@ -17,7 +17,7 @@ public class ItemData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     GameObject gameMaster;
 
-    private int thisWeaponsID;
+    public int thisWeaponsID;
     private Vector2 offsetToReturnItem;
 
     void Start()
@@ -27,7 +27,7 @@ public class ItemData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         IdentifyThisWeapon();
     }
         
-    public void OnBeginDrag(PointerEventData eventData)
+    /*public void OnBeginDrag(PointerEventData eventData)
     {
         if (weapons != null && !itemCameFromLoot)
         {
@@ -57,25 +57,26 @@ public class ItemData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (!itemCameFromLoot)
         {
-            this.transform.SetParent(inventoryManager.slots[slotID].transform);
+            this.transform.SetParent(gameMaster.GetComponent<>.slots[slotID].transform);
             this.transform.position = inventoryManager.slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
-    }
+    }*/
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Is this being called?");
+        //Debug.Log("Is this being called?" + gameMaster.GetComponent<InventoryManager>.);
         if (itemCameFromLoot)
         {           
             //Add item to player's inventory if possible.
-            //gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisWeaponsID);
+            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisWeaponsID);
+            gameMaster.GetComponent<InventoryManager>().PrintInventory();
         }
     }
 
     public void IdentifyThisWeapon()
     {
         
-        //thisWeaponsID = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID()
+        //thisWeaponsID = gameMaster.GetComponent<InventoryManager>()
     }
 }
