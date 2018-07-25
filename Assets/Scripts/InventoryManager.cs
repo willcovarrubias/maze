@@ -96,26 +96,6 @@ public class InventoryManager : MonoBehaviour
         UpdateInventoryText();
     }
 
-    void AddItemToSlots(Items item, int count)
-    {
-        GameObject itemObject = Instantiate(itemPrefab);
-        AddDynamicSlot();
-        itemObject.transform.SetParent(slots[slotAmount - 1].transform);
-        itemObject.transform.localPosition = Vector2.zero;
-        itemObject.name = item.Title;
-        itemObject.GetComponentInChildren<ItemData>().thisItemsID = item.ID;
-        itemObject.GetComponentInChildren<ItemData>().amount = 1;
-        itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
-        if (IsWeapon(item.ID))
-        {
-            itemObject.GetComponent<Text>().text = item.Title;
-        }
-        else
-        {
-            itemObject.GetComponent<Text>().text = item.Title + " x" + count;
-        }
-    }
-
     public void PrintInventory()
     {
         for (int i = 0; i < playerItems.Count; i++)
@@ -127,16 +107,6 @@ public class InventoryManager : MonoBehaviour
     public void UpdateInventoryText()
     {
         inventoryText.GetComponent<Text>().text = "Inventory: " + currentSize + " / " + maxInventorySize;
-    }
-
-    public int GetMaxInventorySize()
-    {
-        return maxInventorySize;
-    }
-
-    public int GetCurrentSize()
-    {
-        return currentSize;
     }
 
     bool CanFitInInventory(int itemSize)
@@ -205,6 +175,26 @@ public class InventoryManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void AddItemToSlots(Items item, int count)
+    {
+        GameObject itemObject = Instantiate(itemPrefab);
+        AddDynamicSlot();
+        itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+        itemObject.transform.localPosition = Vector2.zero;
+        itemObject.name = item.Title;
+        itemObject.GetComponentInChildren<ItemData>().thisItemsID = item.ID;
+        itemObject.GetComponentInChildren<ItemData>().amount = 1;
+        itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
+        if (IsWeapon(item.ID))
+        {
+            itemObject.GetComponent<Text>().text = item.Title;
+        }
+        else
+        {
+            itemObject.GetComponent<Text>().text = item.Title + " x" + count;
+        }
     }
 
     public void AddDynamicSlot()
