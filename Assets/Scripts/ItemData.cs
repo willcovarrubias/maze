@@ -8,9 +8,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
     //sense once the inventory  drag and drop functionalitiy is implemented.
-
-    //public Weapons weapons;
-    
+       
     public int amount;
     public int slotID;
     public bool itemCameFromLoot;
@@ -23,7 +21,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        //inventoryManager = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
     }
         
     public void OnBeginDrag(PointerEventData eventData)
@@ -43,8 +40,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         if (!itemCameFromLoot)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
-            Debug.Log("I'm currently dragging the following item: " + thisItemsID.ToString());
-
         }
 
     }
@@ -53,7 +48,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         if (!itemCameFromLoot)
         {
-            Debug.Log("This is End Drag");
             this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
             this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -64,13 +58,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         if (itemCameFromLoot)
         {
+            //if(gameMaster.GetComponent<InventoryManager>().GetMaxInventorySize().)
             //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
             gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisItemsID);
-            gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
-        }
-        else
-        {
-            //Do nothing.
+            //gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
         }
     }
 }
