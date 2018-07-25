@@ -54,7 +54,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         if (!itemCameFromLoot)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
-            Debug.Log("I'm currently dragging the following item: " + thisItemsID.ToString());
+            Debug.Log("I'm currently dragging the following item: " + item.Item.ID.ToString());
 
         }
 
