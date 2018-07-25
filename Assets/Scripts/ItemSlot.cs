@@ -17,6 +17,8 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
     public void OnDrop(PointerEventData eventData)
     {
+
+        //*******Old working code when I used WeaponManager********
         //Keeping this for reference.
 
         /*
@@ -42,6 +44,9 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
             wm.weapons[id] = droppedItem.weapons;
         }*/
 
+
+
+        //New, NOT working code when I'm trying to use Inventory Manager;
         ItemData droppedItem = eventData.pointerDrag.GetComponent<ItemData>();
         if (gameMaster.GetComponent<InventoryManager>().playerItems[id].Item.ID == -1)
         {
