@@ -104,7 +104,7 @@ public class ItemDatabase : MonoBehaviour
                 return;
             }
         }
-        Items chestItem = chestItem = FetchItemByID(id);
+        Items chestItem = FetchItemByID(id);
         chestItems.Add(new Inventory(chestItem, count));
     }
 }
