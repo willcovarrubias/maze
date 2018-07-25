@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour { //, IDropHandler {
+public class ItemSlot : MonoBehaviour, IDropHandler {
 
     public int id;
     GameObject gameMaster;
