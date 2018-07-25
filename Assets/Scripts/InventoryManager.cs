@@ -28,7 +28,7 @@ public class InventoryManager : MonoBehaviour
     public void AddItemToInventory(int id)
     {
         Items item = GetComponent<ItemDatabase>().FetchItemByID(id);
-        if (currentSize + item.Size <= maxInventorySize)
+        if (CanFitInInventory(item.Size))
         {
             if (IsWeapon(item.ID))
             {
@@ -137,6 +137,15 @@ public class InventoryManager : MonoBehaviour
     public int GetCurrentSize()
     {
         return currentSize;
+    }
+
+    bool CanFitInInventory(int itemSize)
+    {
+        if (currentSize + itemSize <= maxInventorySize)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void SaveInventory()
