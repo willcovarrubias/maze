@@ -1837,42 +1837,42 @@ Prefab:
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_CellSize.x
-      value: 125
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_CellSize.y
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_Spacing.y
       value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
+      propertyPath: m_Spacing.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
+        type: 2}
       propertyPath: m_Padding.m_Left
-      value: 140
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_Padding.m_Right
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_Padding.m_Top
-      value: 70
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_Constraint
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114059721918932146, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_ConstraintCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 38ad271bcd792874493c3a4342348643, type: 2}
