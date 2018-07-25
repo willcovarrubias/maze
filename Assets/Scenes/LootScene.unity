@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1114,7 +1114,7 @@ MonoBehaviour:
   lootRoom2ChestLayout: {fileID: 1808908459}
   chestPanel: {fileID: 1172980675}
   slotPanel: {fileID: 2107704912}
-  slot: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663, type: 2}
+  slot: {fileID: 1055738467480586, guid: 0f214456f87a32b4ea5c20d8de8991c8, type: 2}
   itemPrefab: {fileID: 1444504196538504, guid: 56fadf847fb832d40951e54a1ec6c088, type: 2}
   slots: []
 --- !u!4 &1162445813
