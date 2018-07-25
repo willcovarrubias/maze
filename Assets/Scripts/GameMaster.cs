@@ -8,6 +8,7 @@ public class GameMaster : MonoBehaviour {
 
     public int roomCount = -1;
 
+
     public void Awake()
     {
         if (gameMaster == null)
@@ -19,6 +20,8 @@ public class GameMaster : MonoBehaviour {
         {
             Destroy(gameObject);
         }
+
+        //PlayerPrefs.DeleteAll();
     }
 
 

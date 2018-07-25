@@ -35,10 +35,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
             this.transform.position = eventData.position - offsetToReturnItem;
             GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
-        else
-        {
-            Debug.Log("Unable to find the GameMaster!!");
-        }
 
     }
 
@@ -47,6 +43,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         if (!itemCameFromLoot)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
+            Debug.Log("I'm currently dragging the following item: " + thisItemsID.ToString());
 
         }
 
@@ -56,6 +53,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         if (!itemCameFromLoot)
         {
+            Debug.Log("This is End Drag");
             this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
             this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -65,10 +63,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     public void OnPointerDown(PointerEventData eventData)
     {
         if (itemCameFromLoot)
-        {           
+        {
             //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
             gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisItemsID);
             gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+        }
+        else
+        {
+            //Do nothing.
         }
     }
 }

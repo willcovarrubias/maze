@@ -14,7 +14,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
         //wm = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
     }
-
+    
     public void OnDrop(PointerEventData eventData)
     {
 
@@ -45,20 +45,14 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
         }*/
 
 
-
+        
         //New, NOT working code when I'm trying to use Inventory Manager;
         ItemData droppedItem = eventData.pointerDrag.GetComponent<ItemData>();
         if (gameMaster.GetComponent<InventoryManager>().playerItems[id].Item.ID == -1)
         {
-            //STUCK HERE!!
-            //gameMaster.GetComponent<InventoryManager>().playerItems[droppedItem.slotID].Item = new Items();
-            
-            
-            //gameMaster.GetComponent<InventoryManager>().playerItems[id].Item = droppedItem.?????;
-            
-            //droppedItem.slotID = id;
+            //This is for empty slots.
         }
-        else
+        else if (!droppedItem.itemCameFromLoot)
         {
             //ALSO STUCK HERE!!
 
@@ -70,6 +64,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
             droppedItem.slotID = id;
             droppedItem.transform.SetParent(this.transform);
             droppedItem.transform.position = this.transform.position;
+            Debug.Log("This is End DROP");
 
             //gameMaster.GetComponent<InventoryManager>().playerItems[droppedItem.slotID] = oldWeapon.GetComponent<ItemData>().playerItems;
             //gameMaster.GetComponent<InventoryManager>().playerItems[id] = droppedItem.slotID;
