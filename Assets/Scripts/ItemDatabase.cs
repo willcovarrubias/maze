@@ -41,48 +41,72 @@ public class ItemDatabase : MonoBehaviour
     }
 
     //TODO: Make sure to use mazeRoomNumber and rarity someway in the furture
-    public List<Items> GetRandomItemsForChest(/*int mazeRoomNumber*/)
+    public List<Inventory> GetRandomItemsForChest(/*int mazeRoomNumber*/)
     {
-        List<Items> chestItems = new List<Items>();
+        List<Inventory> chestItems = new List<Inventory>();
+        List<int> itemIDs = new List<int>();
         int numberOfItems = Random.Range(1, 11);
-        for (int i = 0; i < numberOfItems; i++)
+        int i = 0;
+        while (i < numberOfItems)
         {
             float randomValue = Random.value;
+            int chestItemID;
+            int amount;
             if (randomValue >= 0.6f)
             {
-                chestItems.Add(FetchItemByID(GetComponent<ConsumableDatabase>().GetRandomConsumableID()));
+                amount = Random.Range(1, 6);
+                i += amount;
+                if (amount + i > numberOfItems)
+                {
+                    amount = numberOfItems - i;
+                    i = numberOfItems;
+                }
+                chestItemID = GetComponent<ConsumableDatabase>().GetRandomConsumableID();
+                AddToChestList(chestItems, chestItemID, amount);
             }
             else if (randomValue >= 0.2f && randomValue < 0.6f)
             {
-                chestItems.Add(FetchItemByID(GetComponent<MaterialDatabase>().GetRandomMaterialID()));
+                amount = Random.Range(1, 6);
+                i += amount;
+                if (amount + i > numberOfItems)
+                {
+                    amount = numberOfItems - i;
+                    i = numberOfItems;
+                }
+                chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
+                AddToChestList(chestItems, chestItemID, amount);
             }
             else if (randomValue >= 0.1f && randomValue < 0.2f)
             {
-                chestItems.Add(FetchItemByID(GetComponent<WeaponDatabase>().GetRandomWeaponID()));
+                amount = 1;
+                chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
+                i++;
+                AddToChestList(chestItems, chestItemID, amount);
             }
             else
             {
-                chestItems.Add(FetchItemByID(GetComponent<ArmorDatabase>().GetRandomArmorID()));
+                amount = 1;
+                chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
+                i++;
+                AddToChestList(chestItems, chestItemID, amount);
             }
         }
-        /*
-        for (int i = 0; i < chestItems.Count; i++)
-        {
-            Debug.Log(chestItems[i].Title);
-        }
-        */
         return chestItems;
     }
 
-    /*
-    private void Update()
+    void AddToChestList(List<Inventory> chestItems, int id, int count)
     {
-        if (Input.GetKeyDown("p"))
+        for (int i = 0; i < chestItems.Count; i++)
         {
-            GetRandomItemsForChest();
+            if (chestItems[i].Item.ID == id)
+            {
+                chestItems[i].Count += count;
+                return;
+            }
         }
+        Items chestItem = chestItem = FetchItemByID(id);
+        chestItems.Add(new Inventory(chestItem, count));
     }
-    */
 }
 
 public class Items

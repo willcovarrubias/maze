@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LootSceneController : MonoBehaviour {
+public class LootSceneController : MonoBehaviour
+{
 
     public GameObject lootRoom1ChestLayout, lootRoom2ChestLayout;
     //public GameObject chest;
 
     GameObject gameMaster;
-    List<Items> chestItems = new List<Items>();
+    List<Inventory> chestItems = new List<Inventory>();
 
     public GameObject chestPanel;
     //public GameObject inventoryPanel;
@@ -107,24 +108,32 @@ public class LootSceneController : MonoBehaviour {
         for (int i = 0; i < chestItems.Count; i++)
         {
 
-                Debug.Log("This item is: " + chestItems[i].Title);
-                //chestItems[i] = itemsToAdd;
-                GameObject itemObject = Instantiate(itemPrefab);
+            Debug.Log("This item is: " + chestItems[i].Item.Title);
+            //chestItems[i] = itemsToAdd;
+            GameObject itemObject = Instantiate(itemPrefab);
 
-                //Added this for testing.
-                //itemObject.GetComponent<ItemData>().weapons = itemsToAdd;
-                //itemObject.GetComponent<ItemData>().slotID = i;
+            //Added this for testing.
+            //itemObject.GetComponent<ItemData>().weapons = itemsToAdd;
+            //itemObject.GetComponent<ItemData>().slotID = i;
 
-                itemObject.transform.SetParent(slots[i].transform);
-                itemObject.transform.localPosition = Vector2.zero;
-                //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
-                itemObject.name = chestItems[i].Title;
-                itemObject.GetComponent<Text>().text = chestItems[i].Title;
-                itemObject.GetComponent<ItemData>().thisItemsID = chestItems[i].ID;
-                //Debug.Log("Title: " + itemsToAdd.Title);
+            itemObject.transform.SetParent(slots[i].transform);
+            itemObject.transform.localPosition = Vector2.zero;
+            //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
+            itemObject.name = chestItems[i].Item.Title;
+            if (chestItems[i].Count > 1)
+            {
+                itemObject.GetComponent<Text>().text = chestItems[i].Item.Title + " x" + chestItems[i].Count;
+            }
+            else
+            {
+                itemObject.GetComponent<Text>().text = chestItems[i].Item.Title;
+            }
+            itemObject.GetComponent<ItemData>().thisItemsID = chestItems[i].Item.ID;
+            itemObject.GetComponent<ItemData>().amount = chestItems[i].Count;
+            //Debug.Log("Title: " + itemsToAdd.Title);
 
-                //break;
-            
+            //break;
+
         }
 
 
