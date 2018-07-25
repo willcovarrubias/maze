@@ -20,6 +20,7 @@ public class InventoryManager : MonoBehaviour
     public List<GameObject> slots = new List<GameObject>();
     Scene currentScene;
     private string sceneName;
+    public GameObject trash;
 
     void Start()
     {
@@ -95,6 +96,7 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
+        SaveInventory();
         UpdateInventoryText();
     }
 
@@ -228,5 +230,15 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-   
+    public void ReorganizeSlots(GameObject slot)
+    {
+        slotAmount--;
+        slots.Remove(slot);
+        for (int i = 0; i < slotAmount; i++)
+        {
+            slots[i].GetComponent<ItemSlot>().id = i;
+            slots[i].GetComponentInChildren<ItemData>().slotID = i;
+        }
+        Destroy(slot);
+    }
 }

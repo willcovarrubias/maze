@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
@@ -18,6 +18,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     Inventory item;
 
     GameObject gameMaster;
+    GameObject currentSlot;
 
     //public int thisItemsID;
     private Vector2 offsetToReturnItem;
@@ -41,6 +42,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         if (gameMaster != null && !itemCameFromLoot)
         {
+            currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
@@ -71,6 +73,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver = false;
+        if (!itemCameFromLoot)
+        {
+            gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(true);
+        }
         if (itemCameFromLoot)
         {
             //if(gameMaster.GetComponent<InventoryManager>().GetMaxInventorySize().)
@@ -100,5 +107,27 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
             }
         }
         
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (!itemCameFromLoot && gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver)
+        {
+            gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
+            if (item.Count == 1)
+            {
+                GetComponentInParent<Text>().text = item.Item.Title;
+            }
+            else if (item.Count > 0)
+            {
+                GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+            }
+            else
+            {
+                gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
+                Destroy(gameObject);
+            }
+        }
+        gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(false);
     }
 }
