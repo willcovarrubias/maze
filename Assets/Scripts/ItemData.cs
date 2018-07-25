@@ -80,33 +80,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         if (itemCameFromLoot)
         {
-            //if(gameMaster.GetComponent<InventoryManager>().GetMaxInventorySize().)
-            //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
-
-            if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
-            {
-                item.Count--;
-                gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
-                gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
-                if (item.Count == 1)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title;
-                }
-                else if (item.Count > 0)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
-                }
-                else
-                {
-                    Destroy(gameObject);
-                }
-            }
-            else
-            {
-
-            }
+            RemoveOneItem();
         }
-        
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -129,5 +104,32 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             }
         }
         gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(false);
+    }
+
+    public void RemoveOneItem()
+    {
+        //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
+        if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
+        {
+            item.Count--;
+            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
+            //gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+            if (item.Count == 1)
+            {
+                GetComponentInParent<Text>().text = item.Item.Title;
+            }
+            else if (item.Count > 0)
+            {
+                GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            
+        }
     }
 }
