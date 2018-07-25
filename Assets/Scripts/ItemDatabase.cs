@@ -96,16 +96,19 @@ public class ItemDatabase : MonoBehaviour
 
     void AddToChestList(List<Inventory> chestItems, int id, int count)
     {
-        for (int i = 0; i < chestItems.Count; i++)
+        if (count > 0)
         {
-            if (chestItems[i].Item.ID == id)
+            for (int i = 0; i < chestItems.Count; i++)
             {
-                chestItems[i].Count += count;
-                return;
+                if (chestItems[i].Item.ID == id)
+                {
+                    chestItems[i].Count += count;
+                    return;
+                }
             }
+            Items chestItem = FetchItemByID(id);
+            chestItems.Add(new Inventory(chestItem, count));
         }
-        Items chestItem = FetchItemByID(id);
-        chestItems.Add(new Inventory(chestItem, count));
     }
 }
 
