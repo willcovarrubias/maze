@@ -19,6 +19,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Inventory item;
 
     GameObject gameMaster;
+    GameObject currentSlot;
 
     //public int thisItemsID;
     private Vector2 offsetToReturnItem;
@@ -43,6 +44,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (gameMaster != null && !itemCameFromLoot)
         {
+            currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
@@ -75,6 +77,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver = false;
         if (!itemCameFromLoot)
         {
             gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(true);
@@ -126,6 +129,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             }
             else
             {
+                gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
                 Destroy(gameObject);
             }
         }

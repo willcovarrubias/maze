@@ -215,11 +215,15 @@ public class InventoryManager : MonoBehaviour
         inventoryPanel.SetActive(false);
     }
 
-    public void ReorganizeSlots()
+    public void ReorganizeSlots(GameObject slot)
     {
-        for (int i = 0; i < slots.Count; i++)
+        slotAmount--;
+        slots.Remove(slot);
+        for (int i = 0; i < slotAmount; i++)
         {
-            
+            slots[i].GetComponent<ItemSlot>().id = i;
+            slots[i].GetComponentInChildren<ItemData>().slotID = i;
         }
+        Destroy(slot);
     }
 }

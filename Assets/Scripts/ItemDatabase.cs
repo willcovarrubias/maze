@@ -54,39 +54,39 @@ public class ItemDatabase : MonoBehaviour
             int amount;
             if (randomValue >= 0.6f)
             {
-                amount = Random.Range(1, 6);
-                i += amount;
-                if (amount + i > numberOfItems)
+                int max = numberOfItems - i;
+                if (max > 6)
                 {
-                    amount = numberOfItems - i;
-                    i = numberOfItems;
+                    max = 6;
                 }
+                amount = Random.Range(1, max);
+                i += amount;
                 chestItemID = GetComponent<ConsumableDatabase>().GetRandomConsumableID();
                 AddToChestList(chestItems, chestItemID, amount);
             }
             else if (randomValue >= 0.2f && randomValue < 0.6f)
             {
-                amount = Random.Range(1, 6);
-                i += amount;
-                if (amount + i > numberOfItems)
+                int max = numberOfItems - i;
+                if (max > 6)
                 {
-                    amount = numberOfItems - i;
-                    i = numberOfItems;
+                    max = 6;
                 }
+                amount = Random.Range(1, max);
+                i += amount;
                 chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
                 AddToChestList(chestItems, chestItemID, amount);
             }
             else if (randomValue >= 0.1f && randomValue < 0.2f)
             {
                 amount = 1;
-                chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
+                chestItemID = GetComponent<WeaponDatabase>().GetRandomWeaponID();
                 i++;
                 AddToChestList(chestItems, chestItemID, amount);
             }
             else
             {
                 amount = 1;
-                chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
+                chestItemID = GetComponent<ArmorDatabase>().GetRandomArmorID();
                 i++;
                 AddToChestList(chestItems, chestItemID, amount);
             }
