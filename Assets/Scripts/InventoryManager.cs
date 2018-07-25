@@ -108,7 +108,7 @@ public class InventoryManager : MonoBehaviour
         inventoryText.GetComponent<Text>().text = "Inventory: " + currentSize + " / " + maxInventorySize;
     }
 
-    bool CanFitInInventory(int itemSize)
+    public bool CanFitInInventory(int itemSize)
     {
         if (currentSize + itemSize <= maxInventorySize)
         {
@@ -183,7 +183,7 @@ public class InventoryManager : MonoBehaviour
         itemObject.name = item.Item.Title;
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
-        if (IsWeapon(item.Item.ID))
+        if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
         }
