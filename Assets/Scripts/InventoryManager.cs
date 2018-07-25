@@ -25,9 +25,8 @@ public class InventoryManager : MonoBehaviour
         LoadInventory();
     }
 
-    public void AddItemToInventory(int id)
+    public void AddItemToInventory(Items item)
     {
-        Items item = GetComponent<ItemDatabase>().FetchItemByID(id);
         if (CanFitInInventory(item.Size))
         {
             if (IsWeapon(item.ID))
@@ -35,7 +34,7 @@ public class InventoryManager : MonoBehaviour
                 Inventory newItem = new Inventory(item, 1);
                 playerItems.Add(newItem);
                 currentSize += item.Size;
-                AddItemToSlots(item, 1);
+                AddItemToSlots(newItem);
                 UpdateInventoryText();
             }
             else
@@ -49,9 +48,9 @@ public class InventoryManager : MonoBehaviour
                         SaveInventory();
                         for (int j = 0; j < slots.Count; j++)
                         {
-                            if (slots[j].GetComponentInChildren<ItemData>().thisItemsID == item.ID)
+                            if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == item.ID)
                             {
-                                slots[j].GetComponentInChildren<ItemData>().amount = playerItems[i].Count;
+                                slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[i].Count;
                                 slots[j].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
                                 UpdateInventoryText();
                                 break;
@@ -64,7 +63,7 @@ public class InventoryManager : MonoBehaviour
                 playerItems.Add(newItem);
                 currentSize += item.Size;
                 SaveInventory();
-                AddItemToSlots(item, 1);
+                AddItemToSlots(newItem);
                 UpdateInventoryText();
             }
         }
@@ -96,26 +95,6 @@ public class InventoryManager : MonoBehaviour
         UpdateInventoryText();
     }
 
-    void AddItemToSlots(Items item, int count)
-    {
-        GameObject itemObject = Instantiate(itemPrefab);
-        AddDynamicSlot();
-        itemObject.transform.SetParent(slots[slotAmount - 1].transform);
-        itemObject.transform.localPosition = Vector2.zero;
-        itemObject.name = item.Title;
-        itemObject.GetComponentInChildren<ItemData>().thisItemsID = item.ID;
-        itemObject.GetComponentInChildren<ItemData>().amount = 1;
-        itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
-        if (IsWeapon(item.ID))
-        {
-            itemObject.GetComponent<Text>().text = item.Title;
-        }
-        else
-        {
-            itemObject.GetComponent<Text>().text = item.Title + " x" + count;
-        }
-    }
-
     public void PrintInventory()
     {
         for (int i = 0; i < playerItems.Count; i++)
@@ -127,16 +106,6 @@ public class InventoryManager : MonoBehaviour
     public void UpdateInventoryText()
     {
         inventoryText.GetComponent<Text>().text = "Inventory: " + currentSize + " / " + maxInventorySize;
-    }
-
-    public int GetMaxInventorySize()
-    {
-        return maxInventorySize;
-    }
-
-    public int GetCurrentSize()
-    {
-        return currentSize;
     }
 
     bool CanFitInInventory(int itemSize)
@@ -182,6 +151,7 @@ public class InventoryManager : MonoBehaviour
                 weapon.Durability = duribility;
                 playerItems.Add(loadedItem);
                 currentSize += weapon.Size * count;
+                AddItemToSlots(loadedItem);
             }
             else
             {
@@ -189,11 +159,8 @@ public class InventoryManager : MonoBehaviour
                 Inventory loadedItem = new Inventory(item, count);
                 playerItems.Add(loadedItem);
                 currentSize += item.Size * count;
+                AddItemToSlots(loadedItem);
             }
-        }
-        for (int i = 0; i < playerItems.Count; i++)
-        {
-            AddItemToSlots(playerItems[i].Item, playerItems[i].Count);
         }
         UpdateInventoryText();
     }
@@ -205,6 +172,25 @@ public class InventoryManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void AddItemToSlots(Inventory item)
+    {
+        GameObject itemObject = Instantiate(itemPrefab);
+        AddDynamicSlot();
+        itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+        itemObject.transform.localPosition = Vector2.zero;
+        itemObject.name = item.Item.Title;
+        itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
+        itemObject.GetComponentInChildren<ItemData>().SetItem(item);
+        if (IsWeapon(item.Item.ID))
+        {
+            itemObject.GetComponent<Text>().text = item.Item.Title;
+        }
+        else
+        {
+            itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
+        }
     }
 
     public void AddDynamicSlot()

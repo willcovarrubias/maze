@@ -11,13 +11,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
 
     //public Weapons weapons;
     
-    public int amount;
+    //public int amount;
     public int slotID;
     public bool itemCameFromLoot;
+    Inventory item;
 
     GameObject gameMaster;
 
-    public int thisItemsID;
+    //public int thisItemsID;
     private Vector2 offsetToReturnItem;
 
     void Start()
@@ -26,6 +27,16 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         //inventoryManager = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
     }
         
+    public Inventory GetItem()
+    {
+        return item;
+    }
+
+    public void SetItem(Inventory itemToBeSet)
+    {
+        item = itemToBeSet;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (gameMaster != null && !itemCameFromLoot)
@@ -65,7 +76,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         if (itemCameFromLoot)
         {
             //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
-            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisItemsID);
+            Debug.Log(GetItem().Count);
+            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(GetItem().Item);
             gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
         }
         else

@@ -120,6 +120,7 @@ public class LootSceneController : MonoBehaviour
             itemObject.transform.localPosition = Vector2.zero;
             //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
             itemObject.name = chestItems[i].Item.Title;
+            itemObject.GetComponent<ItemData>().SetItem(chestItems[i]);
             if (chestItems[i].Count > 1)
             {
                 itemObject.GetComponent<Text>().text = chestItems[i].Item.Title + " x" + chestItems[i].Count;
@@ -128,8 +129,6 @@ public class LootSceneController : MonoBehaviour
             {
                 itemObject.GetComponent<Text>().text = chestItems[i].Item.Title;
             }
-            itemObject.GetComponent<ItemData>().thisItemsID = chestItems[i].Item.ID;
-            itemObject.GetComponent<ItemData>().amount = chestItems[i].Count;
             //Debug.Log("Title: " + itemsToAdd.Title);
 
             //break;
