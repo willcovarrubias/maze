@@ -12,11 +12,14 @@ public class LootSceneController : MonoBehaviour
 
     GameObject gameMaster;
     List<Inventory> chestItems = new List<Inventory>();
+    List<Inventory> chestItemsAdChest = new List<Inventory>();
 
-    public GameObject chestPanel;
+    public GameObject chestPanelFree;
+    public GameObject chestPanelAd;
     //public GameObject inventoryPanel;
 
     public GameObject slotPanel;
+    public GameObject slotPanelForAdChest;
     public GameObject slot;
     public GameObject itemPrefab;
 
@@ -24,7 +27,7 @@ public class LootSceneController : MonoBehaviour
 
     //public List<Weapons> weapons = new List<Weapons>();
     public List<GameObject> slots = new List<GameObject>();
-
+    public List<GameObject> adSlots = new List<GameObject>();
 
 
     //Testing out inventory with WeaponManager. TODO: Replace this with real inventory manager eventually.
@@ -42,21 +45,25 @@ public class LootSceneController : MonoBehaviour
         RandomizeLootRoomLayout();
         GetRandomizedListOfLoot();
 
+
         slotAmount = 10;
         for (int i = 0; i < slotAmount; i++)
         {
             //weapons.Add(new Weapons());
 
             slots.Add(Instantiate(slot));
+            adSlots.Add(Instantiate(slot));
 
             //Adds an ID to each slot when it generates the slots. Used for drag/drop.
             //slots[i].GetComponent<ItemSlot>().id = i;
 
             slots[i].transform.SetParent(slotPanel.transform);
+            adSlots[i].transform.SetParent(slotPanelForAdChest.transform);
 
         }
 
-        AddListOfItemsToChest();
+        AddListOfItemsToFreeChest();
+        AddListOfItemsToAdChest();
 
     }
 
@@ -77,6 +84,7 @@ public class LootSceneController : MonoBehaviour
     private void GetRandomizedListOfLoot()
     {
         chestItems = gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest();
+        chestItemsAdChest = gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest();
     }
 
     public void GoToPathScene()
@@ -84,22 +92,29 @@ public class LootSceneController : MonoBehaviour
         SceneManager.LoadScene("PathScene");
     }
 
-    public void OpenChestUI()
+    public void OpenFreeChestUI()
     {
-        chestPanel.SetActive(true);
+        chestPanelFree.SetActive(true);
+        gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
+        //chest.SetActive(true);
+    }
+    public void OpenAdChestUI()
+    {
+        chestPanelAd.SetActive(true);
         gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
         //chest.SetActive(true);
     }
 
     public void CloseChestUI()
     {
-        chestPanel.SetActive(false);
-        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+        chestPanelFree.SetActive(false);
+        chestPanelAd.SetActive(false);
         //chest.SetActive(false);
     }
 
-    public void AddListOfItemsToChest()
+    public void AddListOfItemsToFreeChest()
     {
+
         if (chestItems.Count > 0)
         {
             Debug.Log("There were more than 0 items, chest count: " + chestItems.Count);
@@ -132,6 +147,33 @@ public class LootSceneController : MonoBehaviour
             //Debug.Log("Title: " + itemsToAdd.Title);
 
             //break;
+
+        }
+
+
+    }
+
+    public void AddListOfItemsToAdChest()
+    {
+        for (int i = 0; i < chestItemsAdChest.Count; i++)
+        {
+
+            Debug.Log("This item is: " + chestItemsAdChest[i].Item.Title);
+            GameObject itemObject = Instantiate(itemPrefab);
+
+            itemObject.transform.SetParent(adSlots[i].transform);
+            itemObject.transform.localPosition = Vector2.zero;
+            //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
+            itemObject.name = chestItemsAdChest[i].Item.Title;
+            itemObject.GetComponent<ItemData>().SetItem(chestItemsAdChest[i]);
+            if (chestItemsAdChest[i].Count > 1)
+            {
+                itemObject.GetComponent<Text>().text = chestItemsAdChest[i].Item.Title + " x" + chestItemsAdChest[i].Count;
+            }
+            else
+            {
+                itemObject.GetComponent<Text>().text = chestItemsAdChest[i].Item.Title;
+            }
 
         }
 
