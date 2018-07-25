@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler {
+public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+{
 
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
     //sense once the inventory  drag and drop functionalitiy is implemented.
 
-    public int amount;
 
+    public int amount;
     public int slotID;
     public bool itemCameFromLoot;
     Inventory item;
@@ -24,7 +26,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
     }
-        
+
     public Inventory GetItem()
     {
         return item;
@@ -74,9 +76,28 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
             //if(gameMaster.GetComponent<InventoryManager>().GetMaxInventorySize().)
             //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
 
-            Debug.Log(GetItem().Count);
-            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(GetItem().Item);
-            gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+            if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
+            {
+                item.Count--;
+                gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
+                gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+                if (item.Count == 1)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title;
+                }
+                else if (item.Count > 0)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
+            else
+            {
+
+            }
         }
         
     }
