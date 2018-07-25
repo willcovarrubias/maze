@@ -174,10 +174,30 @@ public class LootSceneController : MonoBehaviour
             {
                 itemObject.GetComponent<Text>().text = chestItemsAdChest[i].Item.Title;
             }
-
         }
-
-
     }
 
+    public void CollectAllFreeLoot()
+    {
+        for (int i = 0; i < chestItems.Count; i++)
+        {
+            int count = chestItems[i].Count;
+            for (int j = 0; j < count; j++)
+            {
+                slots[i].GetComponentInChildren<ItemData>().RemoveOneItem();
+            }
+        }
+    }
+
+    public void CollectAllAdLoot()
+    {
+        for (int i = 0; i < chestItemsAdChest.Count; i++)
+        {
+            int count = chestItemsAdChest[i].Count;
+            for (int j = 0; j < count; j++)
+            {
+                adSlots[i].GetComponentInChildren<ItemData>().RemoveOneItem();
+            }
+        }
+    }
 }

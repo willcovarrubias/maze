@@ -80,6 +80,7 @@ public class InventoryManager : MonoBehaviour
         if (IsWeapon(item.Item.ID))
         {
             playerItems.Remove(item);
+            item.Count--;
         }
         else
         {
@@ -216,13 +217,8 @@ public class InventoryManager : MonoBehaviour
     public void CloseInventoryPanelUI()
     {
         inventoryPanel.SetActive(false);
-
-
-
-
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
-
         if (sceneName == "LootScene") //Close the chest/player inventory
         {
             GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
