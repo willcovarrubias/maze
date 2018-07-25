@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventoryText;
     public int slotAmount;
     public List<GameObject> slots = new List<GameObject>();
+    public GameObject trash;
 
     void Start()
     {
@@ -92,6 +93,7 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
+        SaveInventory();
         UpdateInventoryText();
     }
 
@@ -211,5 +213,13 @@ public class InventoryManager : MonoBehaviour
     public void CloseInventoryPanelUI()
     {
         inventoryPanel.SetActive(false);
+    }
+
+    public void ReorganizeSlots()
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            
+        }
     }
 }
