@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - WeaponManager
+  - LootSceneManager
   layers:
   - Default
   - TransparentFX

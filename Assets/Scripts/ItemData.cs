@@ -11,9 +11,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
     //sense once the inventory  drag and drop functionalitiy is implemented.
 
-    //public Weapons weapons;
 
-    //public int amount;
+    public int amount;
     public int slotID;
     public bool itemCameFromLoot;
     Inventory item;
@@ -27,7 +26,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        //inventoryManager = GameObject.FindGameObjectWithTag("WeaponManager").GetComponent<WeaponManager>();
     }
 
     public Inventory GetItem()
@@ -58,7 +56,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (!itemCameFromLoot)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
-            Debug.Log("I'm currently dragging the following item: " + item.Item.ID.ToString());
 
         }
 
@@ -68,7 +65,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (!itemCameFromLoot)
         {
-            Debug.Log("This is End Drag");
             this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
             this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -84,7 +80,9 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         if (itemCameFromLoot)
         {
+            //if(gameMaster.GetComponent<InventoryManager>().GetMaxInventorySize().)
             //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
+
             if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
             {
                 item.Count--;
@@ -108,10 +106,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
             }
         }
-        else
-        {
-            //Do nothing.
-        }
+        
     }
 
     public void OnPointerUp(PointerEventData eventData)

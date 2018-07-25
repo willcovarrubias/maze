@@ -7,8 +7,12 @@ public class VillageSceneController : MonoBehaviour {
 
     public GameObject mainMenu, labyrinthConfirmation, barracksMenu, blacksmithMenu, itemShopMenu, inventoryUI;
 
+    GameObject gameMaster;
+
     private void Start()
     {
+        gameMaster = GameObject.FindGameObjectWithTag("GameController");
+
         mainMenu.SetActive(false);
         labyrinthConfirmation.SetActive(false);
         barracksMenu.SetActive(false);
@@ -18,6 +22,8 @@ public class VillageSceneController : MonoBehaviour {
 
     public void MainMenu()
     {
+        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+
         mainMenu.SetActive(true);
     }
     public void MainMenuClose()
@@ -29,7 +35,9 @@ public class VillageSceneController : MonoBehaviour {
     //This function will ask the player if they're sure they want to enter the maze. If so, the next scene will load.
     public void EnterLabyrinth() //TODO: Need to add a confirmation to this, so players don't accidentally enter the labyrinth  when they didn't mean to.
     {
+        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
         labyrinthConfirmation.SetActive(true);
+
     }
     public void EnterLabyrinthConfirmation()
     {
@@ -46,6 +54,8 @@ public class VillageSceneController : MonoBehaviour {
 
     public void BlacksmithMenu()//This'll pop up a menu that'll allow the player to upgrade the smith but also purchase weapons.
     {
+        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+
         blacksmithMenu.SetActive(true);
     }
 
@@ -58,6 +68,8 @@ public class VillageSceneController : MonoBehaviour {
 
     public void BarracksMenu()//This'll pop up a menu that'll allow the player to upgrade the barracks but also select a character.
     {
+        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+
         barracksMenu.SetActive(true);
         Debug.Log("You have accessed the Barracks Menu.");
     }
@@ -69,6 +81,8 @@ public class VillageSceneController : MonoBehaviour {
 
     public void ItemShopMenu()//This'll pop up a menu that'll allow the player to upgrade the item shop but also purchase items.
     {
+        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+
         itemShopMenu.SetActive(true);
     }
 

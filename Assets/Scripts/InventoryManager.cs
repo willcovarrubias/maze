@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
@@ -17,6 +18,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventoryText;
     public int slotAmount;
     public List<GameObject> slots = new List<GameObject>();
+    Scene currentScene;
+    private string sceneName;
     public GameObject trash;
 
     void Start()
@@ -213,6 +216,18 @@ public class InventoryManager : MonoBehaviour
     public void CloseInventoryPanelUI()
     {
         inventoryPanel.SetActive(false);
+
+
+
+
+        currentScene = SceneManager.GetActiveScene();
+        sceneName = currentScene.name;
+
+        if (sceneName == "LootScene") //Close the chest/player inventory
+        {
+            GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
+            lootSceneController.GetComponent<LootSceneController>().CloseChestUI();
+        }
     }
 
     public void ReorganizeSlots(GameObject slot)
