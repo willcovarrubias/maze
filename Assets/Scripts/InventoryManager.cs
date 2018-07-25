@@ -99,10 +99,10 @@ public class InventoryManager : MonoBehaviour
                         SaveInventory();
                         for (int j = 0; j < slots.Count; j++)
                         {
-                            if (slots[i].GetComponentInChildren<ItemData>().thisItemsID == item.ID)
+                            if (slots[j].GetComponentInChildren<ItemData>().thisItemsID == item.ID)
                             {
-                                slots[i].GetComponentInChildren<ItemData>().amount = playerItems[i].Count;
-                                slots[i].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
+                                slots[j].GetComponentInChildren<ItemData>().amount = playerItems[i].Count;
+                                slots[j].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
                                 break;
                             }
                         }
