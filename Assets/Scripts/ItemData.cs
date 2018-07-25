@@ -8,14 +8,16 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
     //sense once the inventory  drag and drop functionalitiy is implemented.
-       
+
     public int amount;
+
     public int slotID;
     public bool itemCameFromLoot;
+    Inventory item;
 
     GameObject gameMaster;
 
-    public int thisItemsID;
+    //public int thisItemsID;
     private Vector2 offsetToReturnItem;
 
     void Start()
@@ -23,6 +25,16 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
     }
         
+    public Inventory GetItem()
+    {
+        return item;
+    }
+
+    public void SetItem(Inventory itemToBeSet)
+    {
+        item = itemToBeSet;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (gameMaster != null && !itemCameFromLoot)
@@ -40,6 +52,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         if (!itemCameFromLoot)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
+
         }
 
     }
@@ -60,8 +73,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         {
             //if(gameMaster.GetComponent<InventoryManager>().GetMaxInventorySize().)
             //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
-            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(thisItemsID);
-            //gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+
+            Debug.Log(GetItem().Count);
+            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(GetItem().Item);
+            gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
         }
+        
     }
 }
