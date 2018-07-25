@@ -47,7 +47,7 @@ public class InventoryManager : MonoBehaviour
         if (Input.GetKeyDown("a"))
         {
             Debug.Log("SAVING...");
-            AddItemToInventory(GetComponent<ItemDatabase>().FetchItemByID(1000));
+            //AddItemToInventory(GetComponent<ItemDatabase>().FetchItemByID(1000));
             for (int i = 0; i < playerItems.Count; i++)
             {
                 Debug.Log(playerItems[i].Item.Title + " " + playerItems[i].Count);
@@ -77,6 +77,16 @@ public class InventoryManager : MonoBehaviour
                 Inventory newItem = new Inventory(item, 1);
                 playerItems.Add(newItem);
                 currentSize += item.Size;
+
+                GameObject itemObject = Instantiate(itemPrefab);
+                AddDynamicSlot();
+                itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+                itemObject.transform.localPosition = Vector2.zero;
+                itemObject.name = item.Title;
+                itemObject.GetComponent<Text>().text = item.Title;
+                itemObject.GetComponentInChildren<ItemData>().thisItemsID = item.ID;
+                itemObject.GetComponentInChildren<ItemData>().amount = 1;
+                itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
             }
             else
             {
@@ -86,35 +96,41 @@ public class InventoryManager : MonoBehaviour
                     {
                         playerItems[i].Count++;
                         currentSize += item.Size;
-
-                        
-
+                        SaveInventory();
+                        for (int j = 0; j < slots.Count; j++)
+                        {
+                            if (slots[i].GetComponentInChildren<ItemData>().thisItemsID == item.ID)
+                            {
+                                slots[i].GetComponentInChildren<ItemData>().amount = playerItems[i].Count;
+                                slots[i].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
+                                break;
+                            }
+                        }
                         return;
                     }
                 }
                 Inventory newItem = new Inventory(item, 1);
                 playerItems.Add(newItem);
                 currentSize += item.Size;
+                SaveInventory();
 
-
-                
+                //Will's testing:
+                GameObject itemObject = Instantiate(itemPrefab);
+                //Added this for testing.
+                // weaponObj.GetComponent<ItemData>().weapons = weaponToAdd;
+                //weaponObj.GetComponent<ItemData>().slotID = i;
+                AddDynamicSlot();
+                //weaponObj.transform.SetParent(slots[i].transform);
+                itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+                itemObject.transform.localPosition = Vector2.zero;
+                //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
+                itemObject.name = item.Title;
+                itemObject.GetComponent<Text>().text = item.Title;
+                itemObject.GetComponentInChildren<ItemData>().thisItemsID = item.ID;
+                itemObject.GetComponentInChildren<ItemData>().amount = 1;
+                itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
+                //End.
             }
-
-            //Will's testing:
-            
-            GameObject itemObject = Instantiate(itemPrefab);
-
-            //Added this for testing.
-            // weaponObj.GetComponent<ItemData>().weapons = weaponToAdd;
-            //weaponObj.GetComponent<ItemData>().slotID = i;
-            AddDynamicSlot();
-            //weaponObj.transform.SetParent(slots[i].transform);
-            itemObject.transform.SetParent(slots[slotAmount - 1].transform);
-            itemObject.transform.localPosition = Vector2.zero;
-            //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
-            itemObject.name = item.Title;
-            itemObject.GetComponent<Text>().text = item.Title;
-            //End.
         }
     }
 
@@ -201,6 +217,25 @@ public class InventoryManager : MonoBehaviour
                 Inventory loadedItem = new Inventory(item, count);
                 playerItems.Add(loadedItem);
                 currentSize = item.Size * count;
+            }
+        }
+        for (int i = 0; i < playerItems.Count; i++)
+        {
+            GameObject itemObject = Instantiate(itemPrefab);
+            AddDynamicSlot();
+            itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+            itemObject.transform.localPosition = Vector2.zero;
+            itemObject.name = playerItems[i].Item.Title;
+            itemObject.GetComponentInChildren<ItemData>().thisItemsID = playerItems[i].Item.ID;
+            itemObject.GetComponentInChildren<ItemData>().amount = playerItems[i].Count;
+            itemObject.GetComponentInChildren<ItemData>().slotID = i;
+            if (IsWeapon(playerItems[i].Item.ID))
+            {
+                itemObject.GetComponent<Text>().text = playerItems[i].Item.Title;
+            }
+            else
+            {
+                itemObject.GetComponent<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
             }
         }
     }
