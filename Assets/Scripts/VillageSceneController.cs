@@ -12,7 +12,7 @@ public class VillageSceneController : MonoBehaviour {
     private void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-
+        inventoryUI = gameMaster.transform.Find("Canvas/InventoryPanel").gameObject;
         mainMenu.SetActive(false);
         labyrinthConfirmation.SetActive(false);
         barracksMenu.SetActive(false);

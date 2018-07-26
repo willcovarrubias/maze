@@ -21,6 +21,7 @@ public class InventoryManager : MonoBehaviour
     Scene currentScene;
     private string sceneName;
     public GameObject trash;
+    public GameObject removeAll;
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class InventoryManager : MonoBehaviour
                 Inventory newItem = new Inventory(item, 1);
                 playerItems.Add(newItem);
                 currentSize += item.Size;
+                SaveInventory();
                 AddItemToSlots(newItem);
                 UpdateInventoryText();
             }
@@ -73,14 +75,13 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    //TODO: Also remove slot when removing items. But also make sure that the slot IDs play nice.
     public void RemoveItemFromInventory(Inventory item)
     {
         currentSize -= item.Item.Size;
         if (IsWeapon(item.Item.ID))
         {
             playerItems.Remove(item);
-            item.Count--;
+            item.Count = 0;
         }
         else
         {
@@ -97,6 +98,15 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
+        SaveInventory();
+        UpdateInventoryText();
+    }
+
+    public void RemoveWholeStackFromInventory(Inventory items)
+    {
+        currentSize -= items.Item.Size * items.Count;
+        playerItems.Remove(items);
+        items.Count = 0;
         SaveInventory();
         UpdateInventoryText();
     }
