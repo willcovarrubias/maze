@@ -97,7 +97,7 @@ public class ItemPopUp : MonoBehaviour
     {
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
-            ThrowAwayOne();
+            //ThrowAwayOne();
             //change HP or MP
         }
         else if (item.Item.ID >= 2000 && item.Item.ID < 3000)
