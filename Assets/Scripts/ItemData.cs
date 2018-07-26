@@ -20,8 +20,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     GameObject gameMaster;
     GameObject currentSlot;
 
-    //public int thisItemsID;
     private Vector2 offsetToReturnItem;
+    bool beingDragged = false;
 
     void Start()
     {
@@ -56,7 +56,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (!itemCameFromLoot)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
-
+            beingDragged = true;
         }
 
     }
@@ -73,12 +73,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver = false;gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver = false;
-        if (!itemCameFromLoot)
-        {
-            gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(true);
-            gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(true);
-        }
+        beingDragged = false;
+        gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver = false; gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver = false;
         if (itemCameFromLoot)
         {
             RemoveOneItem();
@@ -87,34 +83,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!itemCameFromLoot && gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver)
+        if (!beingDragged && !itemCameFromLoot)
         {
-            gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
-            if (item.Count == 1)
-            {
-                GetComponentInParent<Text>().text = item.Item.Title;
-            }
-            else if (item.Count > 0)
-            {
-                GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
-            }
-            else
-            {
-                gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
-                Destroy(gameObject);
-            }
+            gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject);
         }
-
-        //FOR REMOVE ALL
-        if (!itemCameFromLoot && gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver)
-        {
-            gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item);
-            gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
-            Destroy(gameObject);
-        }
-
-        gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(false);
-        gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(false);
     }
 
     public void RemoveOneItem()
@@ -140,7 +112,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         else
         {
-            
+
         }
     }
 }

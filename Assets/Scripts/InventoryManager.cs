@@ -250,15 +250,16 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ReorganizeSlots(GameObject slot)
+    public void ReorganizeSlots(int slotID)
     {
+        GameObject currentSlot = slots[slotID];
         slotAmount--;
-        slots.Remove(slot);
+        slots.RemoveAt(slotID);
         for (int i = 0; i < slotAmount; i++)
         {
             slots[i].GetComponent<ItemSlot>().id = i;
             slots[i].GetComponentInChildren<ItemData>().slotID = i;
         }
-        Destroy(slot);
+        Destroy(currentSlot);
     }
 }
