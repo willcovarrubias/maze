@@ -20,7 +20,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
         {
             //This is for empty slots.
         }
-        else if (!droppedItem.itemCameFromLoot && this.transform.childCount > 0)
+        else if (droppedItem && !droppedItem.itemCameFromLoot)
         {
             Transform oldWeapon = this.transform.GetChild(0);
             oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
