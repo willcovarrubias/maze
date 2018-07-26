@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class VillageSceneController : MonoBehaviour {
 
-    public GameObject mainMenu, labyrinthConfirmation, barracksMenu, blacksmithMenu, itemShopMenu, inventoryUI;
+    public GameObject mainMenu, labyrinthConfirmation, barracksMenu, blacksmithMenu, itemShopMenu, inventoryUI, villInventoryUI;
 
     GameObject gameMaster;
 
@@ -95,10 +95,13 @@ public class VillageSceneController : MonoBehaviour {
     public void InventoryUIOpen()
     {
         inventoryUI.SetActive(true);
+        villInventoryUI.SetActive(true);
+
     }
 
     public void InventoryUIClose()
     {
         inventoryUI.SetActive(false);
+        villInventoryUI.SetActive(false);
     }
 }

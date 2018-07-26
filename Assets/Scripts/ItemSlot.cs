@@ -16,11 +16,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     public void OnDrop(PointerEventData eventData)
     {
         ItemData droppedItem = eventData.pointerDrag.GetComponent<ItemData>();
-        if (gameMaster.GetComponent<InventoryManager>().playerItems[id].Item.ID == -1)
+        if (!droppedItem) // Check if it's in the box.
         {
-            //This is for empty slots.
-        }
-        else if (droppedItem && !droppedItem.itemCameFromLoot)
+            //Do nothing
+        }        
+        else if (droppedItem && !droppedItem.itemCameFromLoot && this.transform.childCount > 0)
         {
             Transform oldWeapon = this.transform.GetChild(0);
             oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;

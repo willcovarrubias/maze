@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -17,8 +18,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public bool itemCameFromLoot;
     Inventory item;
 
+    
+
     GameObject gameMaster;
+    GameObject villageSceneController;
     GameObject currentSlot;
+
+    Scene currentScene;
+    string sceneName;
 
     //public int thisItemsID;
     private Vector2 offsetToReturnItem;
@@ -26,6 +33,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
+
+        currentScene = SceneManager.GetActiveScene();
+        sceneName = currentScene.name;
+
+        if (sceneName == "VillageScene")
+        {
+            villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
+        }
     }
 
     public Inventory GetItem()
@@ -44,7 +59,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
-            this.transform.SetParent(this.transform.parent.parent);
+            this.transform.SetParent(this.transform.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
             GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
@@ -115,6 +130,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
         gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(false);
         gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(false);
+
+
+
+        //Testing for dumping items into VillageInventory. Super messy and inefficient!
+        
+        
+        if (!itemCameFromLoot && villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
+        {
+            Debug.Log("Added items to Village Inventory!!!");
+            //Repeated code. TODO: Clean this up and make it for efficient.
+
+
+            AddThisItemToVillageInventory();
+
+        }
+        
     }
 
     public void RemoveOneItem()
@@ -141,6 +172,33 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         else
         {
             
+        }
+    }
+
+    public void AddThisItemToVillageInventory()
+    {
+        //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
+        if (villageSceneController.GetComponent<VillageInventoryManager>().CanFitInInventory(item.Item.Size))
+        {
+            item.Count--;
+            villageSceneController.GetComponent<VillageInventoryManager>().AddItemToVillageInventory(item.Item);
+            //gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
+            if (item.Count == 1)
+            {
+                GetComponentInParent<Text>().text = item.Item.Title;
+            }
+            else if (item.Count > 0)
+            {
+                GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+
         }
     }
 }

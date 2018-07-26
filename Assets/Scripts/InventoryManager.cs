@@ -203,6 +203,7 @@ public class InventoryManager : MonoBehaviour
         itemObject.name = item.Item.Title;
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
+
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
@@ -212,11 +213,7 @@ public class InventoryManager : MonoBehaviour
             itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
         }
 
-
-        //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
-        slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
-        slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
-        
+        ResizeSlotPanel();
     }
 
     public void AddDynamicSlot()
@@ -260,5 +257,13 @@ public class InventoryManager : MonoBehaviour
             slots[i].GetComponentInChildren<ItemData>().slotID = i;
         }
         Destroy(slot);
+        ResizeSlotPanel();
+    }
+
+    void ResizeSlotPanel()
+    {
+        //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
+        slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
+        slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
     }
 }
