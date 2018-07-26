@@ -49,7 +49,8 @@ public class PathSceneManager : MonoBehaviour {
     //We'll adjust this later to create better balance.
     public void SelectPath()
     {
-        int roomType = Random.Range(0, 4);
+        //Testing - set to only spawn chest rooms for now
+        int roomType = Random.Range(3, 4);
 
 
         if (roomType == 0)

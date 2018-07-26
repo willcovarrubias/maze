@@ -46,7 +46,7 @@ public class VillageInventoryManager : MonoBehaviour
             GetComponent<ItemDatabase>().DisplayAllItems();
         }
     }
-    
+        
 
     public void AddItem(Items item)
     {

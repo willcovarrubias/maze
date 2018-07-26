@@ -45,7 +45,7 @@ public class ItemDatabase : MonoBehaviour
     {
         List<Inventory> chestItems = new List<Inventory>();
         List<int> itemIDs = new List<int>();
-        int numberOfItems = Random.Range(1, 11);
+        int numberOfItems = Random.Range(1, 21);
         int i = 0;
         while (i < numberOfItems)
         {

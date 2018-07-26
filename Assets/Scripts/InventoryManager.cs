@@ -22,11 +22,16 @@ public class InventoryManager : MonoBehaviour
     private string sceneName;
     public GameObject trash;
 
+
+    public RectTransform slotPanelRectTransform;
+    public ScrollRect scrollView;
+
     void Start()
     {
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
+
     }
 
     public void AddItemToInventory(Items item)
@@ -196,6 +201,12 @@ public class InventoryManager : MonoBehaviour
         {
             itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
         }
+
+
+        //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
+        slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
+        slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
+        
     }
 
     public void AddDynamicSlot()
@@ -219,7 +230,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-
+        //Closes the inventory panel no matter what scene the player is currently in.
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
 
