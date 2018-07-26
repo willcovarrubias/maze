@@ -44,8 +44,7 @@ public class ItemDatabase : MonoBehaviour
     public List<Inventory> GetRandomItemsForChest(/*int mazeRoomNumber*/)
     {
         List<Inventory> chestItems = new List<Inventory>();
-        List<int> itemIDs = new List<int>();
-        int numberOfItems = Random.Range(1, 21);
+        int numberOfItems = Random.Range(1, 11);
         int i = 0;
         while (i < numberOfItems)
         {
