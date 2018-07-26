@@ -107,8 +107,8 @@ public class LootSceneController : MonoBehaviour
 
     public void CloseChestUI()
     {
-        chestPanelFree.SetActive(false);
-        chestPanelAd.SetActive(false);
+        //chestPanelFree.SetActive(false);
+        //chestPanelAd.SetActive(false);
         //chest.SetActive(false);
     }
 

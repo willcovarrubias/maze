@@ -22,18 +22,21 @@ public class LootGenerator : MonoBehaviour
         for (int i = 0; i < randomAmount; i++)
         {
             GameObject newChest = Instantiate(chest, canvas.transform, true);
+            newChest.transform.SetAsFirstSibling();
             newChest.AddComponent<Loot>();
             newChest.GetComponent<Loot>().RunRandom(slot, itemPrefab);
+            GameObject chestPanel = newChest.transform.Find("ChestPanel").gameObject;
             newChest.transform.localPosition = new Vector3(
                 chest.transform.localPosition.x + (i * 100) - offset,
                 chest.transform.localPosition.y,
                 chest.transform.localPosition.z
             );
-            newChest.transform.Find("ChestPanel").transform.localPosition = new Vector3(
-                newChest.transform.Find("ChestPanel").transform.localPosition.x - (i * 100) + offset,
-                newChest.transform.Find("ChestPanel").transform.localPosition.y,
-                newChest.transform.Find("ChestPanel").transform.localPosition.z
+            chestPanel.transform.localPosition = new Vector3(
+                chestPanel.transform.localPosition.x - (i * 100) + offset,
+                chestPanel.transform.localPosition.y,
+                chestPanel.transform.localPosition.z
             );
+            chestPanel.transform.SetParent(chestPanel.transform.parent.parent);
             chests.Add(newChest);
         }
     }
