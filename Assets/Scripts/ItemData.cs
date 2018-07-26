@@ -74,11 +74,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerDown(PointerEventData eventData)
     {
         gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver = false;
-        gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver = false;
+        //gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver = false;
         if (!itemCameFromLoot)
         {
             gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(true);
-            gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(true);
+            //gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(true);
         }
         if (itemCameFromLoot)
         {
@@ -108,14 +108,15 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
         //FOR REMOVE ALL
 
+        /*
         if (!itemCameFromLoot && gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver)
         {
             gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item);
             gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
             Destroy(gameObject);
         }
-
-        gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(false);
+        */
+        //gameMaster.GetComponent<InventoryManager>().removeAll.gameObject.SetActive(false);
         gameMaster.GetComponent<InventoryManager>().trash.gameObject.SetActive(false);
     }
 

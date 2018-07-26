@@ -21,8 +21,7 @@ public class InventoryManager : MonoBehaviour
     Scene currentScene;
     private string sceneName;
     public GameObject trash;
-    public GameObject removeAll;
-
+    //public GameObject removeAll;
 
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollView;
