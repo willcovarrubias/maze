@@ -222,7 +222,7 @@ public class InventoryManager : MonoBehaviour
         if (sceneName == "LootScene") //Close the chest/player inventory
         {
             GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
-            lootSceneController.GetComponent<LootSceneController>().CloseChestUI();
+            //lootSceneController.GetComponent<LootSceneController>().CloseChestUI();
             lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
         }
     }
