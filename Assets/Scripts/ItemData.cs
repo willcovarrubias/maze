@@ -52,7 +52,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public Location.WhereAmI GetCurrentLocation()
     {
-        return goingToLocation;
+        return currentLocation;
     }
 
     public Location.WhereAmI GetGoingToLocation()
@@ -101,10 +101,31 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
         }
-        else if (currentLocation == Location.WhereAmI.player && goingToLocation != Location.WhereAmI.village)
+        else if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.player)
         {
             this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
             this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
+        else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.village)
+        {
+            this.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform);
+            this.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
+        else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.player)
+        {
+            if (item.Count > 0)
+            {
+                this.transform.SetParent(currentSlot.transform);
+                this.transform.position = currentSlot.transform.position;
+                GetComponent<CanvasGroup>().blocksRaycasts = true;
+            }
+        }
+        else if (goingToLocation == Location.WhereAmI.notSet)
+        {
+            this.transform.SetParent(currentSlot.transform);
+            this.transform.position = currentSlot.transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
     }
@@ -112,6 +133,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerDown(PointerEventData eventData)
     {
         beingDragged = false;
+        goingToLocation = Location.WhereAmI.notSet;
         if (villageSceneController != null)
         {
             villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver = false;
@@ -130,15 +152,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         if (villageSceneController != null && beingDragged)
         {
-            if (currentLocation == Location.WhereAmI.player && villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
+            if (villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
             {
                 goingToLocation = Location.WhereAmI.village;
                 //Repeated code. TODO: Clean this up and make it for efficient.
-                AddThisItemToVillageInventory();
+                if (currentLocation == Location.WhereAmI.player)
+                {
+                    AddThisItemToVillageInventory();
+                }
             }
-            else
+        }
+        if (gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver)
+        {
+            goingToLocation = Location.WhereAmI.player;
+            if (currentLocation == Location.WhereAmI.village)
             {
-                goingToLocation = Location.WhereAmI.player;
+                AddThisItemToPlayerInventory();
             }
         }
     }
@@ -176,12 +205,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
             if (villageSceneController.GetComponent<VillageInventoryManager>().CanFitInInventory(item.Item.Size))
             {
                 gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
                 villageSceneController.GetComponent<VillageInventoryManager>().AddItemToVillageInventory(item.Item);
-                //item.Count--;
                 if (item.Count == 1)
                 {
                     GetComponentInParent<Text>().text = item.Item.Title;
@@ -193,6 +220,35 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 else
                 {
                     gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(slotID);
+                    Destroy(gameObject);
+                }
+            }
+            else
+            {
+
+            }
+        }
+    }
+
+    public void AddThisItemToPlayerInventory()
+    {
+        if (currentLocation == Location.WhereAmI.village)
+        {
+            if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
+            {
+                villageSceneController.GetComponent<VillageInventoryManager>().RemoveItemFromVillageInventory(item);
+                gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
+                if (item.Count == 1)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title;
+                }
+                else if (item.Count > 0)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                }
+                else
+                {
+                    villageSceneController.GetComponent<VillageInventoryManager>().ReorganizeSlots(slotID);
                     Destroy(gameObject);
                 }
             }

@@ -9,7 +9,6 @@ public class VillageInventoryManager : MonoBehaviour
     int currentSize;
     public List<Inventory> villageItems = new List<Inventory>();
 
-
     public GameObject slotPanel;
     public GameObject slot;
     public GameObject itemPrefab;
@@ -20,7 +19,6 @@ public class VillageInventoryManager : MonoBehaviour
     GameObject gameMaster;
     public GameObject addItemsToVillageInventory;
     //public GameObject add_ALL_ItemsToVillageInventory;
-
 
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollViewVillage;
@@ -212,8 +210,8 @@ public class VillageInventoryManager : MonoBehaviour
         slots.Add(Instantiate(slot));
         slotAmount++;
         //Adds an ID to each slot when it generates the slots. Used for drag/drop.
-        slots[slotAmount - 1].GetComponent<ItemSlot>().id = slotAmount - 1 + 2000;
-        slots[slotAmount - 1].name = "Slot" + (slotAmount - 1 + 2000);
+        slots[slotAmount - 1].GetComponent<ItemSlot>().id = slotAmount - 1;
+        slots[slotAmount - 1].name = "Slot" + (slotAmount - 1);
         slots[slotAmount - 1].transform.SetParent(slotPanel.transform);
     }
 

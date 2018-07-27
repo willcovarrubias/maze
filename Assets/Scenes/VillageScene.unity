@@ -600,6 +600,11 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114684132351431212, guid: 38ad271bcd792874493c3a4342348643,
+        type: 2}
+      propertyPath: inventoryPane
+      value: 
+      objectReference: {fileID: 800331579}
     m_RemovedComponents:
     - {fileID: 114924705026149886, guid: 38ad271bcd792874493c3a4342348643, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 38ad271bcd792874493c3a4342348643, type: 2}
@@ -1698,6 +1703,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 776504251}
+--- !u!1 &800331579 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1068190126766040, guid: 38ad271bcd792874493c3a4342348643,
+    type: 2}
+  m_PrefabInternal: {fileID: 263518395}
+--- !u!114 &800331580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 800331579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72646c17258e946c8ba9503f63aa91ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOver: 0
 --- !u!1 &857369975
 GameObject:
   m_ObjectHideFlags: 0
