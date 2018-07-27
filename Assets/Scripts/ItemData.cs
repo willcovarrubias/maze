@@ -67,27 +67,34 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+
         if (gameMaster != null && currentLocation != Location.WhereAmI.chest)
         {
             currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
-            GetComponent<CanvasGroup>().blocksRaycasts = false;
+            GetComponent<CanvasGroup>().blocksRaycasts = false;        
+                
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
+
         if (currentLocation != Location.WhereAmI.chest)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
             beingDragged = true;
         }
+
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
         if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.village)
         {
             if (item.Count > 0)
@@ -124,10 +131,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = currentSlot.transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
+
+
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
+
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
         if (sceneName == "VillageScene" && villageSceneController == null)
@@ -146,6 +157,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 1;
+
         if (!beingDragged && currentLocation == Location.WhereAmI.player)
         {
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject);
