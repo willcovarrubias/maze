@@ -232,16 +232,17 @@ public class InventoryManager : MonoBehaviour
     public void CloseInventoryPanelUI()
     {
         inventoryPanel.SetActive(false);
-
         //Closes the inventory panel no matter what scene the player is currently in.
-
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
         if (sceneName == "LootScene") //Close the chest/player inventory
         {
             GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
-            //lootSceneController.GetComponent<LootSceneController>().CloseChestUI();
             lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
+        }
+        if (sceneName == "VillageScene")
+        {
+            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();;   
         }
     }
 
