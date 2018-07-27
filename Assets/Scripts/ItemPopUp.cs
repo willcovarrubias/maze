@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ItemPopUp : MonoBehaviour
 {
     Inventory item;
-    GameObject gameMaster;
+    GameObject gameMaster, villageInventory;
     GameObject itemHolder;
     int currentSlot;
     GameObject imageOfItem, nameOfItem, statsOfItem;
@@ -94,11 +94,16 @@ public class ItemPopUp : MonoBehaviour
             action.SetActive(false);
             move1.GetComponentInChildren<Text>().text = "Send to inventory";
             moveAll.GetComponentInChildren<Text>().text = "Send all to inventory";
+            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }
         else
         {
             move1.SetActive(false);
             moveAll.SetActive(false);
+        }
+        if (SceneManager.GetActiveScene().name == "VillageScene" && villageInventory == null)
+        {
+            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }
         popUp.SetActive(true);
     }
@@ -141,7 +146,7 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
+            gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, 1, currentSlot);
             if (item.Count == 1)
             {
                 itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
@@ -161,7 +166,23 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-
+            villageInventory.GetComponent<VillageInventoryManager>().RemoveItemFromVillageInventory(item);
+            if (item.Count == 1)
+            {
+                itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
+                UpdateCount();
+            }
+            else if (item.Count > 0)
+            {
+                itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                UpdateCount();
+            }
+            else
+            {
+                villageInventory.GetComponent<VillageInventoryManager>().ReorganizeSlots(currentSlot);
+                Destroy(itemHolder);
+                Close();
+            }
         }
     }
 
@@ -176,13 +197,28 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-
+            villageInventory.GetComponent<VillageInventoryManager>().RemoveWholeStackFromInventory(item);
+            villageInventory.GetComponent<VillageInventoryManager>().ReorganizeSlots(currentSlot);
+            Destroy(itemHolder);
+            Close();
         }
     }
 
     public void MoveOne()
     {
-        if (currentLocation == Location.WhereAmI.village)
+        if (currentLocation == Location.WhereAmI.player)
+        {
+            itemHolder.GetComponent<ItemData>().AddThisItemToVillageInventory();
+            if (item.Count > 0)
+            {
+                UpdateCount();
+            }
+            else
+            {
+                Close();
+            }
+        }
+        else if (currentLocation == Location.WhereAmI.village)
         {
             itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
             if (item.Count > 0)
@@ -196,26 +232,23 @@ public class ItemPopUp : MonoBehaviour
         }
     }
 
+    //TODO: Make this more efficent
     public void MoveAll()
     {
-        if (currentLocation == Location.WhereAmI.village)
+        if (currentLocation == Location.WhereAmI.player)
         {
-            int itemCount = item.Count;
-            for (int i = 0; i < itemCount; i++)
+            bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot);
+            if (movedAll)
             {
-                bool completed = itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
-                if (item.Count > 0)
-                {
-                    UpdateCount();
-                }
-                else
-                {
-                    Close();
-                }
-                if (!completed)
-                {
-                    return;
-                }
+                Close();
+            }
+        }
+        else if (currentLocation == Location.WhereAmI.village)
+        {
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot);
+            if (movedAll)
+            {
+                Close();
             }
         }
     }

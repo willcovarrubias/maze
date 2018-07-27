@@ -214,13 +214,13 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
-    public void AddThisItemToVillageInventory()
+    public bool AddThisItemToVillageInventory()
     {
         if (currentLocation == Location.WhereAmI.player)
         {
             if (villageSceneController.GetComponent<VillageInventoryManager>().CanFitInInventory(item.Item.Size))
             {
-                gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
+                gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, 1, slotID);
                 villageSceneController.GetComponent<VillageInventoryManager>().AddItemToVillageInventory(item.Item);
                 if (item.Count == 1)
                 {
@@ -235,12 +235,15 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(slotID);
                     Destroy(gameObject);
                 }
+                return true;
             }
             else
             {
-
+                // Add warning
+                return false;
             }
         }
+        return false;
     }
 
     public bool AddThisItemToPlayerInventory()
