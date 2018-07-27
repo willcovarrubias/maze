@@ -35,11 +35,15 @@ public class InventoryManager : MonoBehaviour
         LoadInventory();
     }
 
-    public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId)
+    public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount)
     {
         bool movedAll = false;
-        int amountCanFit = Mathf.FloorToInt(GetFreeSpaceCount() / items.Item.Size);
-        if (amountCanFit > items.Count)
+        int amountCanFit = amount;
+        if (amountCanFit >= Mathf.FloorToInt(GetFreeSpaceCount() / items.Item.Size))
+        {
+            amountCanFit = Mathf.FloorToInt(GetFreeSpaceCount() / items.Item.Size);
+        }
+        if (amountCanFit >= items.Count)
         {
             amountCanFit = items.Count;
             movedAll = true;
