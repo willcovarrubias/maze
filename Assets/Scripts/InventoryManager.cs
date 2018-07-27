@@ -39,7 +39,7 @@ public class InventoryManager : MonoBehaviour
     {
         bool movedAll = false;
         int amountCanFit = Mathf.FloorToInt(GetFreeSpaceCount() / items.Item.Size);
-        if (amountCanFit > items.Item.Size)
+        if (amountCanFit > items.Count)
         {
             amountCanFit = items.Count;
             movedAll = true;
@@ -52,12 +52,7 @@ public class InventoryManager : MonoBehaviour
             }
             if (IsWeapon(items.Item.ID))
             {
-                Inventory newItem = new Inventory(items.Item, 1);
-                playerItems.Add(newItem);
-                currentSize += items.Item.Size;
-                SaveInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(items.Item, 1);
                 villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, 1, thisSlotId);
                 return true;
             }
@@ -83,12 +78,7 @@ public class InventoryManager : MonoBehaviour
                         }
                     }
                 }
-                Inventory newItem = new Inventory(items.Item, amountCanFit);
-                playerItems.Add(newItem);
-                currentSize += items.Item.Size * amountCanFit;
-                SaveInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(items.Item, amountCanFit);
                 villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
             }
         }
@@ -101,12 +91,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (IsWeapon(item.ID))
             {
-                Inventory newItem = new Inventory(item, 1);
-                playerItems.Add(newItem);
-                currentSize += item.Size;
-                SaveInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(item, 1);
             }
             else
             {
@@ -130,12 +115,7 @@ public class InventoryManager : MonoBehaviour
                         return;
                     }
                 }
-                Inventory newItem = new Inventory(item, 1);
-                playerItems.Add(newItem);
-                currentSize += item.Size;
-                SaveInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(item, 1);
             }
         }
     }
@@ -261,6 +241,16 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    void CreateNewItem(Items items, int count)
+    {
+        Inventory newItem = new Inventory(items, count);
+        playerItems.Add(newItem);
+        currentSize += items.Size * count;
+        SaveInventory();
+        AddItemToSlots(newItem);
+        UpdateInventoryText();
+    }
+
     void AddItemToSlots(Inventory item)
     {
         GameObject itemObject = Instantiate(itemPrefab);
@@ -311,7 +301,7 @@ public class InventoryManager : MonoBehaviour
         }
         if (sceneName == "VillageScene")
         {
-            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose(); ;
+            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
         }
     }
 

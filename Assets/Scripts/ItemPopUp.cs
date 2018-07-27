@@ -86,12 +86,16 @@ public class ItemPopUp : MonoBehaviour
         }
         if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "VillageScene")
         {
+            move1.SetActive(true);
+            moveAll.SetActive(true);
             move1.GetComponentInChildren<Text>().text = "Send to village";
             moveAll.GetComponentInChildren<Text>().text = "Send all to village";
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
             action.SetActive(false);
+            move1.SetActive(true);
+            moveAll.SetActive(true);
             move1.GetComponentInChildren<Text>().text = "Send to inventory";
             moveAll.GetComponentInChildren<Text>().text = "Send all to inventory";
             villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
@@ -240,6 +244,10 @@ public class ItemPopUp : MonoBehaviour
             {
                 Close();
             }
+            else 
+            {
+                UpdateCount();
+            }
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
@@ -247,6 +255,10 @@ public class ItemPopUp : MonoBehaviour
             if (movedAll)
             {
                 Close();
+            }
+            else
+            {
+                UpdateCount();
             }
         }
     }

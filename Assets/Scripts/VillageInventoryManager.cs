@@ -36,7 +36,7 @@ public class VillageInventoryManager : MonoBehaviour
     {
         bool movedAll = false;
         int amountCanFit = Mathf.FloorToInt(GetFreeSpaceCount() / items.Item.Size);
-        if (amountCanFit > items.Item.Size)
+        if (amountCanFit > items.Count)
         {
             amountCanFit = items.Count;
             movedAll = true;
@@ -45,12 +45,7 @@ public class VillageInventoryManager : MonoBehaviour
         {
             if (IsWeapon(items.Item.ID))
             {
-                Inventory newItem = new Inventory(items.Item, 1);
-                villageItems.Add(newItem);
-                currentSize += items.Item.Size;
-                SaveVillageInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(items.Item, 1);
                 gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, 1, thisSlotId);
                 return true;
             }
@@ -76,12 +71,7 @@ public class VillageInventoryManager : MonoBehaviour
                         }
                     }
                 }
-                Inventory newItem = new Inventory(items.Item, amountCanFit);
-                villageItems.Add(newItem);
-                currentSize += items.Item.Size * amountCanFit;
-                SaveVillageInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(items.Item, amountCanFit);
                 gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
             }
         }
@@ -94,12 +84,7 @@ public class VillageInventoryManager : MonoBehaviour
         {
             if (IsWeapon(item.ID))
             {
-                Inventory newItem = new Inventory(item, 1);
-                villageItems.Add(newItem);
-                currentSize += item.Size;
-                SaveVillageInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(item, 1);
             }
             else
             {
@@ -123,12 +108,7 @@ public class VillageInventoryManager : MonoBehaviour
                         return;
                     }
                 }
-                Inventory newItem = new Inventory(item, 1);
-                villageItems.Add(newItem);
-                currentSize += item.Size;
-                SaveVillageInventory();
-                AddItemToSlots(newItem);
-                UpdateInventoryText();
+                CreateNewItem(item, 1);
             }
         }
     }
@@ -251,6 +231,16 @@ public class VillageInventoryManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void CreateNewItem(Items items, int count)
+    {
+        Inventory newItem = new Inventory(items, count);
+        villageItems.Add(newItem);
+        currentSize += items.Size * count;
+        SaveVillageInventory();
+        AddItemToSlots(newItem);
+        UpdateInventoryText();
     }
 
     void AddItemToSlots(Inventory item)
