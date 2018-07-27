@@ -159,9 +159,9 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerUp(PointerEventData eventData)
     {
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 1;
-
         if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village))
         {
+            gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 3;
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
         }
         if (villageSceneController != null && beingDragged)
