@@ -21,6 +21,7 @@ public class InventoryManager : MonoBehaviour
     Scene currentScene;
     private string sceneName;
 
+    public GameObject inventoryPane;
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollView;
 
@@ -29,7 +30,6 @@ public class InventoryManager : MonoBehaviour
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
-
     }
 
     public void AddItemToInventory(Items item)

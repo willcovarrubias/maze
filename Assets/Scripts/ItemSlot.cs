@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
     public int id;
     GameObject gameMaster;
+    GameObject villageSceneController;
 
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
+        if (SceneManager.GetActiveScene().name == "VillageScene")
+        {
+            villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
+        }
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -32,8 +38,19 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             droppedItem.slotID = id;
             droppedItem.transform.SetParent(this.transform);
             droppedItem.transform.position = this.transform.position;
+        }
+        else if (droppedItem && this.transform.childCount > 0 &&
+                 droppedItem.GetComponent<ItemData>().GetCurrentLocation() == Location.WhereAmI.village &&
+                 droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.village)
+        {
+            Transform oldWeapon = this.transform.GetChild(0);
+            oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
+            oldWeapon.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[droppedItem.slotID].transform);
+            oldWeapon.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[droppedItem.slotID].transform.position;
 
+            droppedItem.slotID = id;
+            droppedItem.transform.SetParent(this.transform);
+            droppedItem.transform.position = this.transform.position;
         }
     }
-
 }
