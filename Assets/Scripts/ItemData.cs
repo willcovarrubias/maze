@@ -130,6 +130,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
+        gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver = false;
         if (sceneName == "VillageScene" && villageSceneController == null)
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
@@ -146,16 +147,15 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!beingDragged && currentLocation == Location.WhereAmI.player)
+        if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village))
         {
-            gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject);
+            gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
         }
         if (villageSceneController != null && beingDragged)
         {
             if (villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
             {
                 goingToLocation = Location.WhereAmI.village;
-                //Repeated code. TODO: Clean this up and make it for efficient.
                 if (currentLocation == Location.WhereAmI.player)
                 {
                     AddThisItemToVillageInventory();
@@ -230,7 +230,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
-    public void AddThisItemToPlayerInventory()
+    public bool AddThisItemToPlayerInventory()
     {
         if (currentLocation == Location.WhereAmI.village)
         {
@@ -251,11 +251,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     villageSceneController.GetComponent<VillageInventoryManager>().ReorganizeSlots(slotID);
                     Destroy(gameObject);
                 }
+                return true;
             }
             else
             {
-
+                // Add warning
+                return false;
             }
         }
+        return false;
     }
 }

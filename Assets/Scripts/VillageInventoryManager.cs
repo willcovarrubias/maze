@@ -102,7 +102,15 @@ public class VillageInventoryManager : MonoBehaviour
         }
         SaveVillageInventory();
         UpdateInventoryText();
-        
+    }
+
+    public void RemoveWholeStackFromInventory(Inventory items)
+    {
+        currentSize -= items.Item.Size * items.Count;
+        villageItems.Remove(items);
+        items.Count = 0;
+        SaveVillageInventory();
+        UpdateInventoryText();
     }
 
     public void UpdateInventoryText()
