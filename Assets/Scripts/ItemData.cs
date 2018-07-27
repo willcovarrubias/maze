@@ -67,15 +67,13 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
         if (gameMaster != null && currentLocation != Location.WhereAmI.chest)
         {
             currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
-            GetComponent<CanvasGroup>().blocksRaycasts = false;        
-                
+            GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
     }
 
@@ -88,13 +86,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = eventData.position - offsetToReturnItem;
             beingDragged = true;
         }
-
-        
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
         if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.village)
         {
             if (item.Count > 0)
@@ -131,14 +126,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = currentSlot.transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
-
-
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
-
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
         gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver = false;
@@ -171,7 +163,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 goingToLocation = Location.WhereAmI.village;
                 if (currentLocation == Location.WhereAmI.player)
                 {
-                    AddThisItemToVillageInventory();
+                    villageSceneController.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, slotID, 1);
+                    CheckCount();
                 }
             }
         }
@@ -180,7 +173,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             goingToLocation = Location.WhereAmI.player;
             if (currentLocation == Location.WhereAmI.village)
             {
-                AddThisItemToPlayerInventory();
+                gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1);
+                CheckCount();
             }
         }
     }
@@ -214,65 +208,19 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
-    public bool AddThisItemToVillageInventory()
+    void CheckCount()
     {
-        if (currentLocation == Location.WhereAmI.player)
+        if (item.Count == 1)
         {
-            if (villageSceneController.GetComponent<VillageInventoryManager>().CanFitInInventory(item.Item.Size))
-            {
-                gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, 1, slotID);
-                villageSceneController.GetComponent<VillageInventoryManager>().AddItemToVillageInventory(item.Item);
-                if (item.Count == 1)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title;
-                }
-                else if (item.Count > 0)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
-                }
-                else
-                {
-                    Destroy(gameObject);
-                }
-                return true;
-            }
-            else
-            {
-                // Add warning
-                return false;
-            }
+            GetComponentInParent<Text>().text = item.Item.Title;
         }
-        return false;
-    }
-
-    public bool AddThisItemToPlayerInventory()
-    {
-        if (currentLocation == Location.WhereAmI.village)
+        else if (item.Count > 0)
         {
-            if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
-            {
-                villageSceneController.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(item, 1, slotID);
-                gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
-                if (item.Count == 1)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title;
-                }
-                else if (item.Count > 0)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
-                }
-                else
-                {
-                    Destroy(gameObject);
-                }
-                return true;
-            }
-            else
-            {
-                // Add warning
-                return false;
-            }
+            GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
         }
-        return false;
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

@@ -117,10 +117,12 @@ public class ItemPopUp : MonoBehaviour
         if (item.Count > 1)
         {
             nameOfItem.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
+            itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
         }
         else
         {
             nameOfItem.GetComponent<Text>().text = item.Item.Title;
+            itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
         }
     }
 
@@ -151,14 +153,8 @@ public class ItemPopUp : MonoBehaviour
         if (currentLocation == Location.WhereAmI.player)
         {
             gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, 1, currentSlot);
-            if (item.Count == 1)
+            if (item.Count > 0)
             {
-                itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
-                UpdateCount();
-            }
-            else if (item.Count > 0)
-            {
-                itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
                 UpdateCount();
             }
             else
@@ -170,14 +166,8 @@ public class ItemPopUp : MonoBehaviour
         else if (currentLocation == Location.WhereAmI.village)
         {
             villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(item, 1, currentSlot);
-            if (item.Count == 1)
+            if (item.Count > 0)
             {
-                itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
-                UpdateCount();
-            }
-            else if (item.Count > 0)
-            {
-                itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
                 UpdateCount();
             }
             else
@@ -210,56 +200,39 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            itemHolder.GetComponent<ItemData>().AddThisItemToVillageInventory();
-            if (item.Count > 0)
-            {
-                UpdateCount();
-            }
-            else
-            {
-                Close();
-            }
+            bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, 1);
+            CloseOrUpdate(movedAll);
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
-            if (item.Count > 0)
-            {
-                UpdateCount();
-            }
-            else
-            {
-                Close();
-            }
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1);
+            CloseOrUpdate(movedAll);
         }
     }
 
-    //TODO: Make this more efficent
     public void MoveAll()
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot);
-            if (movedAll)
-            {
-                Close();
-            }
-            else 
-            {
-                UpdateCount();
-            }
+            bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, item.Count);
+            CloseOrUpdate(movedAll);
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot);
-            if (movedAll)
-            {
-                Close();
-            }
-            else
-            {
-                UpdateCount();
-            }
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count);
+            CloseOrUpdate(movedAll);
+        }
+    }
+
+    void CloseOrUpdate(bool movedAll)
+    {
+        if (movedAll)
+        {
+            Close();
+        }
+        else
+        {
+            UpdateCount();
         }
     }
 }
