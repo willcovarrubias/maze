@@ -79,6 +79,7 @@ public class VillageInventoryManager : MonoBehaviour
                 gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
             }
         }
+        //TODO if reached here the item cannot fit!
         return movedAll;
     }
 

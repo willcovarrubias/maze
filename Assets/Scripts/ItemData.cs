@@ -201,10 +201,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     Destroy(gameObject);
                 }
             }
-            else
-            {
-
-            }
         }
     }
 
