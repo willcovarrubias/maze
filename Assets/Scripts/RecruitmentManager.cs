@@ -34,9 +34,9 @@ public class RecruitmentManager : MonoBehaviour {
 
             characterObject.transform.SetParent(characterSlots[i].transform);
             characterObject.transform.localPosition = Vector2.zero;
-            characterObject.GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().CreateHero();
-            characterObject.name = characterObject.GetComponent<CharacterData>().character.name;
-            characterObject.GetComponent<Text>().text = characterObject.GetComponent<CharacterData>().character.name;
+            //characterObject.GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
+            //characterObject.name = characterObject.GetComponent<CharacterData>().character.name;
+            //characterObject.GetComponent<Text>().text = characterObject.GetComponent<CharacterData>().character.name;
 
             //characterObject.GetComponent<Image>().sprite = gameMaster.GetComponent<CharacterDatabase>().CreateHero().sprite;
         }
