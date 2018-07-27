@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ItemPopUp : MonoBehaviour
@@ -10,7 +11,7 @@ public class ItemPopUp : MonoBehaviour
     GameObject itemHolder;
     int currentSlot;
     GameObject imageOfItem, nameOfItem, statsOfItem;
-    GameObject popUp, action, discard1, discardAll, exit;
+    GameObject popUp, action, discard1, discardAll, move1, moveAll, exit;
     Location.WhereAmI currentLocation;
 
     void Start()
@@ -23,6 +24,8 @@ public class ItemPopUp : MonoBehaviour
         action = popUp.transform.Find("Background/Action").gameObject;
         discard1 = popUp.transform.Find("Background/ThrowAway1").gameObject;
         discardAll = popUp.transform.Find("Background/ThrowAwayAll").gameObject;
+        move1 = popUp.transform.Find("Background/Move1").gameObject;
+        moveAll = popUp.transform.Find("Background/MoveAll").gameObject;
         exit = popUp.transform.Find("Background/Exit").gameObject;
         Button actionButton = action.GetComponent<Button>();
         actionButton.onClick.AddListener(Action);
@@ -30,6 +33,10 @@ public class ItemPopUp : MonoBehaviour
         discardButton.onClick.AddListener(ThrowAwayOne);
         Button discardAllButton = discardAll.GetComponent<Button>();
         discardAllButton.onClick.AddListener(ThrowAwayAll);
+        Button moveButton = move1.GetComponent<Button>();
+        moveButton.onClick.AddListener(MoveOne);
+        Button moveAllButton = moveAll.GetComponent<Button>();
+        moveAllButton.onClick.AddListener(MoveAll);
         Button exitButton = exit.GetComponent<Button>();
         exitButton.onClick.AddListener(Close);
     }
@@ -41,6 +48,8 @@ public class ItemPopUp : MonoBehaviour
         currentSlot = slot;
         itemHolder = holder;
         currentLocation = location;
+        discard1.GetComponentInChildren<Text>().text = "Discard";
+        discardAll.GetComponentInChildren<Text>().text = "Discard All";
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
             Consumable consumable = (Consumable)item.Item;
@@ -75,16 +84,21 @@ public class ItemPopUp : MonoBehaviour
             action.SetActive(true);
             action.GetComponentInChildren<Text>().text = "Equip";
         }
-        if (currentLocation == Location.WhereAmI.player)
+        if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "VillageScene")
         {
-            discard1.GetComponentInChildren<Text>().text = "Discard 1";
-            discardAll.GetComponentInChildren<Text>().text = "Discard All";
+            move1.GetComponentInChildren<Text>().text = "Send to village";
+            moveAll.GetComponentInChildren<Text>().text = "Send all to village";
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
             action.SetActive(false);
-            discard1.GetComponentInChildren<Text>().text = "Move 1 to inventory";
-            discardAll.GetComponentInChildren<Text>().text = "Move all to inventory";
+            move1.GetComponentInChildren<Text>().text = "Send to inventory";
+            moveAll.GetComponentInChildren<Text>().text = "Send all to inventory";
+        }
+        else
+        {
+            move1.SetActive(false);
+            moveAll.SetActive(false);
         }
         popUp.SetActive(true);
     }
@@ -147,15 +161,7 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
-            if (item.Count > 0)
-            {
-                UpdateCount();
-            }
-            else
-            {
-                Close();
-            }
+
         }
     }
 
@@ -170,6 +176,30 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
+
+        }
+    }
+
+    public void MoveOne()
+    {
+        if (currentLocation == Location.WhereAmI.village)
+        {
+            itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
+            if (item.Count > 0)
+            {
+                UpdateCount();
+            }
+            else
+            {
+                Close();
+            }
+        }
+    }
+
+    public void MoveAll()
+    {
+        if (currentLocation == Location.WhereAmI.village)
+        {
             int itemCount = item.Count;
             for (int i = 0; i < itemCount; i++)
             {
@@ -181,7 +211,7 @@ public class ItemPopUp : MonoBehaviour
                 else
                 {
                     Close();
-                } 
+                }
                 if (!completed)
                 {
                     return;
