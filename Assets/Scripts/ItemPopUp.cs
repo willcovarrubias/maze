@@ -11,6 +11,7 @@ public class ItemPopUp : MonoBehaviour
     int currentSlot;
     GameObject imageOfItem, nameOfItem, statsOfItem;
     GameObject popUp, action, discard1, discardAll, exit;
+    Location.WhereAmI currentLocation;
 
     void Start()
     {
@@ -33,12 +34,13 @@ public class ItemPopUp : MonoBehaviour
         exitButton.onClick.AddListener(Close);
     }
 
-    public void ShowItemPopUp(Inventory i, int slot, GameObject holder)
+    public void ShowItemPopUp(Inventory i, int slot, GameObject holder, Location.WhereAmI location)
     {
         string stats = "";
         item = i;
         currentSlot = slot;
         itemHolder = holder;
+        currentLocation = location;
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
             Consumable consumable = (Consumable)item.Item;
@@ -72,6 +74,17 @@ public class ItemPopUp : MonoBehaviour
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
             action.GetComponentInChildren<Text>().text = "Equip";
+        }
+        if (currentLocation == Location.WhereAmI.player)
+        {
+            discard1.GetComponentInChildren<Text>().text = "Discard 1";
+            discardAll.GetComponentInChildren<Text>().text = "Discard All";
+        }
+        else if (currentLocation == Location.WhereAmI.village)
+        {
+            action.SetActive(false);
+            discard1.GetComponentInChildren<Text>().text = "Move 1 to inventory";
+            discardAll.GetComponentInChildren<Text>().text = "Move all to inventory";
         }
         popUp.SetActive(true);
     }
@@ -112,30 +125,68 @@ public class ItemPopUp : MonoBehaviour
 
     public void ThrowAwayOne()
     {
-        gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
-        if (item.Count == 1)
+        if (currentLocation == Location.WhereAmI.player)
         {
-            itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
-            UpdateCount();
+            gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
+            if (item.Count == 1)
+            {
+                itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
+                UpdateCount();
+            }
+            else if (item.Count > 0)
+            {
+                itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                UpdateCount();
+            }
+            else
+            {
+                gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
+                Destroy(itemHolder);
+                Close();
+            }
         }
-        else if (item.Count > 0)
+        else if (currentLocation == Location.WhereAmI.village)
         {
-            itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
-            UpdateCount();
-        }
-        else
-        {
-            gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
-            Destroy(itemHolder);
-            Close();
+            itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
+            if (item.Count > 0)
+            {
+                UpdateCount();
+            }
+            else
+            {
+                Close();
+            }
         }
     }
 
     public void ThrowAwayAll()
     {
-        gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item);
-        gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
-        Destroy(itemHolder);
-        Close();
+        if (currentLocation == Location.WhereAmI.player)
+        {
+            gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item);
+            gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
+            Destroy(itemHolder);
+            Close();
+        }
+        else if (currentLocation == Location.WhereAmI.village)
+        {
+            int itemCount = item.Count;
+            for (int i = 0; i < itemCount; i++)
+            {
+                bool completed = itemHolder.GetComponent<ItemData>().AddThisItemToPlayerInventory();
+                if (item.Count > 0)
+                {
+                    UpdateCount();
+                }
+                else
+                {
+                    Close();
+                } 
+                if (!completed)
+                {
+                    return;
+                }
+            }
+        }
     }
 }
