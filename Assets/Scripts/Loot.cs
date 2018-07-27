@@ -52,6 +52,7 @@ public class Loot : MonoBehaviour
             itemObject.transform.localPosition = Vector2.zero;
             itemObject.name = chestItems[i].Item.Title;
             itemObject.GetComponent<ItemData>().SetItem(chestItems[i]);
+            itemObject.GetComponent<ItemData>().SetLocation(Location.WhereAmI.chest);
             if (chestItems[i].Count > 1)
             {
                 itemObject.GetComponent<Text>().text = chestItems[i].Item.Title + " x" + chestItems[i].Count;
@@ -70,7 +71,7 @@ public class Loot : MonoBehaviour
             int count = chestItems[i].Count;
             for (int j = 0; j < count; j++)
             {
-                slots[i].GetComponentInChildren<ItemData>().RemoveOneItem();
+                slots[i].GetComponentInChildren<ItemData>().RemoveOneItemFromChest();
             }
         }
     }

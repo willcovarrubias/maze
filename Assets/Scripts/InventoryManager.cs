@@ -20,8 +20,6 @@ public class InventoryManager : MonoBehaviour
     public List<GameObject> slots = new List<GameObject>();
     Scene currentScene;
     private string sceneName;
-    public GameObject trash;
-    public GameObject removeAll;
 
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollView;
@@ -203,7 +201,7 @@ public class InventoryManager : MonoBehaviour
         itemObject.name = item.Item.Title;
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
-
+        itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.player);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;

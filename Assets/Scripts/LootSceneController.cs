@@ -136,6 +136,7 @@ public class LootSceneController : MonoBehaviour
             //weaponObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
             itemObject.name = chestItems[i].Item.Title;
             itemObject.GetComponent<ItemData>().SetItem(chestItems[i]);
+            itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.chest);
             if (chestItems[i].Count > 1)
             {
                 itemObject.GetComponent<Text>().text = chestItems[i].Item.Title + " x" + chestItems[i].Count;
@@ -184,7 +185,7 @@ public class LootSceneController : MonoBehaviour
             int count = chestItems[i].Count;
             for (int j = 0; j < count; j++)
             {
-                slots[i].GetComponentInChildren<ItemData>().RemoveOneItem();
+                slots[i].GetComponentInChildren<ItemData>().RemoveOneItemFromChest();
             }
         }
     }
@@ -196,7 +197,7 @@ public class LootSceneController : MonoBehaviour
             int count = chestItemsAdChest[i].Count;
             for (int j = 0; j < count; j++)
             {
-                adSlots[i].GetComponentInChildren<ItemData>().RemoveOneItem();
+                adSlots[i].GetComponentInChildren<ItemData>().RemoveOneItemFromChest();
             }
         }
     }
