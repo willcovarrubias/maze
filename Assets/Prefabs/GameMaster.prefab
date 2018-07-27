@@ -623,8 +623,6 @@ MonoBehaviour:
   inventoryText: {fileID: 1642265882816644}
   slotAmount: 0
   slots: []
-  trash: {fileID: 1440141537651266}
-  removeAll: {fileID: 1356770283814538}
   slotPanelRectTransform: {fileID: 224585525886735612}
   scrollView: {fileID: 114352583703971968}
 --- !u!114 &114774634929605638
@@ -773,6 +771,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d39e42684dc4898a0a33f5de04d11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotPanel: {fileID: 0}
+  slot: {fileID: 0}
+  itemPrefab: {fileID: 0}
+  villageInventoryText: {fileID: 0}
+  slotAmount: 0
+  slots: []
+  addItemsToVillageInventory: {fileID: 0}
+  slotPanelRectTransform: {fileID: 0}
+  scrollViewVillage: {fileID: 0}
 --- !u!114 &114958948796013350
 MonoBehaviour:
   m_ObjectHideFlags: 1

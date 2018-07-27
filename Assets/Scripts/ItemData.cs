@@ -12,13 +12,9 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
     //sense once the inventory  drag and drop functionalitiy is implemented.
 
-
     public int amount;
     public int slotID;
-    public bool itemCameFromLoot;
     Inventory item;
-
-    
 
     GameObject gameMaster;
     GameObject villageSceneController;
@@ -30,22 +26,18 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     private Vector2 offsetToReturnItem;
     bool beingDragged = false;
 
+    Location.WhereAmI currentLocation;
+    Location.WhereAmI goingToLocation;
+
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
-
         if (sceneName == "VillageScene")
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }
-    }
-
-    public Inventory GetItem()
-    {
-        return item;
     }
 
     public void SetItem(Inventory itemToBeSet)
@@ -53,9 +45,29 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         item = itemToBeSet;
     }
 
+    public void SetLocation(Location.WhereAmI location)
+    {
+        currentLocation = location;
+    }
+
+    public Location.WhereAmI GetCurrentLocation()
+    {
+        return goingToLocation;
+    }
+
+    public Location.WhereAmI GetGoingToLocation()
+    {
+        return goingToLocation;
+    }
+
+    public Inventory GetItem()
+    {
+        return item;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (gameMaster != null && !itemCameFromLoot)
+        if (gameMaster != null && currentLocation != Location.WhereAmI.chest)
         {
             currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
@@ -63,22 +75,33 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = eventData.position - offsetToReturnItem;
             GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
-
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!itemCameFromLoot)
+        if (currentLocation != Location.WhereAmI.chest)
         {
             this.transform.position = eventData.position - offsetToReturnItem;
             beingDragged = true;
         }
-
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (!itemCameFromLoot)
+        /*
+         * check player to player
+         * check player to village
+         */
+        if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.village)
+        {
+            if (item.Count > 0)
+            {
+                this.transform.SetParent(currentSlot.transform);
+                this.transform.position = currentSlot.transform.position;
+                GetComponent<CanvasGroup>().blocksRaycasts = true;
+            }
+        }
+        else if (currentLocation == Location.WhereAmI.player && goingToLocation != Location.WhereAmI.village)
         {
             this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
             this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
@@ -89,82 +112,94 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerDown(PointerEventData eventData)
     {
         beingDragged = false;
-        gameMaster.GetComponent<InventoryManager>().trash.GetComponent<OverUI>().isOver = false; gameMaster.GetComponent<InventoryManager>().removeAll.GetComponent<OverUI>().isOver = false;
-        if (itemCameFromLoot)
+        if (villageSceneController != null)
         {
-            RemoveOneItem();
+            villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver = false;
+        }
+        if (currentLocation == Location.WhereAmI.chest)
+        {
+            RemoveOneItemFromChest();
         }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!beingDragged && !itemCameFromLoot)
+        if (!beingDragged && currentLocation == Location.WhereAmI.player)
         {
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject);
         }
-        //Testing for dumping items into VillageInventory. Super messy and inefficient!
-        if (!itemCameFromLoot && villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
+        if (villageSceneController != null && beingDragged)
         {
-            Debug.Log("Added items to Village Inventory!!!");
-            //Repeated code. TODO: Clean this up and make it for efficient.
-
-
-            AddThisItemToVillageInventory();
-
-        }
-    }
-
-    public void RemoveOneItem()
-    {
-        //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
-        if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
-        {
-            item.Count--;
-            gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
-            //gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
-            if (item.Count == 1)
+            if (currentLocation == Location.WhereAmI.player && villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
             {
-                GetComponentInParent<Text>().text = item.Item.Title;
-            }
-            else if (item.Count > 0)
-            {
-                GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                goingToLocation = Location.WhereAmI.village;
+                //Repeated code. TODO: Clean this up and make it for efficient.
+                AddThisItemToVillageInventory();
             }
             else
             {
-                Destroy(gameObject);
+                goingToLocation = Location.WhereAmI.player;
             }
         }
-        else
-        {
+    }
 
+    public void RemoveOneItemFromChest()
+    {
+        if (currentLocation == Location.WhereAmI.chest)
+        {
+            //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
+            if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
+            {
+                item.Count--;
+                gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
+                if (item.Count == 1)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title;
+                }
+                else if (item.Count > 0)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 
     public void AddThisItemToVillageInventory()
     {
-        //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
-        if (villageSceneController.GetComponent<VillageInventoryManager>().CanFitInInventory(item.Item.Size))
+        if (currentLocation == Location.WhereAmI.player)
         {
-            item.Count--;
-            villageSceneController.GetComponent<VillageInventoryManager>().AddItemToVillageInventory(item.Item);
-            //gameMaster.GetComponent<InventoryManager>().PrintInventory(); //TODO: Remove this once done testing.
-            if (item.Count == 1)
+            //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
+            if (villageSceneController.GetComponent<VillageInventoryManager>().CanFitInInventory(item.Item.Size))
             {
-                GetComponentInParent<Text>().text = item.Item.Title;
-            }
-            else if (item.Count > 0)
-            {
-                GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                gameMaster.GetComponent<InventoryManager>().RemoveItemFromInventory(item);
+                villageSceneController.GetComponent<VillageInventoryManager>().AddItemToVillageInventory(item.Item);
+                //item.Count--;
+                if (item.Count == 1)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title;
+                }
+                else if (item.Count > 0)
+                {
+                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+                }
+                else
+                {
+                    gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(slotID);
+                    Destroy(gameObject);
+                }
             }
             else
             {
-                Destroy(gameObject);
-            }
-        }
-        else
-        {
 
+            }
         }
     }
 }

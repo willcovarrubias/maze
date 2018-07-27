@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour, IDropHandler {
-
+public class ItemSlot : MonoBehaviour, IDropHandler
+{
     public int id;
     GameObject gameMaster;
 
@@ -12,15 +12,17 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
     }
-    
+
     public void OnDrop(PointerEventData eventData)
     {
         ItemData droppedItem = eventData.pointerDrag.GetComponent<ItemData>();
         if (!droppedItem) // Check if it's in the box.
         {
             //Do nothing
-        }        
-        else if (droppedItem && !droppedItem.itemCameFromLoot && this.transform.childCount > 0)
+        }
+        else if (droppedItem && this.transform.childCount > 0 &&
+                 droppedItem.GetComponent<ItemData>().GetCurrentLocation() == Location.WhereAmI.player &&
+                 droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.player)
         {
             Transform oldWeapon = this.transform.GetChild(0);
             oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
@@ -30,7 +32,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
             droppedItem.slotID = id;
             droppedItem.transform.SetParent(this.transform);
             droppedItem.transform.position = this.transform.position;
-            
+
         }
     }
 

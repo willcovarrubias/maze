@@ -28,52 +28,11 @@ public class VillageInventoryManager : MonoBehaviour
     private void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-
         maxVillageInventorySize = 100;
         currentSize = 0;
         LoadVillageInventory();
-
-
         ResizeSlotPanel();
-
     }
-
-    /*
-    private void Update()
-    {
-        if (Input.GetKeyDown("l"))
-        {
-            Debug.Log("Loading...");
-            LoadFromPlayerPrefs();
-            for (int i = 0; i < villageItems.Count; i++)
-            {
-                Debug.Log(villageItems[i].Item.Title + " " + villageItems[i].Count);
-            }
-        }
-        if (Input.GetKeyDown("a"))
-        {
-            Debug.Log("SAVING...");
-            AddItem(GetComponent<ItemDatabase>().FetchItemByID(1000));
-            AddItem(GetComponent<ItemDatabase>().FetchItemByID(2000));
-            AddItem(GetComponent<ItemDatabase>().FetchItemByID(2000));
-            AddItem(GetComponent<ItemDatabase>().FetchItemByID(3000));
-            AddItem(GetComponent<ItemDatabase>().FetchItemByID(3000));
-            for (int i = 0; i < villageItems.Count; i++)
-            {
-                Debug.Log(villageItems[i].Item.Title + " " + villageItems[i].Count);
-            }
-            SaveToPlayerPrefs();
-        }
-        if (Input.GetKeyDown("c"))
-        {
-            PlayerPrefs.DeleteAll();
-        }
-        if (Input.GetKeyDown("p"))
-        {
-            GetComponent<ItemDatabase>().DisplayAllItems();
-        }
-    }
-    */
 
     public void AddItemToVillageInventory(Items item)
     {
@@ -235,7 +194,7 @@ public class VillageInventoryManager : MonoBehaviour
         itemObject.name = item.Item.Title;
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
-
+        itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.village);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
@@ -256,6 +215,20 @@ public class VillageInventoryManager : MonoBehaviour
         slots[slotAmount - 1].GetComponent<ItemSlot>().id = slotAmount - 1 + 2000;
         slots[slotAmount - 1].name = "Slot" + (slotAmount - 1 + 2000);
         slots[slotAmount - 1].transform.SetParent(slotPanel.transform);
+    }
+
+    public void ReorganizeSlots(int slotID)
+    {
+        GameObject currentSlot = slots[slotID];
+        slotAmount--;
+        slots.RemoveAt(slotID);
+        for (int i = 0; i < slotAmount; i++)
+        {
+            slots[i].GetComponent<ItemSlot>().id = i;
+            slots[i].GetComponentInChildren<ItemData>().slotID = i;
+        }
+        Destroy(currentSlot);
+        ResizeSlotPanel();
     }
 }
 
