@@ -88,10 +88,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        /*
-         * check player to player
-         * check player to village
-         */
         if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.village)
         {
             if (item.Count > 0)
@@ -107,12 +103,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
-        else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.village)
-        {
-            this.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform);
-            this.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
-        }
         else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.player)
         {
             if (item.Count > 0)
@@ -121,6 +111,12 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 this.transform.position = currentSlot.transform.position;
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
+        }
+        else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.village)
+        {
+            this.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform);
+            this.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
         else if (goingToLocation == Location.WhereAmI.notSet)
         {
@@ -134,6 +130,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
+        if (sceneName == "VillageScene" && villageSceneController == null)
+        {
+            villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
+        }
         if (villageSceneController != null)
         {
             villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver = false;
