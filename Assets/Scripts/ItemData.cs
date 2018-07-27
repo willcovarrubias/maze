@@ -232,7 +232,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
                 else
                 {
-                    gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(slotID);
                     Destroy(gameObject);
                 }
                 return true;
@@ -252,7 +251,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
             {
-                villageSceneController.GetComponent<VillageInventoryManager>().RemoveItemFromVillageInventory(item);
+                villageSceneController.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(item, 1, slotID);
                 gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
                 if (item.Count == 1)
                 {
@@ -264,7 +263,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
                 else
                 {
-                    villageSceneController.GetComponent<VillageInventoryManager>().ReorganizeSlots(slotID);
                     Destroy(gameObject);
                 }
                 return true;

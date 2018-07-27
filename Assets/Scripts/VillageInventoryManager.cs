@@ -166,33 +166,6 @@ public class VillageInventoryManager : MonoBehaviour
         }
     }
 
-    public void RemoveItemFromVillageInventory(Inventory item)
-    {
-        currentSize -= item.Item.Size;
-        if (IsWeapon(item.Item.ID))
-        {
-            villageItems.Remove(item);
-            item.Count = 0;
-        }
-        else
-        {
-            for (int i = 0; i < villageItems.Count; i++)
-            {
-                if (villageItems[i].Item.ID == item.Item.ID)
-                {
-                    villageItems[i].Count--;
-                    if (villageItems[i].Count == 0)
-                    {
-                        villageItems.RemoveAt(i);
-                    }
-                    break;
-                }
-            }
-        }
-        SaveVillageInventory();
-        UpdateInventoryText();
-    }
-
     public void RemoveWholeStackFromInventory(Inventory items)
     {
         currentSize -= items.Item.Size * items.Count;

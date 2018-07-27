@@ -173,35 +173,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    /*
-    public void RemoveItemFromInventory(Inventory item)
-    {
-        currentSize -= item.Item.Size;
-        if (IsWeapon(item.Item.ID))
-        {
-            playerItems.Remove(item);
-            item.Count = 0;
-        }
-        else
-        {
-            for (int i = 0; i < playerItems.Count; i++)
-            {
-                if (playerItems[i].Item.ID == item.Item.ID)
-                {
-                    playerItems[i].Count--;
-                    if (playerItems[i].Count == 0)
-                    {
-                        playerItems.RemoveAt(i);
-                    }
-                    break;
-                }
-            }
-        }
-        SaveInventory();
-        UpdateInventoryText();
-    }
-    */
-
     public void RemoveWholeStackFromInventory(Inventory items)
     {
         currentSize -= items.Item.Size * items.Count;

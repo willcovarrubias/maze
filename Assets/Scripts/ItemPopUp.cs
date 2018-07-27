@@ -159,14 +159,13 @@ public class ItemPopUp : MonoBehaviour
             }
             else
             {
-                gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
                 Destroy(itemHolder);
                 Close();
             }
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            villageInventory.GetComponent<VillageInventoryManager>().RemoveItemFromVillageInventory(item);
+            villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(item, 1, currentSlot);
             if (item.Count == 1)
             {
                 itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
@@ -179,7 +178,6 @@ public class ItemPopUp : MonoBehaviour
             }
             else
             {
-                villageInventory.GetComponent<VillageInventoryManager>().ReorganizeSlots(currentSlot);
                 Destroy(itemHolder);
                 Close();
             }
