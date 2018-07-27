@@ -10,10 +10,8 @@ public class CharacterDatabase : MonoBehaviour
 {
     private List<Character> enemyDatabase = new List<Character>();
     public List<Character> listOfHeroes = new List<Character>();
-    public List<int> characterNumbers = new List<int>();
 
     private JsonData enemyData;
-    private JsonData heroData;
     Character currentCharacter;
     static int maxAmountOfHeroes = 4;
     int currentAmountOfHeroes = 0;
@@ -22,11 +20,11 @@ public class CharacterDatabase : MonoBehaviour
     void Start()
     {
         enemyData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
-        heroData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Heroes.json"));
         AddToDatabase(enemyData, enemyDatabase);
         LoadCharacters();
     }
 
+    /*
     private void Update()
     {
         if (Input.GetKeyUp("c"))
@@ -39,9 +37,14 @@ public class CharacterDatabase : MonoBehaviour
         }
         if (Input.GetKeyUp("d"))
         {
+            DeleteHero(listOfHeroes[UnityEngine.Random.Range(0, listOfHeroes.Count)]);
+        }
+        if (Input.GetKeyUp("e"))
+        {
             PlayerPrefs.DeleteAll();
         }
     }
+    */
 
     public Character FetchCharacterByID(int id)
     {
@@ -98,17 +101,15 @@ public class CharacterDatabase : MonoBehaviour
         };
         bool newSlot = true;
         int slotNumber = listOfHeroes.Count;
-        /* // look into this for deleting
-        for (int i = 0; i < characterNumbers.Count; i++)
+        for (int i = 0; i < listOfHeroes.Count; i++)
         {
-            if (characterNumbers[i] == 0)
+            if (PlayerPrefs.GetInt("Hero Num " + i) == 0)
             {
                 slotNumber = i;
                 newSlot = false;
                 break;
             }
         }
-        */
         if (newSlot)
         {
             amountOfSavedHeroes += 1;
@@ -116,7 +117,6 @@ public class CharacterDatabase : MonoBehaviour
         }
         listOfHeroes.Add(newCharacter);
         SaveNewCharacter(newCharacter, slotNumber);
-        //Debug.Log("Amount of heroes: " + amountOfSavedHeroes);
         return newCharacter;
     }
 
@@ -161,6 +161,7 @@ public class CharacterDatabase : MonoBehaviour
         PlayerPrefs.SetInt("Hero " + index + " Lives", hero.lives);
         PlayerPrefs.SetString("Hero " + index + " Slug", hero.slug);
         PlayerPrefs.Save();
+        Debug.Log("Added " + hero.name);
     }
 
     /*
@@ -195,7 +196,6 @@ public class CharacterDatabase : MonoBehaviour
     void LoadCharacters()
     {
         amountOfSavedHeroes = PlayerPrefs.GetInt("Character Count", 0);
-        //Debug.Log(amountOfSavedHeroes);
         listOfHeroes.Clear();
         for (int i = 0; i < amountOfSavedHeroes; i++)
         {
@@ -223,29 +223,33 @@ public class CharacterDatabase : MonoBehaviour
 
     public void DeleteHero(Character character)
     {
-        /*
-        string path = "Assets/StreamingAssets/Heroes.json";
         for (int i = 0; i < listOfHeroes.Count; i++)
         {
-            if (listOfHeroes[i].id == character.id)
+            if (listOfHeroes[i] == character)
             {
+                PlayerPrefs.SetInt("Hero Num " + i, 0);
+                PlayerPrefs.SetInt("Hero " + i + " ID", 0);
+                PlayerPrefs.SetString("Hero " + i + " Name", "");
+                PlayerPrefs.SetString("Hero " + i + " Job", "");
+                PlayerPrefs.SetInt("Hero " + i + " HP", 0);
+                PlayerPrefs.SetInt("Hero " + i + " MP", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Attack", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Special", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Defense", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Luck", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Items", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Exp", 0);
+                PlayerPrefs.SetInt("Hero " + i + " Lives", 0);
+                PlayerPrefs.SetString("Hero " + i + " Slug", "");
+                if (i == (listOfHeroes.Count - 1))
+                {
+                    PlayerPrefs.SetInt("Character Count", (PlayerPrefs.GetInt("Character Count") - 1));
+                }
+                Debug.Log("Deleted " + listOfHeroes[i].name);
                 listOfHeroes.RemoveAt(i);
-                break;
+                return;
             }
         }
-        string[] newJsonArray = new string[listOfHeroes.Count + 1];
-        newJsonArray[0] = "[";
-        for (int i = 0; i < listOfHeroes.Count - 1; i++)
-        {
-            if (listOfHeroes.Count > 0 && i != listOfHeroes.Count - 1 && i != 0)
-            {
-                newJsonArray[i + 1] = ",";
-            }
-            newJsonArray[i + 1] += JsonMapper.ToJson(listOfHeroes[i]);
-        }
-        newJsonArray[listOfHeroes.Count] = "]";
-        File.WriteAllLines(path, newJsonArray);
-        */
     }
 
     public void ChangeCurrentCharacter(int id)
