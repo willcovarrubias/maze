@@ -134,7 +134,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
         gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver = false;
-        if (sceneName == "VillageScene" && villageSceneController == null)
+        if (sceneName == "VillageScene")
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }

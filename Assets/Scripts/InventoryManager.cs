@@ -29,7 +29,6 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
@@ -50,7 +49,7 @@ public class InventoryManager : MonoBehaviour
         }
         if (amountCanFit > 0)
         {
-            if (SceneManager.GetActiveScene().name == "VillageScene" && villageInventory == null)
+            if (SceneManager.GetActiveScene().name == "VillageScene")
             {
                 villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
             }
@@ -165,6 +164,26 @@ public class InventoryManager : MonoBehaviour
         items.Count = 0;
         SaveInventory();
         UpdateInventoryText();
+    }
+
+    public void MoveWholeInventoryToVillage()
+    {
+        if (sceneName == "VillageScene")
+        {
+            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
+        }
+        for (int i = 0; i < slots.Count; i += 0)
+        {
+            slots[i].GetComponentInChildren<ItemData>().GetItem();
+            bool complete = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(
+                            slots[i].GetComponentInChildren<ItemData>().GetItem(),
+                            slots[i].GetComponentInChildren<ItemData>().slotID,
+                            slots[i].GetComponentInChildren<ItemData>().GetItem().Count);
+            if (!complete)
+            {
+                i++;
+            }
+        }
     }
 
     public void PrintInventory()
