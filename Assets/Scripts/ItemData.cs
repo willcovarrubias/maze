@@ -145,9 +145,15 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         else if (currentLocation == Location.WhereAmI.chest && goingToLocation == Location.WhereAmI.chest)
         {
-            Debug.Log("Moved!");
-            GameObject panel = transform.parent.parent.parent.parent.gameObject;
-            Debug.Log(panel.name);
+            GameObject panel;
+            if (transform.parent.parent.parent.gameObject.name == "Manager")
+            {
+                panel = transform.parent.gameObject;
+            }
+            else
+            {
+                panel = transform.parent.parent.parent.parent.gameObject;
+            }
             this.transform.SetParent(panel.GetComponent<DynamicInventory>().slots[slotID].transform);
             this.transform.position = panel.GetComponent<DynamicInventory>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;

@@ -12,11 +12,12 @@ public class CreateDynamicInventory : MonoBehaviour
 
 	void Start () 
     {
-        //chest example
+        //example
         for (int i = 0; i < 5; i++)
         {
             GameObject newButton = Instantiate(openButton, openButton.transform.parent, true);
             GameObject newPanel = Instantiate(invPanel, invPanel.transform.parent, true);
+            newButton.transform.SetAsFirstSibling();
             panelList.Add(newPanel);
             newButton.SetActive(true);
             newButton.transform.position = new Vector3(openButton.transform.position.x, openButton.transform.position.y + i * 25, openButton.transform.position.z);
