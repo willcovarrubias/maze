@@ -18,6 +18,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     GameObject gameMaster;
     GameObject villageSceneController;
+    GameObject lootSceneController;
     GameObject currentSlot;
 
     Scene currentScene;
@@ -37,6 +38,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (sceneName == "VillageScene")
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
+        }
+        else if (sceneName == "LootScene" || sceneName == "BrandonTest")
+        {
+            lootSceneController = GameObject.Find("Manager");
         }
     }
 
@@ -67,7 +72,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (gameMaster != null && currentLocation != Location.WhereAmI.chest)
+        if (gameMaster != null /*&& currentLocation != Location.WhereAmI.chest*/)
         {
             currentSlot = transform.parent.gameObject;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
@@ -81,16 +86,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
 
-        if (currentLocation != Location.WhereAmI.chest)
-        {
+        //if (currentLocation != Location.WhereAmI.chest)
+        //{
             this.transform.position = eventData.position - offsetToReturnItem;
             beingDragged = true;
-        }
+        //}
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.village)
+        if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.player)
+        {
+            this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
+            this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
+        else if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.village)
         {
             if (item.Count > 0)
             {
@@ -98,12 +109,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 this.transform.position = currentSlot.transform.position;
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
-        }
-        else if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.player)
-        {
-            this.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[slotID].transform);
-            this.transform.position = gameMaster.GetComponent<InventoryManager>().slots[slotID].transform.position;
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
         else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.player)
         {
@@ -118,6 +123,33 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             this.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform);
             this.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
+        else if (currentLocation == Location.WhereAmI.chest && goingToLocation == Location.WhereAmI.player)
+        {
+            if (item.Count > 0)
+            {
+                this.transform.SetParent(currentSlot.transform);
+                this.transform.position = currentSlot.transform.position;
+                GetComponent<CanvasGroup>().blocksRaycasts = true;
+            }
+        }
+        else if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.chest)
+        {
+            if (item.Count > 0)
+            {
+                this.transform.SetParent(currentSlot.transform);
+                this.transform.position = currentSlot.transform.position;
+                GetComponent<CanvasGroup>().blocksRaycasts = true;
+            }
+        }
+        else if (currentLocation == Location.WhereAmI.chest && goingToLocation == Location.WhereAmI.chest)
+        {
+            Debug.Log("Moved!");
+            GameObject panel = transform.parent.parent.parent.parent.gameObject;
+            Debug.Log(panel.name);
+            this.transform.SetParent(panel.GetComponent<DynamicInventory>().slots[slotID].transform);
+            this.transform.position = panel.GetComponent<DynamicInventory>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
         else if (goingToLocation == Location.WhereAmI.notSet)
@@ -142,10 +174,12 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver = false;
         }
+        /*
         if (currentLocation == Location.WhereAmI.chest)
         {
             RemoveOneItemFromChest();
         }
+        */
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -173,7 +207,36 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             goingToLocation = Location.WhereAmI.player;
             if (currentLocation == Location.WhereAmI.village)
             {
-                gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1);
+                gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1, true, null);
+                CheckCount();
+            }
+        }
+        if ((sceneName == "BrandonTest" || sceneName == "LootScene") && eventData.position.x > Screen.width / 2)
+        {
+            goingToLocation = Location.WhereAmI.chest;
+            if (currentLocation == Location.WhereAmI.player)
+            {
+                GameObject panel = GameObject.Find("Manager");
+                panel = panel.transform.GetChild(0).gameObject;
+                for (int i = 0; i < panel.transform.childCount; i++)
+                {
+                    if (panel.transform.GetChild(i).gameObject.activeInHierarchy == true && panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")
+                    {
+                        panel = panel.transform.GetChild(i).gameObject;
+                        panel.GetComponent<DynamicInventory>().MoveItemsToHere(item, slotID, 1);
+                        break;
+                    }
+                }
+                CheckCount();
+            }
+        }
+        else if ((sceneName == "BrandonTest" || sceneName == "LootScene") && eventData.position.x < Screen.width / 2)
+        {
+            goingToLocation = Location.WhereAmI.player;
+            if (currentLocation == Location.WhereAmI.chest)
+            {
+                GameObject panel = transform.parent.gameObject;
+                gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1, false, panel);
                 CheckCount();
             }
         }

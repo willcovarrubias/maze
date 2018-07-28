@@ -52,5 +52,18 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             droppedItem.transform.SetParent(this.transform);
             droppedItem.transform.position = this.transform.position;
         }
+        else if (droppedItem && this.transform.childCount > 0 &&
+                 droppedItem.GetComponent<ItemData>().GetCurrentLocation() == Location.WhereAmI.chest &&
+                 droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.chest)
+        {
+            Transform oldWeapon = this.transform.GetChild(0);
+            oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
+            GameObject panel = oldWeapon.transform.parent.parent.parent.parent.gameObject;
+            oldWeapon.transform.SetParent(panel.GetComponent<DynamicInventory>().slots[droppedItem.slotID].transform);
+            oldWeapon.transform.position = panel.GetComponent<DynamicInventory>().slots[droppedItem.slotID].transform.position;
+            droppedItem.slotID = id;
+            droppedItem.transform.SetParent(this.transform);
+            droppedItem.transform.position = this.transform.position;
+        }
     }
 }

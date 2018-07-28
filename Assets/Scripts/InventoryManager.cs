@@ -34,7 +34,7 @@ public class InventoryManager : MonoBehaviour
         LoadInventory();
     }
 
-    public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount)
+    public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount, bool fromVillage, GameObject panel)
     {
         bool movedAll = false;
         int amountCanFit = amount;
@@ -56,7 +56,14 @@ public class InventoryManager : MonoBehaviour
             if (IsWeapon(items.Item.ID))
             {
                 CreateNewItem(items.Item, 1);
-                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, 1, thisSlotId);
+                if (fromVillage)
+                {
+                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, 1, thisSlotId);
+                }
+                else
+                {
+                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, 1, thisSlotId);
+                }
                 return true;
             }
             else
@@ -75,14 +82,28 @@ public class InventoryManager : MonoBehaviour
                                 slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[i].Count;
                                 slots[j].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
                                 UpdateInventoryText();
-                                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                                if (fromVillage)
+                                {
+                                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                                }
+                                else
+                                {
+                                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                                }
                                 return movedAll;
                             }
                         }
                     }
                 }
                 CreateNewItem(items.Item, amountCanFit);
-                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                if (fromVillage)
+                {
+                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                }
+                else
+                {
+                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                }
             }
         }
         //TODO if reached here the item cannot fit!
@@ -293,7 +314,6 @@ public class InventoryManager : MonoBehaviour
         {
             itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
         }
-
         ResizeSlotPanel();
     }
 
@@ -327,6 +347,7 @@ public class InventoryManager : MonoBehaviour
         {
             GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
         }
+        GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
     }
 
     public void ReorganizeSlots(int slotID)
