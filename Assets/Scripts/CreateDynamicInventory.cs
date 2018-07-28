@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreateDynamicInventory : MonoBehaviour 
+public class CreateDynamicInventory : MonoBehaviour
 {
     public GameObject openButton;
     public GameObject slotPrefab;
@@ -10,7 +10,7 @@ public class CreateDynamicInventory : MonoBehaviour
     public GameObject invPanel;
     public List<GameObject> panelList = new List<GameObject>();
 
-	void Start () 
+    void Start()
     {
         //example
         for (int i = 0; i < 5; i++)
@@ -20,13 +20,17 @@ public class CreateDynamicInventory : MonoBehaviour
             newButton.transform.SetAsFirstSibling();
             panelList.Add(newPanel);
             newButton.SetActive(true);
-            newButton.transform.position = new Vector3(openButton.transform.position.x, openButton.transform.position.y + i * 25, openButton.transform.position.z);
+            newButton.transform.localPosition = new Vector3(
+                newButton.transform.localPosition.x,
+                newButton.transform.localPosition.y - (i * 100),
+                newButton.transform.localPosition.z
+            );
             List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest();
-            newPanel.AddComponent<DynamicInventory>().Initialize(Location.WhereAmI.chest, inventory, slotPrefab, itemPrefab, newButton);
+            newPanel.AddComponent<DynamicInventory>().Initialize(Location.WhereAmI.temp, inventory, slotPrefab, itemPrefab, newButton);
         }
         Destroy(invPanel);
         Destroy(openButton);
-	}
+    }
 
     public void CloseUi()
     {

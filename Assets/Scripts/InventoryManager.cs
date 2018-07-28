@@ -338,16 +338,16 @@ public class InventoryManager : MonoBehaviour
         //Closes the inventory panel no matter what scene the player is currently in.
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
-        if (sceneName == "LootScene") //Close the chest/player inventory
+        if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
         {
-            GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
-            lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
+            //GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
+            //lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
+            GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
         }
         if (sceneName == "VillageScene")
         {
             GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
         }
-        GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
     }
 
     public void ReorganizeSlots(int slotID)

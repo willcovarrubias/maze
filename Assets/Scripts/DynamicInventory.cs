@@ -7,7 +7,6 @@ public class DynamicInventory : MonoBehaviour
 {
     List<Inventory> items = new List<Inventory>();
 
-    //UI Stuff.
     public List<GameObject> slots = new List<GameObject>();
     int slotAmount;
     GameObject slotPanel;
@@ -161,7 +160,6 @@ public class DynamicInventory : MonoBehaviour
 
     void ResizeSlotPanel()
     {
-        //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
         slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
         slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
     }

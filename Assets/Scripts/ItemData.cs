@@ -88,8 +88,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
         //if (currentLocation != Location.WhereAmI.chest)
         //{
-            this.transform.position = eventData.position - offsetToReturnItem;
-            beingDragged = true;
+        this.transform.position = eventData.position - offsetToReturnItem;
+        beingDragged = true;
         //}
     }
 
@@ -125,7 +125,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
-        else if (currentLocation == Location.WhereAmI.chest && goingToLocation == Location.WhereAmI.player)
+        else if (currentLocation == Location.WhereAmI.temp && goingToLocation == Location.WhereAmI.player)
         {
             if (item.Count > 0)
             {
@@ -134,7 +134,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
         }
-        else if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.chest)
+        else if (currentLocation == Location.WhereAmI.player && goingToLocation == Location.WhereAmI.temp)
         {
             if (item.Count > 0)
             {
@@ -143,7 +143,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
         }
-        else if (currentLocation == Location.WhereAmI.chest && goingToLocation == Location.WhereAmI.chest)
+        else if (currentLocation == Location.WhereAmI.temp && goingToLocation == Location.WhereAmI.temp)
         {
             GameObject panel;
             if (transform.parent.parent.parent.gameObject.name == "Manager")
@@ -191,7 +191,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerUp(PointerEventData eventData)
     {
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 1;
-        if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village))
+        if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp))
         {
             gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 3;
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
@@ -219,7 +219,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         if ((sceneName == "BrandonTest" || sceneName == "LootScene") && eventData.position.x > Screen.width / 2)
         {
-            goingToLocation = Location.WhereAmI.chest;
+            goingToLocation = Location.WhereAmI.temp;
             if (currentLocation == Location.WhereAmI.player)
             {
                 GameObject panel = GameObject.Find("Manager");
@@ -239,7 +239,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         else if ((sceneName == "BrandonTest" || sceneName == "LootScene") && eventData.position.x < Screen.width / 2)
         {
             goingToLocation = Location.WhereAmI.player;
-            if (currentLocation == Location.WhereAmI.chest)
+            if (currentLocation == Location.WhereAmI.temp)
             {
                 GameObject panel = transform.parent.gameObject;
                 gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1, false, panel);
@@ -248,6 +248,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
+    /*
     public void RemoveOneItemFromChest()
     {
         if (currentLocation == Location.WhereAmI.chest)
@@ -272,6 +273,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             }
         }
     }
+    */
 
     void CheckCount()
     {
