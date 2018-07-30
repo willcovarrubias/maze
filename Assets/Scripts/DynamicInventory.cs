@@ -16,6 +16,7 @@ public class DynamicInventory : MonoBehaviour
     RectTransform slotPanelRectTransform;
     ScrollRect scrollView;
     public GameObject openButton;
+    GameObject sendAllButton;
 
     GameObject gameMaster;
     Location.WhereAmI location;
@@ -31,12 +32,15 @@ public class DynamicInventory : MonoBehaviour
         slotPrefab = slotPre;
         itemPrefab = itemPre;
         openButton = button;
-        Button open = button.GetComponent<Button>();
-        open.onClick.AddListener(OpenUI);
         inventoryPane = gameObject.transform.Find("ScrollView").gameObject;
         slotPanel = inventoryPane.transform.Find("SlotPanel").gameObject;
+        sendAllButton = gameObject.transform.Find("SendAll").gameObject;
         slotPanelRectTransform = slotPanel.GetComponent<RectTransform>();
         scrollView = inventoryPane.GetComponent<ScrollRect>();
+        Button open = button.GetComponent<Button>();
+        open.onClick.AddListener(OpenUI);
+        Button sendAll = sendAllButton.GetComponent<Button>();
+        sendAll.onClick.AddListener(MoveWholeInventoryToPlayer);
         InitalizeSlots(createdItems);
     }
 
@@ -105,6 +109,24 @@ public class DynamicInventory : MonoBehaviour
     {
         items.Remove(item);
         item.Count = 0;
+    }
+
+    public void MoveWholeInventoryToPlayer()
+    {
+        for (int i = 0; i < slots.Count; i += 0)
+        {
+            slots[i].GetComponentInChildren<ItemData>().GetItem();
+            bool complete = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(
+                            slots[i].GetComponentInChildren<ItemData>().GetItem(),
+                            slots[i].GetComponentInChildren<ItemData>().slotID,
+                            slots[i].GetComponentInChildren<ItemData>().GetItem().Count, 
+                            false, 
+                            gameObject);
+            if (!complete)
+            {
+                i++;
+            }
+        }
     }
 
     void CreateNewItem(Items item, int count)
