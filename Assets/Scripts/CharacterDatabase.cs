@@ -234,20 +234,20 @@ public class CharacterDatabase : MonoBehaviour
         {
             if (listOfWanderers[i] == character)
             {
-                PlayerPrefs.SetInt("Hero Num " + i, 0);
-                PlayerPrefs.SetInt("Hero " + i + " ID", 0);
-                PlayerPrefs.SetString("Hero " + i + " Name", "");
-                PlayerPrefs.SetString("Hero " + i + " Job", "");
-                PlayerPrefs.SetInt("Hero " + i + " HP", 0);
-                PlayerPrefs.SetInt("Hero " + i + " MP", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Attack", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Special", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Defense", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Luck", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Items", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Exp", 0);
-                PlayerPrefs.SetInt("Hero " + i + " Lives", 0);
-                PlayerPrefs.SetString("Hero " + i + " Slug", "");
+                PlayerPrefs.DeleteKey("Hero Num " + i);
+                PlayerPrefs.DeleteKey("Hero " + i + " ID");
+                PlayerPrefs.DeleteKey("Hero " + i + " Name");
+                PlayerPrefs.DeleteKey("Hero " + i + " Job");
+                PlayerPrefs.DeleteKey("Hero " + i + " HP");
+                PlayerPrefs.DeleteKey("Hero " + i + " MP");
+                PlayerPrefs.DeleteKey("Hero " + i + " Attack");
+                PlayerPrefs.DeleteKey("Hero " + i + " Special");
+                PlayerPrefs.DeleteKey("Hero " + i + " Defense");
+                PlayerPrefs.DeleteKey("Hero " + i + " Luck");
+                PlayerPrefs.DeleteKey("Hero " + i + " Items");
+                PlayerPrefs.DeleteKey("Hero " + i + " Exp");
+                PlayerPrefs.DeleteKey("Hero " + i + " Lives");
+                PlayerPrefs.DeleteKey("Hero " + i + " Slug");
                 if (i == (listOfWanderers.Count - 1))
                 {
                     PlayerPrefs.SetInt("Character Count", (PlayerPrefs.GetInt("Character Count") - 1));
@@ -265,7 +265,8 @@ public class CharacterDatabase : MonoBehaviour
         for (int i = 0; i < listOfWanderers.Count; i++)
         {
             DeleteWanderer(listOfWanderers[i]);
-
+            PlayerPrefs.SetInt("Character Count", 0);
+            listOfWanderers.Clear();
         }
     }
 
