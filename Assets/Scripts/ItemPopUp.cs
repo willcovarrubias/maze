@@ -91,6 +91,13 @@ public class ItemPopUp : MonoBehaviour
             move1.GetComponentInChildren<Text>().text = "Send to village";
             moveAll.GetComponentInChildren<Text>().text = "Send all to village";
         }
+        else if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "LootScene")
+        {
+            move1.SetActive(true);
+            moveAll.SetActive(true);
+            move1.GetComponentInChildren<Text>().text = "Send to chest";
+            moveAll.GetComponentInChildren<Text>().text = "Send all to chest";
+        }
         else if (currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp)
         {
             action.SetActive(false);
@@ -223,8 +230,23 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, 1);
-            CloseOrUpdate(movedAll);
+            if (SceneManager.GetActiveScene().name == "VillageScene")
+            {
+                bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, 1);
+                CloseOrUpdate(movedAll);
+            }
+            else if (SceneManager.GetActiveScene().name == "LootScene")
+            {
+                GetActivePanel().GetComponent<DynamicInventory>().MoveItemsToHere(item, currentSlot, 1);
+                if (item.Count > 0)
+                {
+                    CloseOrUpdate(false);
+                }
+                else
+                {
+                    CloseOrUpdate(true);
+                }
+            }
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
@@ -242,8 +264,16 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, item.Count);
-            CloseOrUpdate(movedAll);
+            if (SceneManager.GetActiveScene().name == "VillageScene")
+            {
+                bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, item.Count);
+                CloseOrUpdate(movedAll);
+            }
+            else if (SceneManager.GetActiveScene().name == "LootScene")
+            {
+                GetActivePanel().GetComponent<DynamicInventory>().MoveItemsToHere(item, currentSlot, item.Count);
+                CloseOrUpdate(true);
+            }
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
@@ -267,5 +297,20 @@ public class ItemPopUp : MonoBehaviour
         {
             UpdateCount();
         }
+    }
+
+    GameObject GetActivePanel()
+    {
+        GameObject panel = GameObject.Find("Manager");
+        panel = panel.transform.GetChild(0).gameObject;
+        for (int i = 0; i < panel.transform.childCount; i++)
+        {
+            if (panel.transform.GetChild(i).gameObject.activeInHierarchy == true && panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")
+            {
+                panel = panel.transform.GetChild(i).gameObject;
+                return panel;
+            }
+        }
+        return null;
     }
 }

@@ -26,7 +26,7 @@ public class VillageInventoryManager : MonoBehaviour
     private void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        maxVillageInventorySize = 100000;
+        maxVillageInventorySize = 1000;
         currentSize = 0;
         LoadVillageInventory();
         ResizeSlotPanel();

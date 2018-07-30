@@ -85,12 +85,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnDrag(PointerEventData eventData)
     {
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
-
-        //if (currentLocation != Location.WhereAmI.chest)
-        //{
         this.transform.position = eventData.position - offsetToReturnItem;
         beingDragged = true;
-        //}
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -168,6 +164,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        sceneName = SceneManager.GetActiveScene().name;
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
@@ -175,17 +172,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (sceneName == "VillageScene")
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
-        }
-        if (villageSceneController != null)
-        {
             villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver = false;
         }
-        /*
-        if (currentLocation == Location.WhereAmI.chest)
-        {
-            RemoveOneItemFromChest();
-        }
-        */
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -196,7 +184,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 3;
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
         }
-        if (villageSceneController != null && beingDragged)
+        if (villageSceneController != null && beingDragged && sceneName == "VillageScene")
         {
             if (villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
             {
@@ -208,7 +196,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
             }
         }
-        if (gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver)
+        if (gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver && sceneName == "VillageScene")
         {
             goingToLocation = Location.WhereAmI.player;
             if (currentLocation == Location.WhereAmI.village)
@@ -247,33 +235,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             }
         }
     }
-
-    /*
-    public void RemoveOneItemFromChest()
-    {
-        if (currentLocation == Location.WhereAmI.chest)
-        {
-            //TODO: See if player has space to receive item. If they do, delete this game object. If not, trigger a warning that there's not enough space.
-            if (gameMaster.GetComponent<InventoryManager>().CanFitInInventory(item.Item.Size))
-            {
-                item.Count--;
-                gameMaster.GetComponent<InventoryManager>().AddItemToInventory(item.Item);
-                if (item.Count == 1)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title;
-                }
-                else if (item.Count > 0)
-                {
-                    GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
-                }
-                else
-                {
-                    Destroy(gameObject);
-                }
-            }
-        }
-    }
-    */
 
     void CheckCount()
     {
