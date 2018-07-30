@@ -8,7 +8,7 @@ public class InventoryManager : MonoBehaviour
 {
     int maxInventorySize;
     int currentSize;
-    public List<Inventory> playerItems = new List<Inventory>();
+    public Dictionary<int, Inventory> playerItems = new Dictionary<int, Inventory>();
 
     //UI Stuff.
     public GameObject inventoryPanel;
@@ -68,30 +68,28 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < playerItems.Count; i++)
+                Inventory temp;
+                if (playerItems.TryGetValue(items.Item.ID, out temp))
                 {
-                    if (playerItems[i].Item.ID == items.Item.ID)
+                    playerItems[items.Item.ID].Count += amountCanFit;
+                    currentSize += items.Item.Size * amountCanFit;
+                    SaveInventory();
+                    for (int j = 0; j < slots.Count; j++)
                     {
-                        playerItems[i].Count += amountCanFit;
-                        currentSize += items.Item.Size * amountCanFit;
-                        SaveInventory();
-                        for (int j = 0; j < slots.Count; j++)
+                        if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == items.Item.ID)
                         {
-                            if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == items.Item.ID)
+                            slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[items.Item.ID].Count;
+                            slots[j].GetComponentInChildren<Text>().text = playerItems[items.Item.ID].Item.Title + " x" + playerItems[items.Item.ID].Count;
+                            UpdateInventoryText();
+                            if (fromVillage)
                             {
-                                slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[i].Count;
-                                slots[j].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
-                                UpdateInventoryText();
-                                if (fromVillage)
-                                {
-                                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
-                                }
-                                else
-                                {
-                                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
-                                }
-                                return movedAll;
+                                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
                             }
+                            else
+                            {
+                                panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                            }
+                            return movedAll;
                         }
                     }
                 }
@@ -120,25 +118,23 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < playerItems.Count; i++)
+                Inventory temp;
+                if (playerItems.TryGetValue(item.ID, out temp))
                 {
-                    if (playerItems[i].Item.ID == item.ID)
+                    playerItems[item.ID].Count++;
+                    currentSize += item.Size;
+                    SaveInventory();
+                    for (int j = 0; j < slots.Count; j++)
                     {
-                        playerItems[i].Count++;
-                        currentSize += item.Size;
-                        SaveInventory();
-                        for (int j = 0; j < slots.Count; j++)
+                        if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == item.ID)
                         {
-                            if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == item.ID)
-                            {
-                                slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[i].Count;
-                                slots[j].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
-                                UpdateInventoryText();
-                                break;
-                            }
+                            slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[item.ID].Count;
+                            slots[j].GetComponentInChildren<Text>().text = playerItems[item.ID].Item.Title + " x" + playerItems[item.ID].Count;
+                            UpdateInventoryText();
+                            break;
                         }
-                        return;
                     }
+                    return;
                 }
                 CreateNewItem(item, 1);
             }
@@ -152,25 +148,18 @@ public class InventoryManager : MonoBehaviour
             currentSize -= item.Item.Size * count;
             if (IsWeapon(item.Item.ID))
             {
-                playerItems.Remove(item);
+                playerItems.Remove(item.Item.ID);
                 item.Count = 0;
                 ReorganizeSlots(slotId);
             }
             else
             {
-                for (int i = 0; i < playerItems.Count; i++)
+                playerItems[item.Item.ID].Count -= count;
+                if (playerItems[item.Item.ID].Count <= 0)
                 {
-                    if (playerItems[i].Item.ID == item.Item.ID)
-                    {
-                        playerItems[i].Count -= count;
-                        if (playerItems[i].Count <= 0)
-                        {
-                            playerItems.Remove(item);
-                            item.Count = 0;
-                            ReorganizeSlots(slotId);
-                        }
-                        break;
-                    }
+                    playerItems.Remove(item.Item.ID);
+                    item.Count = 0;
+                    ReorganizeSlots(slotId);
                 }
             }
             SaveInventory();
@@ -181,7 +170,7 @@ public class InventoryManager : MonoBehaviour
     public void RemoveWholeStackFromInventory(Inventory items)
     {
         currentSize -= items.Item.Size * items.Count;
-        playerItems.Remove(items);
+        playerItems.Remove(items.Item.ID);
         items.Count = 0;
         SaveInventory();
         UpdateInventoryText();
@@ -209,9 +198,10 @@ public class InventoryManager : MonoBehaviour
 
     public void PrintInventory()
     {
-        for (int i = 0; i < playerItems.Count; i++)
+        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
         {
-            Debug.Log("THis is the current inventory!: " + playerItems[i].Item.Title + " Count: " + playerItems[i].Count);
+            int key = keyValue.Key;
+            Debug.Log("This is the current inventory!: " + playerItems[key].Item.Title + " Count: " + playerItems[key].Count);
         }
     }
 
@@ -231,16 +221,18 @@ public class InventoryManager : MonoBehaviour
 
     public void SaveInventory()
     {
-        int i;
-        for (i = 0; i < playerItems.Count; i++)
+        int i = 0;
+        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
         {
-            PlayerPrefs.SetInt("Player Item ID" + i, playerItems[i].Item.ID);
-            PlayerPrefs.SetInt("Player Item Count" + i, playerItems[i].Count);
-            if (IsWeapon(playerItems[i].Item.ID))
+            int key = keyValue.Key;
+            PlayerPrefs.SetInt("Player Item ID" + i, playerItems[key].Item.ID);
+            PlayerPrefs.SetInt("Player Item Count" + i, playerItems[key].Count);
+            if (IsWeapon(playerItems[key].Item.ID))
             {
-                Weapons weapon = (Weapons)playerItems[i].Item;
+                Weapons weapon = (Weapons)playerItems[key].Item;
                 PlayerPrefs.SetInt("Player Item Duribility", weapon.Durability);
             }
+            i++;
         }
         PlayerPrefs.SetInt("Player Item Count", i);
         PlayerPrefs.Save();
@@ -261,7 +253,7 @@ public class InventoryManager : MonoBehaviour
                 Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(id);
                 Inventory loadedItem = new Inventory(weapon, count);
                 weapon.Durability = duribility;
-                playerItems.Add(loadedItem);
+                playerItems.Add(loadedItem.Item.ID, loadedItem);
                 currentSize += weapon.Size * count;
                 AddItemToSlots(loadedItem);
             }
@@ -269,7 +261,7 @@ public class InventoryManager : MonoBehaviour
             {
                 Items item = GetComponent<ItemDatabase>().FetchItemByID(id);
                 Inventory loadedItem = new Inventory(item, count);
-                playerItems.Add(loadedItem);
+                playerItems.Add(loadedItem.Item.ID, loadedItem);
                 currentSize += item.Size * count;
                 AddItemToSlots(loadedItem);
             }
@@ -289,7 +281,7 @@ public class InventoryManager : MonoBehaviour
     void CreateNewItem(Items items, int count)
     {
         Inventory newItem = new Inventory(items, count);
-        playerItems.Add(newItem);
+        playerItems.Add(newItem.Item.ID, newItem);
         currentSize += items.Size * count;
         SaveInventory();
         AddItemToSlots(newItem);
@@ -345,6 +337,8 @@ public class InventoryManager : MonoBehaviour
     public void CloseInventoryPanelUI()
     {
         inventoryPanel.SetActive(false);
+        currentScene = SceneManager.GetActiveScene();
+        sceneName = currentScene.name;
         //Closes the inventory panel no matter what scene the player is currently in.
         if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
         {
