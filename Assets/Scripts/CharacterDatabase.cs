@@ -24,6 +24,7 @@ public class CharacterDatabase : MonoBehaviour
         enemyData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
         AddToDatabase(enemyData, enemyDatabase);
         LoadHeroCharacters();
+        LoadWandererCharacters();
     }
 
     private void Update()

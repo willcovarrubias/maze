@@ -26,6 +26,7 @@ public class RecruitmentManager : MonoBehaviour {
         
         AddHeroSlot();
         GenerateListOfHeroesObjects();
+        DisplayCurrentListOfWanderers();
         
         
     }
@@ -42,7 +43,7 @@ public class RecruitmentManager : MonoBehaviour {
 
     void GenerateListOfHeroesObjects()
     {
-        gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
+        //gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
             characterObject.Add(Instantiate(characterObjectPrefab));
@@ -50,10 +51,7 @@ public class RecruitmentManager : MonoBehaviour {
             characterObject[i].transform.SetParent(characterSlots[i].transform);
             characterObject[i].transform.localPosition = Vector2.zero;
 
-            Character newWander = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
-            characterObject[i].name = newWander.name;
-            characterObject[i].GetComponent<Text>().text = newWander.name;
-            characterObject[i].GetComponent<CharacterData>().character = newWander;
+            
         }
 
     }
@@ -65,11 +63,27 @@ public class RecruitmentManager : MonoBehaviour {
        
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
-            gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
-            characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
-            characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
-            characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
+            Character newWander = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
+            characterObject[i].name = newWander.name;
+            characterObject[i].GetComponent<Text>().text = newWander.name;
+            characterObject[i].GetComponent<CharacterData>().character = newWander;
+
+            //gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
+            //characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            //characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            //characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
             //characterObject.GetComponent<Image>().sprite = gameMaster.GetComponent<CharacterDatabase>().CreateHero().sprite;
+        }
+    }
+
+    void DisplayCurrentListOfWanderers()
+    {
+        for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
+        {
+            Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
+            "/n ID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
+
+            characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
         }
     }
 
