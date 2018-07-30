@@ -29,13 +29,12 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
     }
 
-    public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount)
+    public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount, bool fromVillage, GameObject panel)
     {
         bool movedAll = false;
         int amountCanFit = amount;
@@ -50,14 +49,21 @@ public class InventoryManager : MonoBehaviour
         }
         if (amountCanFit > 0)
         {
-            if (SceneManager.GetActiveScene().name == "VillageScene" && villageInventory == null)
+            if (SceneManager.GetActiveScene().name == "VillageScene")
             {
                 villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
             }
             if (IsWeapon(items.Item.ID))
             {
                 CreateNewItem(items.Item, 1);
-                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, 1, thisSlotId);
+                if (fromVillage)
+                {
+                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, 1, thisSlotId);
+                }
+                else
+                {
+                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, 1, thisSlotId);
+                }
                 return true;
             }
             else
@@ -76,14 +82,28 @@ public class InventoryManager : MonoBehaviour
                                 slots[j].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[i].Count;
                                 slots[j].GetComponentInChildren<Text>().text = playerItems[i].Item.Title + " x" + playerItems[i].Count;
                                 UpdateInventoryText();
-                                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                                if (fromVillage)
+                                {
+                                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                                }
+                                else
+                                {
+                                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                                }
                                 return movedAll;
                             }
                         }
                     }
                 }
                 CreateNewItem(items.Item, amountCanFit);
-                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                if (fromVillage)
+                {
+                    villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+                }
+                else
+                {
+                    panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                }
             }
         }
         //TODO if reached here the item cannot fit!
@@ -165,6 +185,26 @@ public class InventoryManager : MonoBehaviour
         items.Count = 0;
         SaveInventory();
         UpdateInventoryText();
+    }
+
+    public void MoveWholeInventoryToVillage()
+    {
+        if (sceneName == "VillageScene")
+        {
+            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
+        }
+        for (int i = 0; i < slots.Count; i += 0)
+        {
+            slots[i].GetComponentInChildren<ItemData>().GetItem();
+            bool complete = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(
+                            slots[i].GetComponentInChildren<ItemData>().GetItem(),
+                            slots[i].GetComponentInChildren<ItemData>().slotID,
+                            slots[i].GetComponentInChildren<ItemData>().GetItem().Count);
+            if (!complete)
+            {
+                i++;
+            }
+        }
     }
 
     public void PrintInventory()
@@ -274,7 +314,6 @@ public class InventoryManager : MonoBehaviour
         {
             itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
         }
-
         ResizeSlotPanel();
     }
 
@@ -299,10 +338,11 @@ public class InventoryManager : MonoBehaviour
         //Closes the inventory panel no matter what scene the player is currently in.
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
-        if (sceneName == "LootScene") //Close the chest/player inventory
+        if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
         {
-            GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
-            lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
+            //GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
+            //lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
+            GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
         }
         if (sceneName == "VillageScene")
         {

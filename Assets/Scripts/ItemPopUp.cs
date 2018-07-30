@@ -91,14 +91,17 @@ public class ItemPopUp : MonoBehaviour
             move1.GetComponentInChildren<Text>().text = "Send to village";
             moveAll.GetComponentInChildren<Text>().text = "Send all to village";
         }
-        else if (currentLocation == Location.WhereAmI.village)
+        else if (currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp)
         {
             action.SetActive(false);
             move1.SetActive(true);
             moveAll.SetActive(true);
             move1.GetComponentInChildren<Text>().text = "Send to inventory";
             moveAll.GetComponentInChildren<Text>().text = "Send all to inventory";
-            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
+            if (currentLocation == Location.WhereAmI.village)
+            {
+                villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
+            }
         }
         else
         {
@@ -176,6 +179,19 @@ public class ItemPopUp : MonoBehaviour
                 Close();
             }
         }
+        else if (currentLocation == Location.WhereAmI.temp)
+        {
+            itemHolder.transform.parent.parent.parent.parent.gameObject.GetComponent<DynamicInventory>().RemoveItemsFromInventory(item, 1, currentSlot);
+            if (item.Count > 0)
+            {
+                UpdateCount();
+            }
+            else
+            {
+                Destroy(itemHolder);
+                Close();
+            }
+        }
     }
 
     public void ThrowAwayAll()
@@ -194,6 +210,13 @@ public class ItemPopUp : MonoBehaviour
             Destroy(itemHolder);
             Close();
         }
+        else if (currentLocation == Location.WhereAmI.temp)
+        {
+            itemHolder.transform.parent.parent.parent.parent.gameObject.GetComponent<DynamicInventory>().RemoveItemsFromInventory(item, 1, currentSlot);
+            itemHolder.transform.parent.parent.parent.parent.gameObject.GetComponent<DynamicInventory>().ReorganizeSlots(currentSlot);
+            Destroy(itemHolder);
+            Close();
+        }
     }
 
     public void MoveOne()
@@ -205,7 +228,12 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1);
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1, true, null);
+            CloseOrUpdate(movedAll);
+        }
+        else if (currentLocation == Location.WhereAmI.temp)
+        {
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
             CloseOrUpdate(movedAll);
         }
     }
@@ -219,7 +247,12 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count);
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, true, null);
+            CloseOrUpdate(movedAll);
+        }
+        else if (currentLocation == Location.WhereAmI.temp)
+        {
+            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
             CloseOrUpdate(movedAll);
         }
     }
