@@ -340,8 +340,6 @@ public class InventoryManager : MonoBehaviour
         sceneName = currentScene.name;
         if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
         {
-            //GameObject lootSceneController = GameObject.FindGameObjectWithTag("LootSceneManager");
-            //lootSceneController.GetComponent<LootGenerator>().CloseAllChestUi();
             GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
         }
         if (sceneName == "VillageScene")

@@ -6,11 +6,8 @@ using UnityEngine.UI;
 
 public class LootSceneController : MonoBehaviour
 {
-    GameObject gameMaster;
-
     private void Start()
     {
-        gameMaster = GameObject.FindGameObjectWithTag("GameController");
         Debug.Log("You're in the loot scene!!!");
     }
 

@@ -119,8 +119,8 @@ public class DynamicInventory : MonoBehaviour
             bool complete = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(
                             slots[i].GetComponentInChildren<ItemData>().GetItem(),
                             slots[i].GetComponentInChildren<ItemData>().slotID,
-                            slots[i].GetComponentInChildren<ItemData>().GetItem().Count, 
-                            false, 
+                            slots[i].GetComponentInChildren<ItemData>().GetItem().Count,
+                            false,
                             gameObject);
             if (!complete)
             {
