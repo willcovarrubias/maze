@@ -252,6 +252,7 @@ public class InventoryManager : MonoBehaviour
                 int duribility = PlayerPrefs.GetInt("Player Item Duribility");
                 Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(id);
                 Inventory loadedItem = new Inventory(weapon, count);
+                weapon.Num = i;
                 weapon.Durability = duribility;
                 playerItems.Add(loadedItem.Item.ID, loadedItem);
                 currentSize += weapon.Size * count;
@@ -280,11 +281,24 @@ public class InventoryManager : MonoBehaviour
 
     void CreateNewItem(Items items, int count)
     {
-        Inventory newItem = new Inventory(items, count);
-        playerItems.Add(newItem.Item.ID, newItem);
-        currentSize += items.Size * count;
-        SaveInventory();
-        AddItemToSlots(newItem);
+        if (IsWeapon(items.ID))
+        {
+            Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(items.ID);
+            Inventory newItem = new Inventory(weapon, count);
+            weapon.Num = Random.Range(0, 10000);
+            playerItems.Add(newItem.Item.ID, newItem);
+            currentSize += items.Size * count;
+            SaveInventory();
+            AddItemToSlots(newItem);
+        }
+        else
+        {
+            Inventory newItem = new Inventory(items, count);
+            playerItems.Add(newItem.Item.ID, newItem);
+            currentSize += items.Size * count;
+            SaveInventory();
+            AddItemToSlots(newItem);
+        }
         UpdateInventoryText();
     }
 

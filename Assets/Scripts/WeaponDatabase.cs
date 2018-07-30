@@ -38,7 +38,8 @@ public class WeaponDatabase : MonoBehaviour
                 (int)itemsData[i]["special"],
                 (int)itemsData[i]["durability"],
                 (int)itemsData[i]["size"],
-                itemsData[i]["slug"].ToString());
+                itemsData[i]["slug"].ToString(), 
+                0);
             GetComponent<ItemDatabase>().AddToDatabase(weapon);
             weaponIDs.Add(weapon.ID);
         }
@@ -56,8 +57,9 @@ public class Weapons : Items
     public int Attack { get; set; }
     public int Special { get; set; }
     public int Durability { get; set; }
+    public int Num { get; set; }
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug)
+    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug, int num)
     {
         this.ID = id;
         this.Title = title;
@@ -68,6 +70,7 @@ public class Weapons : Items
         this.Size = size;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
+        this.Num = num;
     }
 
     public Weapons()
