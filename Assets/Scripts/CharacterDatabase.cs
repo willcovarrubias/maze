@@ -9,6 +9,7 @@ using System.Linq;
 public class CharacterDatabase : MonoBehaviour
 {
     private List<Character> enemyDatabase = new List<Character>();
+    public List<Character> listOfWanderers = new List<Character>();
     public List<Character> listOfHeroes = new List<Character>();
 
     private JsonData enemyData;
@@ -37,7 +38,7 @@ public class CharacterDatabase : MonoBehaviour
         }
         if (Input.GetKeyUp("d"))
         {
-            DeleteHero(listOfHeroes[UnityEngine.Random.Range(0, listOfHeroes.Count)]);
+            DeleteWanderer(listOfWanderers[UnityEngine.Random.Range(0, listOfWanderers.Count)]);
         }
         if (Input.GetKeyUp("e"))
         {
@@ -58,7 +59,7 @@ public class CharacterDatabase : MonoBehaviour
 
     public List<Character> GetListOfHeroes()
     {
-        return listOfHeroes;
+        return listOfWanderers;
     }
 
     void AddToDatabase(JsonData json, List<Character> characters)
@@ -81,6 +82,12 @@ public class CharacterDatabase : MonoBehaviour
         }
     }
 
+    public void RecruitHero(Character characterToRecruit)
+    {
+        listOfHeroes.Add(characterToRecruit);
+        Debug.Log("Recruited: " + characterToRecruit.name);
+    }
+
     public Character CreateRandomHero()
     {
         Character newCharacter = new Character
@@ -100,8 +107,8 @@ public class CharacterDatabase : MonoBehaviour
             slug = "00"
         };
         bool newSlot = true;
-        int slotNumber = listOfHeroes.Count;
-        for (int i = 0; i < listOfHeroes.Count; i++)
+        int slotNumber = listOfWanderers.Count;
+        for (int i = 0; i < listOfWanderers.Count; i++)
         {
             if (PlayerPrefs.GetInt("Hero Num " + i) == 0)
             {
@@ -115,7 +122,7 @@ public class CharacterDatabase : MonoBehaviour
             amountOfSavedHeroes += 1;
             PlayerPrefs.SetInt("Character Count", amountOfSavedHeroes);
         }
-        listOfHeroes.Add(newCharacter);
+        listOfWanderers.Add(newCharacter);
         SaveNewCharacter(newCharacter, slotNumber);
         return newCharacter;
     }
@@ -196,7 +203,7 @@ public class CharacterDatabase : MonoBehaviour
     void LoadCharacters()
     {
         amountOfSavedHeroes = PlayerPrefs.GetInt("Character Count", 0);
-        listOfHeroes.Clear();
+        listOfWanderers.Clear();
         for (int i = 0; i < amountOfSavedHeroes; i++)
         {
             int characterNum = PlayerPrefs.GetInt("Hero Num " + i);
@@ -216,16 +223,16 @@ public class CharacterDatabase : MonoBehaviour
                 int lives = PlayerPrefs.GetInt("Hero " + i + " Lives");
                 string slug = PlayerPrefs.GetString("Hero " + i + " Slug");
                 Character character = new Character(id, heroName, job, hp, mp, att, spec, def, luck, item, exp, lives, slug);
-                listOfHeroes.Add(character);
+                listOfWanderers.Add(character);
             }
         }
     }
 
-    public void DeleteHero(Character character)
+    public void DeleteWanderer(Character character)
     {
-        for (int i = 0; i < listOfHeroes.Count; i++)
+        for (int i = 0; i < listOfWanderers.Count; i++)
         {
-            if (listOfHeroes[i] == character)
+            if (listOfWanderers[i] == character)
             {
                 PlayerPrefs.SetInt("Hero Num " + i, 0);
                 PlayerPrefs.SetInt("Hero " + i + " ID", 0);
@@ -241,33 +248,50 @@ public class CharacterDatabase : MonoBehaviour
                 PlayerPrefs.SetInt("Hero " + i + " Exp", 0);
                 PlayerPrefs.SetInt("Hero " + i + " Lives", 0);
                 PlayerPrefs.SetString("Hero " + i + " Slug", "");
-                if (i == (listOfHeroes.Count - 1))
+                if (i == (listOfWanderers.Count - 1))
                 {
                     PlayerPrefs.SetInt("Character Count", (PlayerPrefs.GetInt("Character Count") - 1));
                 }
-                Debug.Log("Deleted " + listOfHeroes[i].name);
-                listOfHeroes.RemoveAt(i);
+                Debug.Log("Deleted " + listOfWanderers[i].name);
+                listOfWanderers.RemoveAt(i);
                 return;
             }
+        }
+        PlayerPrefs.Save();
+    }
+
+    public void DeleteAllWanderers()
+    {
+        for (int i = 0; i < listOfWanderers.Count; i++)
+        {
+            DeleteWanderer(listOfWanderers[i]);
+
         }
     }
 
     public void ChangeCurrentCharacter(int id)
     {
-        for (int i = 0; i < listOfHeroes.Count; i++)
+        for (int i = 0; i < listOfWanderers.Count; i++)
         {
-            if (listOfHeroes[i].id == id)
+            if (listOfWanderers[i].id == id)
             {
-                currentCharacter = listOfHeroes[i];
+                currentCharacter = listOfWanderers[i];
             }
         }
     }
 
     void PrintCreatedCharacters()
     {
+        for (int i = 0; i < listOfWanderers.Count; i++)
+        {
+            Debug.Log("Wanderers: " + listOfWanderers[i].name);
+            
+        }
+
         for (int i = 0; i < listOfHeroes.Count; i++)
         {
-            Debug.Log(listOfHeroes[i].name);
+            Debug.Log("Heroes: " + listOfHeroes[i].name);
+
         }
     }
 }

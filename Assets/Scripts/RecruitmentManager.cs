@@ -11,8 +11,9 @@ public class RecruitmentManager : MonoBehaviour {
     //UI Stuff.
     public GameObject recruitmentPanel;
     public GameObject characterSlotPanel;
-    public GameObject characaterSlot;
+    public GameObject characterSlot;
     public GameObject characterObjectPrefab;
+    private List<GameObject> characterObject = new List<GameObject>();
     public int characterSlotAmount;
     public List<GameObject> characterSlots = new List<GameObject>();
 
@@ -22,36 +23,72 @@ public class RecruitmentManager : MonoBehaviour {
 
         maxAmountOfHeroesToRecruit = 5; //Set this somewhere, possibly from a village upgrade milestone. Goes up with game progress.
 
-        GenerateListOfHeroes();
-	}
+        
+        AddHeroSlot();
+        GenerateListOfHeroesObjects();
+        
+        
+    }
 
-    void GenerateListOfHeroes()
+    private void Update()
     {
+        
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            UpdateListOfHeroes();
+        }
+    }
+
+    void GenerateListOfHeroesObjects()
+    {
+
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
-            AddHeroSlot();
-            gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
+            characterObject.Add(Instantiate(characterObjectPrefab));
 
-            GameObject characterObject = Instantiate(characterObjectPrefab);
+            characterObject[i].transform.SetParent(characterSlots[i].transform);
+            characterObject[i].transform.localPosition = Vector2.zero;
 
-            characterObject.transform.SetParent(characterSlots[i].transform);
-            characterObject.transform.localPosition = Vector2.zero;
-            //characterObject.GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
-            characterObject.name = gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name;
-            characterObject.GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name;
+            characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
 
-            //characterObject.GetComponent<Image>().sprite = gameMaster.GetComponent<CharacterDatabase>().CreateHero().sprite;
         }
 
     }
 
+    void UpdateListOfHeroes()
+    {
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
+
+
+        for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
+        {
+            gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
+            characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
+            //characterObject.GetComponent<Image>().sprite = gameMaster.GetComponent<CharacterDatabase>().CreateHero().sprite;
+        }
+    }
+
     private void AddHeroSlot()
     {
-        characterSlots.Add(Instantiate(characaterSlot));
-        characterSlotAmount++;
-        //Adds an ID to each slot when it generates the slots. Used for drag/drop.
-        characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
-        characterSlots[characterSlotAmount - 1].name = "Slot" + (characterSlotAmount - 1);
-        characterSlots[characterSlotAmount - 1].transform.SetParent(characterSlotPanel.transform);
+        for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
+        {
+            characterSlots.Add(Instantiate(characterSlot));
+            //characterSlotAmount++;
+            //Adds an ID to each slot when it generates the slots. Used for drag/drop.
+            //characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
+            //characterSlots[characterSlotAmount - 1].name = "Slot" + (characterSlotAmount - 1);
+            characterSlots[i].transform.SetParent(characterSlotPanel.transform);
+
+            
+            
+        }
+            
     }
+
+   
+
 }
