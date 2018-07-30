@@ -30,13 +30,15 @@ public class RecruitmentManager : MonoBehaviour {
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
             AddHeroSlot();
+            gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
+
             GameObject characterObject = Instantiate(characterObjectPrefab);
 
             characterObject.transform.SetParent(characterSlots[i].transform);
             characterObject.transform.localPosition = Vector2.zero;
             //characterObject.GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
-            //characterObject.name = characterObject.GetComponent<CharacterData>().character.name;
-            //characterObject.GetComponent<Text>().text = characterObject.GetComponent<CharacterData>().character.name;
+            characterObject.name = gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name;
+            characterObject.GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name;
 
             //characterObject.GetComponent<Image>().sprite = gameMaster.GetComponent<CharacterDatabase>().CreateHero().sprite;
         }

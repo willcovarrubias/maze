@@ -24,7 +24,7 @@ public class CharacterDatabase : MonoBehaviour
         LoadCharacters();
     }
 
-    /*
+    
     private void Update()
     {
         if (Input.GetKeyUp("c"))
@@ -44,7 +44,7 @@ public class CharacterDatabase : MonoBehaviour
             PlayerPrefs.DeleteAll();
         }
     }
-    */
+    
 
     public Character FetchCharacterByID(int id)
     {
