@@ -18,7 +18,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     GameObject gameMaster;
     GameObject villageSceneController;
-    GameObject lootSceneController;
     GameObject currentSlot;
 
     Scene currentScene;
@@ -30,6 +29,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Location.WhereAmI currentLocation;
     Location.WhereAmI goingToLocation;
 
+    GameObject temp;
+
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
@@ -38,10 +39,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (sceneName == "VillageScene")
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
-        }
-        else if (sceneName == "LootScene" || sceneName == "BrandonTest")
-        {
-            lootSceneController = GameObject.Find("Manager");
         }
     }
 
@@ -72,9 +69,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (gameMaster != null /*&& currentLocation != Location.WhereAmI.chest*/)
+        if (gameMaster != null)
         {
             currentSlot = transform.parent.gameObject;
+            if (item.Count > 1)
+            {
+                temp = Instantiate(transform.gameObject, transform.parent, true);
+                if (item.Count > 3)
+                {
+                    temp.GetComponent<Text>().text = item.Item.Title + " x" + (item.Count - 1);
+                }
+                else
+                {
+                    temp.GetComponent<Text>().text = item.Item.Title;
+                }
+            }
+            GetComponent<Text>().text = item.Item.Title;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
@@ -160,6 +170,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = currentSlot.transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
+        CheckCount();
+        Destroy(temp);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -168,12 +180,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
-        gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver = false;
-        if (sceneName == "VillageScene")
-        {
-            villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
-            villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver = false;
-        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -184,19 +190,33 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 3;
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
         }
-        if (villageSceneController != null && beingDragged && sceneName == "VillageScene")
+        if (sceneName == "VillageScene")
         {
-            if (villageSceneController.GetComponent<VillageInventoryManager>().addItemsToVillageInventory.GetComponent<OverUI>().isOver)
+            OnPointerUpVillage(eventData);
+        }
+        if (sceneName == "BrandonTest" || sceneName == "LootScene")
+        {
+            OnPointerUpLootScene(eventData);
+        }
+        if (sceneName == "PathScene")
+        {
+            goingToLocation = Location.WhereAmI.player;
+        }
+    }
+
+    void OnPointerUpVillage(PointerEventData eventData)
+    {
+        if (eventData.position.x > Screen.width / 2 && beingDragged)
+        {
+            goingToLocation = Location.WhereAmI.village;
+            if (currentLocation == Location.WhereAmI.player)
             {
-                goingToLocation = Location.WhereAmI.village;
-                if (currentLocation == Location.WhereAmI.player)
-                {
-                    villageSceneController.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, slotID, 1);
-                    CheckCount();
-                }
+                villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
+                villageSceneController.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, slotID, 1);
+                CheckCount();
             }
         }
-        if (gameMaster.GetComponent<InventoryManager>().inventoryPane.GetComponent<OverUI>().isOver && sceneName == "VillageScene")
+        if (eventData.position.x < Screen.width / 2)
         {
             goingToLocation = Location.WhereAmI.player;
             if (currentLocation == Location.WhereAmI.village)
@@ -205,7 +225,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 CheckCount();
             }
         }
-        if ((sceneName == "BrandonTest" || sceneName == "LootScene") && eventData.position.x > Screen.width / 2)
+    }
+
+    void OnPointerUpLootScene(PointerEventData eventData)
+    {
+        if (eventData.position.x > Screen.width / 2)
         {
             goingToLocation = Location.WhereAmI.temp;
             if (currentLocation == Location.WhereAmI.player)
@@ -224,7 +248,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 CheckCount();
             }
         }
-        else if ((sceneName == "BrandonTest" || sceneName == "LootScene") && eventData.position.x < Screen.width / 2)
+        else if (eventData.position.x < Screen.width / 2)
         {
             goingToLocation = Location.WhereAmI.player;
             if (currentLocation == Location.WhereAmI.temp)

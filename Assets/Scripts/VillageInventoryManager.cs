@@ -7,7 +7,8 @@ public class VillageInventoryManager : MonoBehaviour
 {
     int maxVillageInventorySize;
     int currentSize;
-    public List<Inventory> villageItems = new List<Inventory>();
+    public Dictionary<int, Inventory> villageItems = new Dictionary<int, Inventory>();
+    //public List<Inventory> villageItems = new List<Inventory>();
 
     public GameObject slotPanel;
     public GameObject slot;
@@ -55,25 +56,24 @@ public class VillageInventoryManager : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < villageItems.Count; i++)
+                Inventory temp;
+                if (villageItems.TryGetValue(items.Item.ID, out temp))
                 {
-                    if (villageItems[i].Item.ID == items.Item.ID)
+                    villageItems[items.Item.ID].Count += amountCanFit;
+                    currentSize += items.Item.Size * amountCanFit;
+                    SaveVillageInventory();
+                    for (int j = 0; j < slots.Count; j++)
                     {
-                        villageItems[i].Count += amountCanFit;
-                        currentSize += items.Item.Size * amountCanFit;
-                        SaveVillageInventory();
-                        for (int j = 0; j < slots.Count; j++)
+                        if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == items.Item.ID)
                         {
-                            if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == items.Item.ID)
-                            {
-                                slots[j].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[i].Count;
-                                slots[j].GetComponentInChildren<Text>().text = villageItems[i].Item.Title + " x" + villageItems[i].Count;
-                                UpdateInventoryText();
-                                gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
-                                return movedAll;
-                            }
+                            slots[j].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[items.Item.ID].Count;
+                            slots[j].GetComponentInChildren<Text>().text = villageItems[items.Item.ID].Item.Title + " x" + villageItems[items.Item.ID].Count;
+                            UpdateInventoryText();
+                            gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                            return movedAll;
                         }
                     }
+
                 }
                 CreateNewItem(items.Item, amountCanFit);
                 gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
@@ -93,25 +93,23 @@ public class VillageInventoryManager : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < villageItems.Count; i++)
+                Inventory temp;
+                if (villageItems.TryGetValue(item.ID, out temp))
                 {
-                    if (villageItems[i].Item.ID == item.ID)
+                    villageItems[item.ID].Count++;
+                    currentSize += item.Size;
+                    SaveVillageInventory();
+                    for (int j = 0; j < slots.Count; j++)
                     {
-                        villageItems[i].Count++;
-                        currentSize += item.Size;
-                        SaveVillageInventory();
-                        for (int j = 0; j < slots.Count; j++)
+                        if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == item.ID)
                         {
-                            if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == item.ID)
-                            {
-                                slots[j].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[i].Count;
-                                slots[j].GetComponentInChildren<Text>().text = villageItems[i].Item.Title + " x" + villageItems[i].Count;
-                                UpdateInventoryText();
-                                break;
-                            }
+                            slots[j].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[item.ID].Count;
+                            slots[j].GetComponentInChildren<Text>().text = villageItems[item.ID].Item.Title + " x" + villageItems[item.ID].Count;
+                            UpdateInventoryText();
+                            break;
                         }
-                        return;
                     }
+                    return;
                 }
                 CreateNewItem(item, 1);
             }
@@ -125,25 +123,18 @@ public class VillageInventoryManager : MonoBehaviour
             currentSize -= item.Item.Size * count;
             if (IsWeapon(item.Item.ID))
             {
-                villageItems.Remove(item);
+                villageItems.Remove(item.Item.ID);
                 item.Count = 0;
                 ReorganizeSlots(slotId);
             }
             else
             {
-                for (int i = 0; i < villageItems.Count; i++)
+                villageItems[item.Item.ID].Count -= count;
+                if (villageItems[item.Item.ID].Count <= 0)
                 {
-                    if (villageItems[i].Item.ID == item.Item.ID)
-                    {
-                        villageItems[i].Count -= count;
-                        if (villageItems[i].Count <= 0)
-                        {
-                            villageItems.Remove(item);
-                            item.Count = 0;
-                            ReorganizeSlots(slotId);
-                        }
-                        break;
-                    }
+                    villageItems.Remove(item.Item.ID);
+                    item.Count = 0;
+                    ReorganizeSlots(slotId);
                 }
             }
             SaveVillageInventory();
@@ -154,7 +145,7 @@ public class VillageInventoryManager : MonoBehaviour
     public void RemoveWholeStackFromInventory(Inventory items)
     {
         currentSize -= items.Item.Size * items.Count;
-        villageItems.Remove(items);
+        villageItems.Remove(items.Item.ID);
         items.Count = 0;
         SaveVillageInventory();
         UpdateInventoryText();
@@ -183,16 +174,18 @@ public class VillageInventoryManager : MonoBehaviour
 
     public void SaveVillageInventory()
     {
-        int i;
-        for (i = 0; i < villageItems.Count; i++)
+        int i = 0;
+        foreach (KeyValuePair<int, Inventory> keyValue in villageItems)
         {
-            PlayerPrefs.SetInt("Village Item ID" + i, villageItems[i].Item.ID);
-            PlayerPrefs.SetInt("Village Item Count" + i, villageItems[i].Count);
-            if (IsWeapon(villageItems[i].Item.ID))
+            int key = keyValue.Key;
+            PlayerPrefs.SetInt("Village Item ID" + i, villageItems[key].Item.ID);
+            PlayerPrefs.SetInt("Village Item Count" + i, villageItems[key].Count);
+            if (IsWeapon(villageItems[key].Item.ID))
             {
-                Weapons weapon = (Weapons)villageItems[i].Item;
+                Weapons weapon = (Weapons)villageItems[key].Item;
                 PlayerPrefs.SetInt("Village Item Duribility", weapon.Durability);
             }
+            i++;
         }
         PlayerPrefs.SetInt("Village Item Count", i);
         PlayerPrefs.Save();
@@ -211,9 +204,10 @@ public class VillageInventoryManager : MonoBehaviour
             {
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility");
                 Weapons weapon = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(id);
+                weapon.Num = Random.Range(0, 10000);
                 Inventory loadedItem = new Inventory(weapon, count);
                 weapon.Durability = duribility;
-                villageItems.Add(loadedItem);
+                villageItems.Add(loadedItem.Item.ID, loadedItem);
                 currentSize += weapon.Size * count;
                 AddItemToSlots(loadedItem);
             }
@@ -221,7 +215,7 @@ public class VillageInventoryManager : MonoBehaviour
             {
                 Items item = gameMaster.GetComponent<ItemDatabase>().FetchItemByID(id);
                 Inventory loadedItem = new Inventory(item, count);
-                villageItems.Add(loadedItem);
+                villageItems.Add(loadedItem.Item.ID, loadedItem);
                 currentSize += item.Size * count;
                 AddItemToSlots(loadedItem);
             }
@@ -240,11 +234,23 @@ public class VillageInventoryManager : MonoBehaviour
 
     void CreateNewItem(Items items, int count)
     {
-        Inventory newItem = new Inventory(items, count);
-        villageItems.Add(newItem);
-        currentSize += items.Size * count;
-        SaveVillageInventory();
-        AddItemToSlots(newItem);
+        if (IsWeapon(items.ID))
+        {
+            Weapons weapon = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(items.ID);
+            Inventory newItem = new Inventory(weapon, count);
+            weapon.Num = Random.Range(0, 10000);
+            currentSize += items.Size * count;
+            SaveVillageInventory();
+            AddItemToSlots(newItem);
+        }
+        else
+        {
+            Inventory newItem = new Inventory(items, count);
+            villageItems.Add(newItem.Item.ID, newItem);
+            currentSize += items.Size * count;
+            SaveVillageInventory();
+            AddItemToSlots(newItem);
+        }
         UpdateInventoryText();
     }
 
