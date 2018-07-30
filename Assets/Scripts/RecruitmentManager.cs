@@ -50,7 +50,7 @@ public class RecruitmentManager : MonoBehaviour {
             characterObject[i].transform.SetParent(characterSlots[i].transform);
             characterObject[i].transform.localPosition = Vector2.zero;
 
-            Character newWander = gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
+            Character newWander = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
             characterObject[i].name = newWander.name;
             characterObject[i].GetComponent<Text>().text = newWander.name;
             characterObject[i].GetComponent<CharacterData>().character = newWander;
@@ -65,7 +65,7 @@ public class RecruitmentManager : MonoBehaviour {
        
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
-            gameMaster.GetComponent<CharacterDatabase>().CreateRandomHero();
+            gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
             characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
             characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
             characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
