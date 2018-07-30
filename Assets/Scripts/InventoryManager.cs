@@ -330,14 +330,22 @@ public class InventoryManager : MonoBehaviour
     public void OpenInventoryPanelUI()
     {
         inventoryPanel.SetActive(true);
+        currentScene = SceneManager.GetActiveScene();
+        sceneName = currentScene.name;
+        if (sceneName == "VillageScene")
+        {
+            inventoryPanel.transform.Find("SendToVillage").gameObject.SetActive(true);
+        }
+        else
+        {
+            inventoryPanel.transform.Find("SendToVillage").gameObject.SetActive(false);
+        }
     }
 
     public void CloseInventoryPanelUI()
     {
         inventoryPanel.SetActive(false);
         //Closes the inventory panel no matter what scene the player is currently in.
-        currentScene = SceneManager.GetActiveScene();
-        sceneName = currentScene.name;
         if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
         {
             GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();

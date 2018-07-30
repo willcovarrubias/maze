@@ -104,7 +104,7 @@ public class VillageSceneController : MonoBehaviour {
 
     public void InventoryUIOpen()
     {
-        inventoryUI.SetActive(true);
+        GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
         villInventoryUI.SetActive(true);
 
     }

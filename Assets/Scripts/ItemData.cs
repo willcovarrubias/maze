@@ -29,6 +29,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Location.WhereAmI currentLocation;
     Location.WhereAmI goingToLocation;
 
+    GameObject temp;
+
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
@@ -67,9 +69,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (gameMaster != null /*&& currentLocation != Location.WhereAmI.chest*/)
+        if (gameMaster != null)
         {
             currentSlot = transform.parent.gameObject;
+            if (item.Count > 1)
+            {
+                temp = Instantiate(transform.gameObject, transform.parent, true);
+                if (item.Count > 3)
+                {
+                    temp.GetComponent<Text>().text = item.Item.Title + " x" + (item.Count - 1);
+                }
+                else
+                {
+                    temp.GetComponent<Text>().text = item.Item.Title;
+                }
+            }
+            GetComponent<Text>().text = item.Item.Title;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
@@ -155,6 +170,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = currentSlot.transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
+        CheckCount();
+        Destroy(temp);
     }
 
     public void OnPointerDown(PointerEventData eventData)
