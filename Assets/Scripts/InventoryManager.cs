@@ -86,6 +86,7 @@ public class InventoryManager : MonoBehaviour
                 villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
             }
         }
+        //TODO if reached here the item cannot fit!
         return movedAll;
     }
 
