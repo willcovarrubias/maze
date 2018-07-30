@@ -21,7 +21,7 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
      
     public void OnPointerDown(PointerEventData eventData)
     {
-        
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(character);
     }
 
     public void OnPointerUp(PointerEventData eventData)
