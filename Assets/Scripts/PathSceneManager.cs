@@ -81,4 +81,9 @@ public class PathSceneManager : MonoBehaviour {
     {
         SceneManager.LoadScene("VillageScene");
     }
+
+    public void InventoryUIOpen()
+    {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
+    }
 }

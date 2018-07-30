@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LootGenerator : MonoBehaviour
 {
+    GameObject gameMaster;
     public GameObject chest;
     public GameObject slot;
     public GameObject itemPrefab;
@@ -12,6 +13,8 @@ public class LootGenerator : MonoBehaviour
 
     void Start()
     {
+        gameMaster = GameObject.FindGameObjectWithTag("GameController");
+
         int randomAmount = Random.Range(1, 5);
         chests = new List<GameObject>();
         int offset = 0;
@@ -47,5 +50,10 @@ public class LootGenerator : MonoBehaviour
         {
             chests[i].GetComponent<Loot>().CloseChestUI();
         }
+    }
+
+    public void InventoryUIOpen()
+    {
+        gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
     }
 }
