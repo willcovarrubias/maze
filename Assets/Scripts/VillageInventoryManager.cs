@@ -62,25 +62,21 @@ public class VillageInventoryManager : MonoBehaviour
                 gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, 1, thisSlotId);
                 return true;
             }
-            else
+            Inventory temp;
+            if (villageItems.TryGetValue(items.Item.ID, out temp))
             {
-                Inventory temp;
-                if (villageItems.TryGetValue(items.Item.ID, out temp))
-                {
-                    villageItems[items.Item.ID].Count += amountCanFit;
-                    currentSize += items.Item.Size * amountCanFit;
-                    SaveVillageInventory();
-                    slots[villageItems[items.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[items.Item.ID].Count;
-                    slots[villageItems[items.Item.ID].SlotNum].GetComponentInChildren<Text>().text = villageItems[items.Item.ID].Item.Title + " x" + villageItems[items.Item.ID].Count;
-                    UpdateInventoryText();
-                    gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
-                    return movedAll;
-                }
-                CreateNewItem(items.Item, amountCanFit);
+                villageItems[items.Item.ID].Count += amountCanFit;
+                currentSize += items.Item.Size * amountCanFit;
+                SaveVillageInventory();
+                slots[villageItems[items.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[items.Item.ID].Count;
+                slots[villageItems[items.Item.ID].SlotNum].GetComponentInChildren<Text>().text = villageItems[items.Item.ID].Item.Title + " x" + villageItems[items.Item.ID].Count;
+                UpdateInventoryText();
                 gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
+                return movedAll;
             }
+            CreateNewItem(items.Item, amountCanFit);
+            gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
         }
-        //TODO if reached here the item cannot fit!
         return movedAll;
     }
 
@@ -141,6 +137,7 @@ public class VillageInventoryManager : MonoBehaviour
             int key = keyValue.Key;
             PlayerPrefs.SetInt("Village Item ID" + i, villageItems[key].Item.ID);
             PlayerPrefs.SetInt("Village Item Count" + i, villageItems[key].Count);
+            PlayerPrefs.SetInt("Village Item Slot" + i, villageItems[key].SlotNum);
             if (IsWeapon(villageItems[key].Item.ID))
             {
                 Weapons weapon = (Weapons)villageItems[key].Item;
@@ -159,6 +156,7 @@ public class VillageInventoryManager : MonoBehaviour
 
     public void LoadVillageInventory()
     {
+        Dictionary<int, Inventory> tempList = new Dictionary<int, Inventory>();
         int itemCount = PlayerPrefs.GetInt("Village Item Count");
         villageItems.Clear();
         currentSize = 0;
@@ -166,6 +164,7 @@ public class VillageInventoryManager : MonoBehaviour
         {
             int id = PlayerPrefs.GetInt("Village Item ID" + i);
             int count = PlayerPrefs.GetInt("Village Item Count" + i);
+            int slotNum = PlayerPrefs.GetInt("Village Item Slot" + i);
             Inventory loadedItem;
             if (IsWeapon(id))
             {
@@ -176,16 +175,20 @@ public class VillageInventoryManager : MonoBehaviour
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Village Item Size" + i);
                 Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "");
-                loadedItem = new Inventory(weapon, count, slotAmount);
+                loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
             {
                 Items item = gameMaster.GetComponent<ItemDatabase>().FetchItemByID(id);
-                loadedItem = new Inventory(item, count, slotAmount);
+                loadedItem = new Inventory(item, count, slotNum);
             }
-            villageItems.Add(loadedItem.Item.ID, loadedItem);
-            currentSize += loadedItem.Item.Size * count;
-            AddItemToSlots(loadedItem);
+            tempList.Add(loadedItem.SlotNum, loadedItem);
+        }
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            villageItems.Add(tempList[i].Item.ID, tempList[i]);
+            currentSize += tempList[i].Item.Size * tempList[i].Count;
+            AddItemToSlots(tempList[i]);
         }
         UpdateInventoryText();
     }

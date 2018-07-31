@@ -77,28 +77,15 @@ public class InventoryManager : MonoBehaviour
                 }
                 return true;
             }
-            else
+            Inventory temp;
+            if (playerItems.TryGetValue(items.Item.ID, out temp))
             {
-                Inventory temp;
-                if (playerItems.TryGetValue(items.Item.ID, out temp))
-                {
-                    playerItems[items.Item.ID].Count += amountCanFit;
-                    currentSize += items.Item.Size * amountCanFit;
-                    SaveInventory();
-                    slots[playerItems[items.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[items.Item.ID].Count;
-                    slots[playerItems[items.Item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[items.Item.ID].Item.Title + " x" + playerItems[items.Item.ID].Count;
-                    UpdateInventoryText();
-                    if (fromVillage)
-                    {
-                        villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
-                    }
-                    else
-                    {
-                        panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
-                    }
-                    return movedAll;
-                }
-                CreateNewItem(items.Item, amountCanFit);
+                playerItems[items.Item.ID].Count += amountCanFit;
+                currentSize += items.Item.Size * amountCanFit;
+                SaveInventory();
+                slots[playerItems[items.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[items.Item.ID].Count;
+                slots[playerItems[items.Item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[items.Item.ID].Item.Title + " x" + playerItems[items.Item.ID].Count;
+                UpdateInventoryText();
                 if (fromVillage)
                 {
                     villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
@@ -107,9 +94,18 @@ public class InventoryManager : MonoBehaviour
                 {
                     panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
                 }
+                return movedAll;
+            }
+            CreateNewItem(items.Item, amountCanFit);
+            if (fromVillage)
+            {
+                villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(items, amountCanFit, thisSlotId);
+            }
+            else
+            {
+                panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
             }
         }
-        //TODO if reached here the item cannot fit!
         return movedAll;
     }
 
@@ -190,6 +186,7 @@ public class InventoryManager : MonoBehaviour
             int key = keyValue.Key;
             PlayerPrefs.SetInt("Player Item ID" + i, playerItems[key].Item.ID);
             PlayerPrefs.SetInt("Player Item Count" + i, playerItems[key].Count);
+            PlayerPrefs.SetInt("Player Item Slot" + i, playerItems[key].SlotNum);
             if (IsWeapon(playerItems[key].Item.ID))
             {
                 Weapons weapon = (Weapons)playerItems[key].Item;
@@ -208,6 +205,7 @@ public class InventoryManager : MonoBehaviour
 
     public void LoadInventory()
     {
+        Dictionary<int, Inventory> tempList = new Dictionary<int, Inventory>();
         int itemCount = PlayerPrefs.GetInt("Player Item Count");
         playerItems.Clear();
         currentSize = 0;
@@ -215,6 +213,7 @@ public class InventoryManager : MonoBehaviour
         {
             int id = PlayerPrefs.GetInt("Player Item ID" + i);
             int count = PlayerPrefs.GetInt("Player Item Count" + i);
+            int slotNum = PlayerPrefs.GetInt("Player Item Slot" + i);
             Inventory loadedItem;
             if (IsWeapon(id))
             {
@@ -225,16 +224,20 @@ public class InventoryManager : MonoBehaviour
                 int duribility = PlayerPrefs.GetInt("Player Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Player Item Size" + i);
                 Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "");
-                loadedItem = new Inventory(weapon, count, slotAmount);
+                loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
             {
                 Items item = GetComponent<ItemDatabase>().FetchItemByID(id);
-                loadedItem = new Inventory(item, count, slotAmount);
+                loadedItem = new Inventory(item, count, slotNum);
             }
-            playerItems.Add(loadedItem.Item.ID, loadedItem);
-            currentSize += loadedItem.Item.Size * count;
-            AddItemToSlots(loadedItem);
+            tempList.Add(loadedItem.SlotNum, loadedItem);
+        }
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            playerItems.Add(tempList[i].Item.ID, tempList[i]);
+            currentSize += tempList[i].Item.Size * tempList[i].Count;
+            AddItemToSlots(tempList[i]);
         }
         UpdateInventoryText();
     }

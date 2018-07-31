@@ -32,6 +32,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                     int temp = oldWeapon.GetComponent<ItemData>().GetItem().SlotNum;
                     GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[oldWeapon.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = droppedItem.GetComponent<ItemData>().GetItem().SlotNum;
                     GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[droppedItem.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = temp;
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory();
                 }
                 oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
                 oldWeapon.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform);
@@ -50,6 +51,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                     int temp = oldWeapon.GetComponent<ItemData>().GetItem().SlotNum;
                     villageSceneController.GetComponent<VillageInventoryManager>().villageItems[oldWeapon.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = droppedItem.GetComponent<ItemData>().GetItem().SlotNum;
                     villageSceneController.GetComponent<VillageInventoryManager>().villageItems[droppedItem.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = temp;
+                    villageSceneController.GetComponent<VillageInventoryManager>().SaveVillageInventory();
                 }
                 oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
                 oldWeapon.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[droppedItem.slotID].transform);
