@@ -18,7 +18,6 @@ public class VillageInventoryManager : MonoBehaviour
 
     GameObject gameMaster;
     public GameObject addItemsToVillageInventory;
-    //public GameObject add_ALL_ItemsToVillageInventory;
 
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollViewVillage;
@@ -145,7 +144,12 @@ public class VillageInventoryManager : MonoBehaviour
             if (IsWeapon(villageItems[key].Item.ID))
             {
                 Weapons weapon = (Weapons)villageItems[key].Item;
-                PlayerPrefs.SetInt("Village Item Duribility", weapon.Durability);
+                PlayerPrefs.SetString("Village Item Name" + i, weapon.Title);
+                PlayerPrefs.SetInt("Village Item Rarity" + i, weapon.Rarity);
+                PlayerPrefs.SetInt("Village Item Attack" + i, weapon.Attack);
+                PlayerPrefs.SetInt("Village Item Special" + i, weapon.Special);
+                PlayerPrefs.SetInt("Village Item Duribility" + i, weapon.Durability);
+                PlayerPrefs.SetInt("Village Item Size" + i, weapon.Size);
             }
             i++;
         }
@@ -165,9 +169,13 @@ public class VillageInventoryManager : MonoBehaviour
             Inventory loadedItem;
             if (IsWeapon(id))
             {
-                int duribility = PlayerPrefs.GetInt("Village Item Duribility");
-                Weapons weapon = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(id);
-                weapon.Durability = duribility;
+                string title = PlayerPrefs.GetString("Village Item Name" + i);
+                int rarity = PlayerPrefs.GetInt("Village Item Rarity" + i);
+                int attack = PlayerPrefs.GetInt("Village Item Attack" + i);
+                int special = PlayerPrefs.GetInt("Village Item Special" + i);
+                int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
+                int size = PlayerPrefs.GetInt("Village Item Size" + i);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "");
                 loadedItem = new Inventory(weapon, count, slotAmount);
             }
             else
@@ -184,7 +192,7 @@ public class VillageInventoryManager : MonoBehaviour
 
     public bool IsWeapon(int id)
     {
-        if (id >= 2000 && id < 3000)
+        if (id >= 10000)
         {
             return true;
         }
@@ -194,15 +202,7 @@ public class VillageInventoryManager : MonoBehaviour
     void CreateNewItem(Items items, int count)
     {
         Inventory newItem;
-        if (IsWeapon(items.ID))
-        {
-            Weapons weapon = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(items.ID);
-            newItem = new Inventory(weapon, count, slotAmount);
-        }
-        else
-        {
-            newItem = new Inventory(items, count, slotAmount);
-        }
+        newItem = new Inventory(items, count, slotAmount);
         villageItems.Add(newItem.Item.ID, newItem);
         currentSize += items.Size * count;
         SaveVillageInventory();

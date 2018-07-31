@@ -193,7 +193,12 @@ public class InventoryManager : MonoBehaviour
             if (IsWeapon(playerItems[key].Item.ID))
             {
                 Weapons weapon = (Weapons)playerItems[key].Item;
-                PlayerPrefs.SetInt("Player Item Duribility", weapon.Durability);
+                PlayerPrefs.SetString("Player Item Name" + i, weapon.Title);
+                PlayerPrefs.SetInt("Player Item Rarity" + i, weapon.Rarity);
+                PlayerPrefs.SetInt("Player Item Attack" + i, weapon.Attack);
+                PlayerPrefs.SetInt("Player Item Special" + i, weapon.Special);
+                PlayerPrefs.SetInt("Player Item Duribility" + i, weapon.Durability);
+                PlayerPrefs.SetInt("Player Item Size" + i, weapon.Size);
             }
             i++;
         }
@@ -213,9 +218,13 @@ public class InventoryManager : MonoBehaviour
             Inventory loadedItem;
             if (IsWeapon(id))
             {
-                int duribility = PlayerPrefs.GetInt("Player Item Duribility");
-                Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(id);
-                weapon.Durability = duribility;
+                string title = PlayerPrefs.GetString("Player Item Name" + i);
+                int rarity = PlayerPrefs.GetInt("Player Item Rarity" + i);
+                int attack = PlayerPrefs.GetInt("Player Item Attack" + i);
+                int special = PlayerPrefs.GetInt("Player Item Special" + i);
+                int duribility = PlayerPrefs.GetInt("Player Item Duribility" + i);
+                int size = PlayerPrefs.GetInt("Player Item Size" + i);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "");
                 loadedItem = new Inventory(weapon, count, slotAmount);
             }
             else
@@ -232,7 +241,7 @@ public class InventoryManager : MonoBehaviour
 
     public bool IsWeapon(int id)
     {
-        if (id >= 2000 && id < 3000)
+        if (id >= 10000)
         {
             return true;
         }
@@ -242,15 +251,7 @@ public class InventoryManager : MonoBehaviour
     void CreateNewItem(Items items, int count)
     {
         Inventory newItem;
-        if (IsWeapon(items.ID))
-        {
-            Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(items.ID);
-            newItem = new Inventory(weapon, count, slotAmount);
-        }
-        else
-        {
-            newItem = new Inventory(items, count, slotAmount);
-        }
+        newItem = new Inventory(items, count, slotAmount);
         playerItems.Add(newItem.Item.ID, newItem);
         currentSize += items.Size * count;
         SaveInventory();

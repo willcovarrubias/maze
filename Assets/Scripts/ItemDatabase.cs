@@ -67,15 +67,13 @@ public class ItemDatabase : MonoBehaviour
                 chestItemID = GetComponent<MaterialDatabase>().GetRandomMaterialID();
                 AddToChestList(chestItems, chestItemID, amount);
             }
-            /*
             else if (randomValue >= 0.1f && randomValue < 0.2f)
             {
                 amount = 1;
-                chestItemID = GetComponent<WeaponDatabase>().GetRandomWeaponID();
+                Items weapon = GetComponent<WeaponDatabase>().CreateWeapon();
+                chestItems.Add(new Inventory(weapon, 1, chestItems.Count));
                 i++;
-                AddToChestList(chestItems, chestItemID, amount);
             }
-            */
             else
             {
                 amount = 1;
