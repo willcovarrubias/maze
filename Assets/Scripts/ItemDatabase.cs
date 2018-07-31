@@ -6,37 +6,29 @@ using System.IO;
 
 public class ItemDatabase : MonoBehaviour
 {
-    private List<Items> database = new List<Items>(); // make database a dictionary <int ID, Items item> for better search?
+    Dictionary<int, Items> database = new Dictionary<int, Items>();
     private JsonData itemsData;
 
     public Items FetchItemByID(int id)
     {
-        for (int i = 0; i < database.Count; i++)
-        {
-            if (database[i].ID == id)
-            {
-                return database[i];
-            }
-        }
-        return null;
+        return database[id];
     }
 
     public void AddToDatabase(Items item)
     {
-        database.Add(item);
-        //Debug.Log(item.ID + " " + database.Count);
+        database.Add(item.ID, item);
     }
 
-    public List<Items> GetDatabase()
+    public Dictionary<int, Items> GetDatabase()
     {
         return database;
     }
 
     public void DisplayAllItems()
     {
-        for (int i = 0; i < database.Count; i++)
+        foreach (KeyValuePair<int, Items> keyValue in database)
         {
-            Debug.Log(database[i].Title);
+            Debug.Log(database[keyValue.Key].Title);
         }
     }
 
@@ -119,6 +111,7 @@ public class Items
     public int Size { get; set; }
     public string Slug { get; set; }
     public Sprite Sprite { get; set; }
+    public int SlotNum { get; set; }
 
     public Items(int id, string title, int rarity, int size, string slug)
     {
