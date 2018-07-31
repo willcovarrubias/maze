@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
+    /*
+     * For swapping slots
+     */
+
     public int id;
     GameObject gameMaster;
     GameObject villageSceneController;
@@ -23,6 +27,12 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                     gameMaster = GameObject.FindGameObjectWithTag("GameController");
                 }
                 Transform oldWeapon = this.transform.GetChild(0);
+                if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
+                {
+                    int temp = oldWeapon.GetComponent<ItemData>().GetItem().SlotNum;
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[oldWeapon.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = droppedItem.GetComponent<ItemData>().GetItem().SlotNum;
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[droppedItem.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = temp;
+                }
                 oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
                 oldWeapon.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform);
                 oldWeapon.transform.position = gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform.position;
@@ -35,6 +45,12 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             {
                 villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
                 Transform oldWeapon = this.transform.GetChild(0);
+                if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
+                {
+                    int temp = oldWeapon.GetComponent<ItemData>().GetItem().SlotNum;
+                    villageSceneController.GetComponent<VillageInventoryManager>().villageItems[oldWeapon.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = droppedItem.GetComponent<ItemData>().GetItem().SlotNum;
+                    villageSceneController.GetComponent<VillageInventoryManager>().villageItems[droppedItem.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = temp;
+                }
                 oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
                 oldWeapon.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[droppedItem.slotID].transform);
                 oldWeapon.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[droppedItem.slotID].transform.position;
@@ -46,8 +62,14 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                      droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.temp)
             {
                 Transform oldWeapon = this.transform.GetChild(0);
-                oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
                 GameObject panel = oldWeapon.transform.parent.parent.parent.parent.gameObject;
+                oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
+                if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
+                {
+                    int temp = oldWeapon.GetComponent<ItemData>().GetItem().SlotNum;
+                    panel.GetComponent<DynamicInventory>().items[oldWeapon.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = droppedItem.GetComponent<ItemData>().GetItem().SlotNum;
+                    panel.GetComponent<DynamicInventory>().items[droppedItem.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = temp;
+                }
                 oldWeapon.transform.SetParent(panel.GetComponent<DynamicInventory>().slots[droppedItem.slotID].transform);
                 oldWeapon.transform.position = panel.GetComponent<DynamicInventory>().slots[droppedItem.slotID].transform.position;
                 droppedItem.slotID = id;

@@ -13,18 +13,12 @@ public class WeaponDatabase : MonoBehaviour
     {
         itemsData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
         ConstructWeaponDatabase();
-
         //Debug.Log (FetchWeaponByID(1).Title);
     }
 
     public Weapons FetchWeaponByID(int id)
     {
-        for (int i = 0; i < GetComponent<ItemDatabase>().GetDatabase().Count; i++)
-        {
-            if (GetComponent<ItemDatabase>().GetDatabase()[i].ID == id)
-                return (Weapons)GetComponent<ItemDatabase>().GetDatabase()[i];
-        }
-        return null;
+        return (Weapons)GetComponent<ItemDatabase>().FetchItemByID(id);
     }
 
     void ConstructWeaponDatabase()
@@ -57,7 +51,7 @@ public class Weapons : Items
     public int Attack { get; set; }
     public int Special { get; set; }
     public int Durability { get; set; }
-    public int Num { get; set; }
+    public int Num { get; set; } // delete this once slot numbers are set
 
     public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug, int num)
     {
