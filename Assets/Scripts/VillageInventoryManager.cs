@@ -167,7 +167,6 @@ public class VillageInventoryManager : MonoBehaviour
             {
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility");
                 Weapons weapon = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(id);
-                weapon.Num = Random.Range(0, 10000);
                 weapon.Durability = duribility;
                 loadedItem = new Inventory(weapon, count, slotAmount);
             }
@@ -198,7 +197,6 @@ public class VillageInventoryManager : MonoBehaviour
         if (IsWeapon(items.ID))
         {
             Weapons weapon = gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(items.ID);
-            weapon.Num = Random.Range(0, 10000);
             newItem = new Inventory(weapon, count, slotAmount);
         }
         else

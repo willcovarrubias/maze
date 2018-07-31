@@ -120,7 +120,6 @@ public class DynamicInventory : MonoBehaviour
         if (IsWeapon(item.ID))
         {
             Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(item.ID);
-            weapon.Num = Random.Range(0, 10000);
             newItem = new Inventory(weapon, count, slotAmount);
         }
         else
@@ -198,7 +197,6 @@ public class DynamicInventory : MonoBehaviour
             if (IsWeapon(list[i].Item.ID))
             {
                 Weapons weapon = GameMaster.gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(list[i].Item.ID);
-                weapon.Num = Random.Range(0, 10000);
                 loadedItem = new Inventory(weapon, 1, i);
             }
             else
