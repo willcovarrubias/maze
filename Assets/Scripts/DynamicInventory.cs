@@ -117,16 +117,7 @@ public class DynamicInventory : MonoBehaviour
     void CreateNewItem(Items item, int count)
     {
         Inventory newItem;
-        if (IsWeapon(item.ID))
-        {
-            Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(item.ID);
-            weapon.Num = Random.Range(0, 10000);
-            newItem = new Inventory(weapon, count, slotAmount);
-        }
-        else
-        {
-            newItem = new Inventory(item, count, slotAmount);
-        }
+        newItem = new Inventory(item, count, slotAmount);
         items.Add(newItem.Item.ID, newItem);
         AddItemToSlots(newItem);
     }
@@ -183,7 +174,7 @@ public class DynamicInventory : MonoBehaviour
 
     public bool IsWeapon(int id)
     {
-        if (id >= 2000 && id < 3000)
+        if (id >= 10000)
         {
             return true;
         }
@@ -195,16 +186,7 @@ public class DynamicInventory : MonoBehaviour
         for (int i = 0; i < list.Count; i++)
         {
             Inventory loadedItem;
-            if (IsWeapon(list[i].Item.ID))
-            {
-                Weapons weapon = GameMaster.gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(list[i].Item.ID);
-                weapon.Num = Random.Range(0, 10000);
-                loadedItem = new Inventory(weapon, 1, i);
-            }
-            else
-            {
-                loadedItem = new Inventory(list[i].Item, list[i].Count, i);
-            }
+            loadedItem = new Inventory(list[i].Item, list[i].Count, i);
             items.Add(loadedItem.Item.ID, loadedItem);
             AddItemToSlots(loadedItem);
         }

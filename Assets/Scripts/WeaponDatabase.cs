@@ -7,42 +7,31 @@ using System.IO;
 public class WeaponDatabase : MonoBehaviour
 {
     List<int> weaponIDs = new List<int>();
-    private JsonData itemsData;
+    JsonData itemsData, weaponMaterialData, weaponTypeData;
+    int weaponCount;
 
     void Start()
     {
-        itemsData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
-        ConstructWeaponDatabase();
-        //Debug.Log (FetchWeaponByID(1).Title);
+        weaponMaterialData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapon Materials.json"));
+        weaponTypeData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapon Types.json"));
+        weaponCount = PlayerPrefs.GetInt("Weapon Count", 10000);
     }
 
-    public Weapons FetchWeaponByID(int id)
+    public Weapons CreateWeapon(/* int rarityNumber */)
     {
-        return (Weapons)GetComponent<ItemDatabase>().FetchItemByID(id);
-    }
-
-    void ConstructWeaponDatabase()
-    {
-        for (int i = 0; i < itemsData.Count; i++)
-        {
-            Weapons weapon = new Weapons((int)itemsData[i]["id"],
-                itemsData[i]["title"].ToString(),
-                (int)itemsData[i]["rarity"],
-                (int)itemsData[i]["attack"],
-                (int)itemsData[i]["special"],
-                (int)itemsData[i]["durability"],
-                (int)itemsData[i]["size"],
-                itemsData[i]["slug"].ToString(), 
-                0);
-            GetComponent<ItemDatabase>().AddToDatabase(weapon);
-            weaponIDs.Add(weapon.ID);
-        }
-    }
-
-    //TODO: use mazeRoomNumber and rarity in the future
-    public int GetRandomWeaponID(/*int mazeRoomNumber*/)
-    {
-        return weaponIDs[Random.Range(0, weaponIDs.Count)];
+        Weapons weapon = new Weapons(
+            weaponCount,
+            weaponMaterialData[Random.Range(0, weaponMaterialData.Count)] + " " + weaponTypeData[Random.Range(0, weaponTypeData.Count)],
+            0,
+            Random.Range(1, 10),
+            Random.Range(1, 10),
+            Random.Range(1, 10),
+            Random.Range(1, 10),
+            "");
+        weaponCount++;
+        PlayerPrefs.SetInt("Weapon Count", weaponCount);
+        PlayerPrefs.Save();
+        return weapon;
     }
 }
 
@@ -51,9 +40,8 @@ public class Weapons : Items
     public int Attack { get; set; }
     public int Special { get; set; }
     public int Durability { get; set; }
-    public int Num { get; set; } // delete this once slot numbers are set
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug, int num)
+    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug)
     {
         this.ID = id;
         this.Title = title;
@@ -64,7 +52,6 @@ public class Weapons : Items
         this.Size = size;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
-        this.Num = num;
     }
 
     public Weapons()
