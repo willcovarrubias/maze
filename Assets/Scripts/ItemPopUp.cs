@@ -59,15 +59,6 @@ public class ItemPopUp : MonoBehaviour
             action.SetActive(true);
             action.GetComponentInChildren<Text>().text = "Consume";
         }
-        else if (item.Item.ID >= 2000 && item.Item.ID < 3000)
-        {
-            Weapons weapon = (Weapons)item.Item;
-            UpdateCount();
-            stats += "Weapon\nAtk " + weapon.Attack + "\nSpec " + weapon.Special + "\nDu " + weapon.Durability + "\nWgt " + item.Item.Size;
-            statsOfItem.GetComponent<Text>().text = stats;
-            action.SetActive(true);
-            action.GetComponentInChildren<Text>().text = "Equip";
-        }
         else if (item.Item.ID >= 3000 && item.Item.ID < 4000)
         {
             UpdateCount();
@@ -80,6 +71,15 @@ public class ItemPopUp : MonoBehaviour
             Armor armor = (Armor)item.Item;
             UpdateCount();
             stats += "Armor\nDef " + armor.Defense + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
+            statsOfItem.GetComponent<Text>().text = stats;
+            action.SetActive(true);
+            action.GetComponentInChildren<Text>().text = "Equip";
+        }
+        else if (item.Item.ID >= 10000)
+        {
+            Weapons weapon = (Weapons)item.Item;
+            UpdateCount();
+            stats += "Weapon\nAtk " + weapon.Attack + "\nSpec " + weapon.Special + "\nDu " + weapon.Durability + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
             action.GetComponentInChildren<Text>().text = "Equip";
@@ -148,13 +148,13 @@ public class ItemPopUp : MonoBehaviour
             //ThrowAwayOne();
             //change HP or MP
         }
-        else if (item.Item.ID >= 2000 && item.Item.ID < 3000)
-        {
-            //equip weapon
-        }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
             //equip armor
+        }
+        else if (item.Item.ID >= 10000)
+        {
+            //equip weapon
         }
     }
 
