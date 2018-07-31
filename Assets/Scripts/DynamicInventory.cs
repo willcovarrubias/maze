@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class DynamicInventory : MonoBehaviour
 {
-    //List<Inventory> items = new List<Inventory>();
-    Dictionary<int, Inventory> items = new Dictionary<int, Inventory>();
+    public Dictionary<int, Inventory> items = new Dictionary<int, Inventory>();
 
     public List<GameObject> slots = new List<GameObject>();
     int slotAmount;
@@ -58,16 +57,10 @@ public class DynamicInventory : MonoBehaviour
             if (items.TryGetValue(item.Item.ID, out temp))
             {
                 items[item.Item.ID].Count += amount;
-                for (int j = 0; j < slots.Count; j++)
-                {
-                    if (slots[j].GetComponentInChildren<ItemData>().GetItem().Item.ID == item.Item.ID)
-                    {
-                        slots[j].GetComponentInChildren<ItemData>().GetItem().Count = items[item.Item.ID].Count;
-                        slots[j].GetComponentInChildren<Text>().text = items[item.Item.ID].Item.Title + " x" + items[item.Item.ID].Count;
-                        gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, amount, thisSlotId);
-                        return;
-                    }
-                }
+                slots[items[item.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = items[item.Item.ID].Count;
+                slots[items[item.Item.ID].SlotNum].GetComponentInChildren<Text>().text = items[item.Item.ID].Item.Title + " x" + items[item.Item.ID].Count;
+                gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, amount, thisSlotId);
+                return;
             }
             CreateNewItem(item.Item, amount);
             gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, amount, thisSlotId);
@@ -123,20 +116,19 @@ public class DynamicInventory : MonoBehaviour
 
     void CreateNewItem(Items item, int count)
     {
+        Inventory newItem;
         if (IsWeapon(item.ID))
         {
             Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(item.ID);
-            Inventory newItem = new Inventory(weapon, count);
             weapon.Num = Random.Range(0, 10000);
-            items.Add(newItem.Item.ID, newItem);
-            AddItemToSlots(newItem);
+            newItem = new Inventory(weapon, count, slotAmount);
         }
         else
         {
-            Inventory newItem = new Inventory(item, count);
-            items.Add(newItem.Item.ID, newItem);
-            AddItemToSlots(newItem);
+            newItem = new Inventory(item, count, slotAmount);
         }
+        items.Add(newItem.Item.ID, newItem);
+        AddItemToSlots(newItem);
     }
 
     void AddItemToSlots(Inventory item)
@@ -202,20 +194,19 @@ public class DynamicInventory : MonoBehaviour
     {
         for (int i = 0; i < list.Count; i++)
         {
+            Inventory loadedItem;
             if (IsWeapon(list[i].Item.ID))
             {
                 Weapons weapon = GameMaster.gameMaster.GetComponent<WeaponDatabase>().FetchWeaponByID(list[i].Item.ID);
                 weapon.Num = Random.Range(0, 10000);
-                Inventory loadedItem = new Inventory(weapon, 1);
-                items.Add(weapon.ID, loadedItem);
-                AddItemToSlots(loadedItem);
+                loadedItem = new Inventory(weapon, 1, i);
             }
             else
             {
-                Inventory loadedItem = new Inventory(list[i].Item, list[i].Count);
-                items.Add(loadedItem.Item.ID, loadedItem);
-                AddItemToSlots(loadedItem);
+                loadedItem = new Inventory(list[i].Item, list[i].Count, i);
             }
+            items.Add(loadedItem.Item.ID, loadedItem);
+            AddItemToSlots(loadedItem);
         }
     }
 
