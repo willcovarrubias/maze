@@ -94,6 +94,7 @@ public class CharacterDatabase : MonoBehaviour
     {
         int slotNumber = listOfHeroes.Count;
         amountOfSavedHeroes += 1;
+        amountOfSavedWanderers -= 1;
         
         //PlayerPrefs.SetInt("Hero Count", amountOfSavedHeroes);
         listOfHeroes.Add(characterToRecruit);
@@ -284,7 +285,7 @@ public class CharacterDatabase : MonoBehaviour
 
         for (int i = 0; i < amountOfSavedWanderers; i++)
         {
-            listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];
+            listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];            
         }
 
         /*

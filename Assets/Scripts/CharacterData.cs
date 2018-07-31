@@ -23,6 +23,7 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     {
         //TODO: Add some checks here to make sure there is room on the roster.
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(character);
+        Destroy(transform.parent.gameObject);
     }
 
     public void OnPointerUp(PointerEventData eventData)
