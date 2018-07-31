@@ -98,7 +98,7 @@ public class ItemDatabase : MonoBehaviour
                 }
             }
             Items chestItem = FetchItemByID(id);
-            chestItems.Add(new Inventory(chestItem, count));
+            chestItems.Add(new Inventory(chestItem, count, chestItems.Count));
         }
     }
 }
@@ -111,7 +111,6 @@ public class Items
     public int Size { get; set; }
     public string Slug { get; set; }
     public Sprite Sprite { get; set; }
-    public int SlotNum { get; set; }
 
     public Items(int id, string title, int rarity, int size, string slug)
     {
