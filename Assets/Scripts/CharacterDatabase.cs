@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 public class CharacterDatabase : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class CharacterDatabase : MonoBehaviour
         enemyData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
         AddToDatabase(enemyData, enemyDatabase);
         LoadHeroCharacters();
+        LoadWandererCharacters();
+        
+        PrintCreatedCharacters();
     }
 
     private void Update()
@@ -90,9 +94,13 @@ public class CharacterDatabase : MonoBehaviour
     {
         int slotNumber = listOfHeroes.Count;
         amountOfSavedHeroes += 1;
-        PlayerPrefs.SetInt("Hero Count", amountOfSavedHeroes);
+        
+        //PlayerPrefs.SetInt("Hero Count", amountOfSavedHeroes);
         listOfHeroes.Add(characterToRecruit);
-        SaveNewHero(characterToRecruit, slotNumber);
+        DeleteWanderer(characterToRecruit);
+
+        //SaveNewHero(characterToRecruit, slotNumber);
+        GameMaster.gameMaster.Save();
         Debug.Log("Recruited: " + characterToRecruit.name);
     }
 
@@ -100,7 +108,7 @@ public class CharacterDatabase : MonoBehaviour
     {
         Character newCharacter = new Character
         {
-            id = GetCurrentTime(),
+            id = GenerateWandererID(),
             name = GetRandomName(),
             job = GetRandomJob(),
             hp = UnityEngine.Random.Range(3, 20),
@@ -116,9 +124,10 @@ public class CharacterDatabase : MonoBehaviour
         };
         int slotNumber = listOfWanderers.Count;
         amountOfSavedWanderers += 1;
-        PlayerPrefs.SetInt("Wanderer Count", amountOfSavedWanderers);
+        //PlayerPrefs.SetInt("Wanderer Count", amountOfSavedWanderers);
         listOfWanderers.Add(newCharacter);
-        SaveNewWanderer(newCharacter, slotNumber);
+        //GameMaster.gameMaster.Save();
+        //SaveNewWanderer(newCharacter, slotNumber);
         return newCharacter;
     }
 
@@ -127,6 +136,19 @@ public class CharacterDatabase : MonoBehaviour
         DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         int currentEpochTime = (int)(DateTime.UtcNow - epochStart).TotalSeconds;
         return currentEpochTime;
+    }
+
+    int GenerateWandererID()
+    {
+        int newWandererID = listOfWanderers.Count + 1;
+        return newWandererID;
+    }
+
+
+    int GenerateHeroID()
+    {
+        int newHeroID = listOfHeroes.Count + 1;
+        return newHeroID;
     }
 
     string GetRandomName()
@@ -148,6 +170,9 @@ public class CharacterDatabase : MonoBehaviour
 
     void SaveNewHero(Character hero, int index)
     {
+
+
+        /*
         PlayerPrefs.SetInt("Hero Num " + index, hero.id);
         PlayerPrefs.SetInt("Hero " + index + " ID", hero.id);
         PlayerPrefs.SetString("Hero " + index + " Name", hero.name);
@@ -163,7 +188,7 @@ public class CharacterDatabase : MonoBehaviour
         PlayerPrefs.SetInt("Hero " + index + " Lives", hero.lives);
         PlayerPrefs.SetString("Hero " + index + " Slug", hero.slug);
         PlayerPrefs.Save();
-        Debug.Log("Added " + hero.name);
+        //Debug.Log("Added " + hero.name);*/
     }
 
     /*
@@ -171,7 +196,7 @@ public class CharacterDatabase : MonoBehaviour
     */
 
     void SaveNewWanderer(Character hero, int index)
-    {
+    {/*
         PlayerPrefs.SetInt("Wanderer Num " + index, hero.id);
         PlayerPrefs.SetInt("Wanderer " + index + " ID", hero.id);
         PlayerPrefs.SetString("Wanderer " + index + " Name", hero.name);
@@ -186,7 +211,7 @@ public class CharacterDatabase : MonoBehaviour
         PlayerPrefs.SetInt("Wanderer " + index + " Exp", hero.exp);
         PlayerPrefs.SetInt("Wanderer " + index + " Lives", hero.lives);
         PlayerPrefs.SetString("Wanderer " + index + " Slug", hero.slug);
-        PlayerPrefs.Save();
+        PlayerPrefs.Save();*/
     }
 
     /*
@@ -194,7 +219,7 @@ public class CharacterDatabase : MonoBehaviour
      */
 
     public void SaveCharacter(Character hero)
-    {
+    {/*
         for (int i = 0; i < amountOfSavedHeroes; i++)
         {
             if (PlayerPrefs.GetInt("Hero Num " + i) == hero.id)
@@ -215,11 +240,18 @@ public class CharacterDatabase : MonoBehaviour
                 return;
             }
         }
-        PlayerPrefs.Save();
+        PlayerPrefs.Save();*/
     }
 
     void LoadHeroCharacters()
     {
+        amountOfSavedHeroes = GameMaster.gameMaster.characterDB.listOfHeroes.Count();
+
+        for (int i = 0; i < amountOfSavedHeroes; i++)
+        {
+            listOfHeroes[i] = GameMaster.gameMaster.characterDB.listOfHeroes[i];
+        }
+        /*
         amountOfSavedHeroes = PlayerPrefs.GetInt("Hero Count", 0);
         listOfHeroes.Clear();
         for (int i = 0; i < amountOfSavedHeroes; i++)
@@ -243,11 +275,19 @@ public class CharacterDatabase : MonoBehaviour
                 Character character = new Character(id, heroName, job, hp, mp, att, spec, def, luck, item, exp, lives, slug);
                 listOfHeroes.Add(character);
             }
-        }
+        }*/
     }
 
     void LoadWandererCharacters()
     {
+        amountOfSavedWanderers = GameMaster.gameMaster.characterDB.listOfWanderers.Count();
+
+        for (int i = 0; i < amountOfSavedWanderers; i++)
+        {
+            listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];
+        }
+
+        /*
         amountOfSavedWanderers = PlayerPrefs.GetInt("Wanderer Count", 0);
         listOfWanderers.Clear();
         for (int i = 0; i < amountOfSavedWanderers; i++)
@@ -271,34 +311,31 @@ public class CharacterDatabase : MonoBehaviour
                 Character character = new Character(id, heroName, job, hp, mp, att, spec, def, luck, item, exp, lives, slug);
                 listOfWanderers.Add(character);
             }
-        }
+        }*/
     }
 
     public void DeleteWanderer(Character character)
     {
-        for (int i = 0; i < listOfWanderers.Count; i++)
-        {
-            if (listOfWanderers[i] == character)
-            {
-                PlayerPrefs.DeleteKey("Hero Num " + i);
-                PlayerPrefs.DeleteKey("Hero " + i + " ID");
-                PlayerPrefs.DeleteKey("Hero " + i + " Name");
-                PlayerPrefs.DeleteKey("Hero " + i + " Job");
-                PlayerPrefs.DeleteKey("Hero " + i + " HP");
-                PlayerPrefs.DeleteKey("Hero " + i + " MP");
-                PlayerPrefs.DeleteKey("Hero " + i + " Attack");
-                PlayerPrefs.DeleteKey("Hero " + i + " Special");
-                PlayerPrefs.DeleteKey("Hero " + i + " Defense");
-                PlayerPrefs.DeleteKey("Hero " + i + " Luck");
-                PlayerPrefs.DeleteKey("Hero " + i + " Items");
-                PlayerPrefs.DeleteKey("Hero " + i + " Exp");
-                PlayerPrefs.DeleteKey("Hero " + i + " Lives");
-                PlayerPrefs.DeleteKey("Hero " + i + " Slug");
-                Debug.Log("Deleted " + listOfWanderers[i].name);
-                return;
-            }
-        }
-        PlayerPrefs.Save();
+        listOfWanderers.Remove(character);
+        /*
+        PlayerPrefs.DeleteKey("Hero Num " + character.id);
+        PlayerPrefs.DeleteKey("Hero " + character.id + " ID");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Name");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Job");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " HP");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " MP");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Attack");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Special");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Defense");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Luck");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Items");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Exp");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Lives");
+        PlayerPrefs.DeleteKey("Hero " + character.id + " Slug");*/
+        Debug.Log("Deleted " + character.name);
+                
+        
+        //PlayerPrefs.Save();
     }
 
     public void DeleteAllWanderers()
@@ -306,7 +343,7 @@ public class CharacterDatabase : MonoBehaviour
         for (int i = 0; i < listOfWanderers.Count; i++)
         {
             DeleteWanderer(listOfWanderers[i]);
-            PlayerPrefs.SetInt("Character Count", 0);
+            //PlayerPrefs.SetInt("Character Count", 0);
             listOfWanderers.Clear();
         }
     }
@@ -336,8 +373,11 @@ public class CharacterDatabase : MonoBehaviour
 
         }
     }
+
+   
 }
 
+[Serializable]
 public class Character
 {
     public int id { get; set; }
@@ -353,7 +393,7 @@ public class Character
     public int exp { get; set; }
     public int lives { get; set; }
     public string slug { get; set; }
-    public Sprite sprite { get; set; }
+    //public Sprite sprite { get; set; }
 
     public Character(int id, string name, string job, int hp, int mp, int attack, int special,
                      int defense, int luck, int items, int exp, int lives, string slug)
@@ -371,7 +411,7 @@ public class Character
         this.exp = exp;
         this.lives = lives;
         this.slug = slug;
-        this.sprite = Resources.Load<Sprite>("Items/" + slug);
+        //this.sprite = Resources.Load<Sprite>("Items/" + slug);
     }
 
     public Character()
