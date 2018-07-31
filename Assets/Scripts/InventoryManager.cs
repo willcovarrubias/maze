@@ -29,6 +29,7 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
+        //PlayerPrefs.DeleteAll();
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
@@ -214,7 +215,6 @@ public class InventoryManager : MonoBehaviour
             {
                 int duribility = PlayerPrefs.GetInt("Player Item Duribility");
                 Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(id);
-                weapon.Num = Random.Range(0, 10000);
                 weapon.Durability = duribility;
                 loadedItem = new Inventory(weapon, count, slotAmount);
             }
@@ -245,7 +245,6 @@ public class InventoryManager : MonoBehaviour
         if (IsWeapon(items.ID))
         {
             Weapons weapon = GetComponent<WeaponDatabase>().FetchWeaponByID(items.ID);
-            weapon.Num = Random.Range(0, 10000);
             newItem = new Inventory(weapon, count, slotAmount);
         }
         else

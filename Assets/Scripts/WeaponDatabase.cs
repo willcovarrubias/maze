@@ -32,8 +32,7 @@ public class WeaponDatabase : MonoBehaviour
                 (int)itemsData[i]["special"],
                 (int)itemsData[i]["durability"],
                 (int)itemsData[i]["size"],
-                itemsData[i]["slug"].ToString(), 
-                0);
+                itemsData[i]["slug"].ToString());
             GetComponent<ItemDatabase>().AddToDatabase(weapon);
             weaponIDs.Add(weapon.ID);
         }
@@ -51,9 +50,8 @@ public class Weapons : Items
     public int Attack { get; set; }
     public int Special { get; set; }
     public int Durability { get; set; }
-    public int Num { get; set; } // delete this once slot numbers are set
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug, int num)
+    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug)
     {
         this.ID = id;
         this.Title = title;
@@ -64,7 +62,6 @@ public class Weapons : Items
         this.Size = size;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
-        this.Num = num;
     }
 
     public Weapons()
