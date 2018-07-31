@@ -178,6 +178,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         sceneName = SceneManager.GetActiveScene().name;
         this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
+        gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 2;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
     }

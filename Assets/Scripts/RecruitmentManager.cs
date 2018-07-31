@@ -47,7 +47,6 @@ public class RecruitmentManager : MonoBehaviour {
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
             characterObject.Add(Instantiate(characterObjectPrefab));
-
             characterObject[i].transform.SetParent(characterSlots[i].transform);
             characterObject[i].transform.localPosition = Vector2.zero;
 
@@ -56,17 +55,18 @@ public class RecruitmentManager : MonoBehaviour {
 
     }
 
-    void UpdateListOfHeroes()
+    void UpdateListOfHeroes()//TODO: Add some logic here that updates the list after a certain amount of time.
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
 
        
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
-            Character newWander = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
-            characterObject[i].name = newWander.name;
-            characterObject[i].GetComponent<Text>().text = newWander.name;
-            characterObject[i].GetComponent<CharacterData>().character = newWander;
+            Character newWanderer = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
+            characterObject[i].name = newWanderer.name;
+            characterObject[i].GetComponent<Text>().text = newWanderer.name;
+            characterObject[i].GetComponent<CharacterData>().character = newWanderer;
+            characterObject[i].GetComponent<CharacterData>().thisCharactersID = newWanderer.id;
 
             //gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
             //characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
@@ -80,10 +80,20 @@ public class RecruitmentManager : MonoBehaviour {
     {
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
+
             Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-            "/n ID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
+            "\nID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
 
             characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            characterObject[i].GetComponent<Text>().text = 
+                gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
+                "\nClass: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job + 
+                "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].hp +
+                "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
+
+            characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
+            characterObject[i].GetComponent<CharacterData>().thisCharactersID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
+
         }
     }
 

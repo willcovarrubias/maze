@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler { 
  
 
-    public int amount;
+    public int thisCharactersID;
     public Character character;
 
 
@@ -21,6 +21,7 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
      
     public void OnPointerDown(PointerEventData eventData)
     {
+        //TODO: Add some checks here to make sure there is room on the roster.
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(character);
     }
 
