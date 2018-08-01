@@ -39,9 +39,9 @@ public class InventoryManager : MonoBehaviour
     /*
     private void Update()
     {
-        if (Input.GetKeyUp("p"))
+        if (Input.GetKeyUp("s"))
         {
-            PrintInventory();
+            SortInventory();
         }
     }
     */
@@ -169,6 +169,42 @@ public class InventoryManager : MonoBehaviour
         }
         villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
         SaveInventory();
+    }
+
+    public void SortInventory()
+    {
+        //TODO: everytime you press the button it will sort a differnt way
+        //first by consumables, materials, armor, weapons
+        //then it will sort by size
+        int itemCount = PlayerPrefs.GetInt("Player Item Count");
+        List<KeyValuePair<int, Inventory>> temp = new List<KeyValuePair<int, Inventory>>();
+        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
+        {
+            int key = keyValue.Key;
+            int size = playerItems[key].Item.Size;
+            int id = playerItems[key].Item.ID;
+            KeyValuePair<int, Inventory> item = new KeyValuePair<int, Inventory>(playerItems[key].SlotNum, playerItems[key]);
+            temp.Add(item);
+        }
+        temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+        {
+            return x.Value.Item.Size.CompareTo(y.Value.Item.Size);
+        });
+        for (int i = 0; i < temp.Count; i++)
+        {
+            Debug.Log(temp[i].Value.Item.Title + temp[i].Value.Item.Size);
+        }
+        ClearSlots();
+        playerItems.Clear();
+        currentSize = 0;
+        for (int i = 0; i < temp.Count; i++)
+        {
+            temp[i].Value.SlotNum = i;
+            playerItems.Add(temp[i].Value.Item.ID, temp[i].Value);
+            AddItemToSlots(temp[i].Value);
+            //CreateNewItem(temp[i].Value.Item, temp[i].Value.Count);
+        }
+        ChangeDialogBox("Sorted by Size");
     }
 
     public void UpdateInventoryText()
@@ -343,6 +379,18 @@ public class InventoryManager : MonoBehaviour
             playerItems[slots[i].GetComponentInChildren<ItemData>().GetItem().Item.ID].SlotNum = i;
         }
         Destroy(currentSlot);
+        ResizeSlotPanel();
+    }
+
+    public void ClearSlots()
+    {
+        int i = 0;
+        while (i < slotPanel.transform.childCount)
+        {
+            Destroy(slotPanel.transform.GetChild(i).gameObject);
+            i++;
+        }
+        slotAmount = 0;
         ResizeSlotPanel();
     }
 
