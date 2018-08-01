@@ -21,13 +21,14 @@ public class VillageInventoryManager : MonoBehaviour
 
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollViewVillage;
+    int sorting;
 
     /*
     private void Update()
     {
-        if (Input.GetKeyUp("p"))
+        if (Input.GetKeyUp("s"))
         {
-            PrintInventory();
+            SortInventory();
         }
     }
     */
@@ -116,6 +117,62 @@ public class VillageInventoryManager : MonoBehaviour
         items.Count = 0;
         SaveVillageInventory();
         UpdateInventoryText();
+    }
+
+    public void SortInventory()
+    {
+        List<KeyValuePair<int, Inventory>> temp = new List<KeyValuePair<int, Inventory>>();
+        foreach (KeyValuePair<int, Inventory> keyValue in villageItems)
+        {
+            int key = keyValue.Key;
+            int size = villageItems[key].Item.Size;
+            int id = villageItems[key].Item.ID;
+            KeyValuePair<int, Inventory> item = new KeyValuePair<int, Inventory>(villageItems[key].SlotNum, villageItems[key]);
+            temp.Add(item);
+        }
+        if (sorting > 2)
+        {
+            sorting = 0;
+        }
+        if (sorting == 0)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                if (x.Value.Item.Size == y.Value.Item.Size)
+                {
+                    return x.Value.Item.ID.CompareTo(y.Value.Item.ID);
+                }
+                return x.Value.Item.Size.CompareTo(y.Value.Item.Size);
+            });
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sorted by size");
+        }
+        else if (sorting == 1)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                return x.Value.Item.ID.CompareTo(y.Value.Item.ID);
+            });
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sorted by type");
+        }
+        else if (sorting == 2)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                return string.Compare(x.Value.Item.Title, y.Value.Item.Title, System.StringComparison.Ordinal);
+            });
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sorted by name");
+        }
+        ClearSlots();
+        villageItems.Clear();
+        currentSize = 0;
+        for (int i = 0; i < temp.Count; i++)
+        {
+            temp[i].Value.SlotNum = i;
+            villageItems.Add(temp[i].Value.Item.ID, temp[i].Value);
+            AddItemToSlots(temp[i].Value);
+        }
+        sorting++;
+        SaveVillageInventory();
     }
 
     public void UpdateInventoryText()
@@ -268,6 +325,19 @@ public class VillageInventoryManager : MonoBehaviour
         //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
         slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
         slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
+    }
+
+    public void ClearSlots()
+    {
+        int i = 0;
+        while (i < slotPanel.transform.childCount)
+        {
+            Destroy(slotPanel.transform.GetChild(i).gameObject);
+            i++;
+        }
+        slots.Clear();
+        slotAmount = 0;
+        ResizeSlotPanel();
     }
 
     public int GetFreeSpaceCount()
