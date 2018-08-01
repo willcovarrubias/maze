@@ -20,13 +20,17 @@ public class CharacterDatabase : MonoBehaviour
     int amountOfSavedHeroes;
     int amountOfSavedWanderers;
 
+    GameObject villageManager;
+
     void Start()
     {
         enemyData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
         AddToDatabase(enemyData, enemyDatabase);
         LoadHeroCharacters();
         LoadWandererCharacters();
-        
+
+        villageManager = GameObject.FindGameObjectWithTag("VillageSceneManager");
+
         PrintCreatedCharacters();
     }
 
@@ -101,6 +105,7 @@ public class CharacterDatabase : MonoBehaviour
         DeleteWanderer(characterToRecruit);
 
         //SaveNewHero(characterToRecruit, slotNumber);
+        villageManager.GetComponent<RosterManager>().AddACharacterSlotInBarracksUI();
         GameMaster.gameMaster.Save();
         Debug.Log("Recruited: " + characterToRecruit.name);
     }

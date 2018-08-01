@@ -23,9 +23,7 @@ public class RecruitmentManager : MonoBehaviour {
 
         maxAmountOfHeroesToRecruit = 5; //Set this somewhere, possibly from a village upgrade milestone. Goes up with game progress.
 
-        
-        AddHeroSlot();
-        GenerateListOfHeroesObjects();
+        AddUIStuffFirst();
         DisplayCurrentListOfWanderers();
         
         
@@ -42,26 +40,17 @@ public class RecruitmentManager : MonoBehaviour {
             DisplayCurrentListOfWanderers();
         }
     }
-
-    void GenerateListOfHeroesObjects()
-    {
-        //gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
-        for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
-        {
-            
-
-            
-        }
-        
-    }
+    
 
     void UpdateListOfHeroes()//TODO: Add some logic here that updates the list after a certain amount of time.
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
 
-
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
+            //characterSlots.Remove(characterSlot);
+            //characterSlots.RemoveAt(i);
+            //Destroy(characterSlots[i]);
             Character newWanderer = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
             //characterObject[i].name = newWanderer.name;
             //characterObject[i].GetComponent<Text>().text = newWanderer.name;
@@ -77,52 +66,62 @@ public class RecruitmentManager : MonoBehaviour {
         GameMaster.gameMaster.Save();
     }
 
-    void DisplayCurrentListOfWanderers()
+
+    void AddUIStuffFirst()
     {
         for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
         {
             characterSlots.Add(Instantiate(characterSlot));
             characterSlots[i].transform.SetParent(characterSlotPanel.transform);
 
+            
             characterObject.Add(Instantiate(characterObjectPrefab));
             characterObject[i].transform.SetParent(characterSlots[i].transform);
             characterObject[i].transform.localPosition = Vector2.zero;
+            
+            
+        }
 
+    }
+    void DisplayCurrentListOfWanderers()
+    {
+        for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
+        {
 
-            Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-                "\nID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
+            
+                Debug.Log("This is null");
+                characterSlots.Add(Instantiate(characterSlot));
+                characterObject.Add(Instantiate(characterObjectPrefab));
 
+                characterSlots[i].transform.SetParent(characterSlotPanel.transform);
+                characterObject[i].transform.SetParent(characterSlots[i].transform);
+                characterObject[i].transform.localPosition = Vector2.zero;
+            
+                Debug.Log("This is NOT null");
                 characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
-                characterObject[i].GetComponent<Text>().text =
-                    gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-                    "\nClass: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
-                    "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].hp +
-                    "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
+                characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
+                            "\nClass: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
+                            "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].hp +
+                            "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
 
                 characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
                 characterObject[i].GetComponent<CharacterData>().thisCharactersID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
+            
+
+            //Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
+              //          "\nID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
 
             
+
+
 
 
         }
     }
 
-    private void AddHeroSlot()
+    public void RemoveWanderer()
     {
-        for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
-        {
-            //characterSlotAmount++;
-            //Adds an ID to each slot when it generates the slots. Used for drag/drop.
-            //characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
-            //characterSlots[characterSlotAmount - 1].name = "Slot" + (characterSlotAmount - 1);
-
-            
-            
-        }
-            
+        
     }
-
-   
 
 }
