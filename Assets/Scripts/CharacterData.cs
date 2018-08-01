@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 
     public bool characterIsAlreadyRecruited;
-    public int thisCharactersID;
+    public int thisObjectsID;
     public Character character;
     GameObject villageManager;
 
@@ -26,8 +26,10 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         {
             //TODO: Add some checks here to make sure there is room on the roster.
             GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(character);
-            //villageManager.GetComponent<RecruitmentManager>().RemoveWanderer();
+            villageManager.GetComponent<RecruitmentManager>().characterObject.Remove(this.gameObject);
+            villageManager.GetComponent<RecruitmentManager>().characterSlots.Remove(transform.parent.gameObject);
             Destroy(transform.parent.gameObject);
+            Destroy(gameObject);
         }
         
     }

@@ -34,7 +34,7 @@ public class RosterManager : MonoBehaviour {
         for (int i = 0; i < maxRosterSize; i++)
         {
             characterObject[i].GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
-            characterObject[i].GetComponent<CharacterData>().thisCharactersID = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].id;
+            characterObject[i].GetComponent<CharacterData>().thisObjectsID = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].id;
 
             characterObject[i].name = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name;
             characterObject[i].GetComponent<Text>().text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name +
@@ -49,7 +49,6 @@ public class RosterManager : MonoBehaviour {
         for (int i = 0; i < maxRosterSize; i++)
         {
             characterSlots.Add(Instantiate(characterSlot));
-            characterSlotAmount++;
             //Adds an ID to each slot when it generates the slots. Used for drag/drop.
             //characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
             //characterSlots[characterSlotAmount - 1].name = "Slot" + (characterSlotAmount - 1);
@@ -59,6 +58,8 @@ public class RosterManager : MonoBehaviour {
             characterObject[i].transform.SetParent(characterSlots[i].transform);
             characterObject[i].transform.localPosition = Vector2.zero;
             characterObject[i].GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+
+            characterSlotAmount++;
 
         }
 
@@ -90,7 +91,7 @@ public class RosterManager : MonoBehaviour {
     {
         //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
         //TODO: Maybe figure out a way to not hard code these values below?
-        slotPanelRectTransform.Translate(0, (characterSlotAmount * -250), 0);
-        slotPanelRectTransform.sizeDelta = new Vector2(590, (characterSlotAmount * 72));
+        slotPanelRectTransform.Translate(0, ((characterSlotAmount ) * -250), 0);
+        slotPanelRectTransform.sizeDelta = new Vector2(590, ((characterSlotAmount ) * 72));
     }
 }

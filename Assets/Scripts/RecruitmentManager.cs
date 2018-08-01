@@ -13,7 +13,7 @@ public class RecruitmentManager : MonoBehaviour {
     public GameObject characterSlotPanel;
     public GameObject characterSlot;
     public GameObject characterObjectPrefab;
-    private List<GameObject> characterObject = new List<GameObject>();
+    public List<GameObject> characterObject = new List<GameObject>();
     public int characterSlotAmount;
     public List<GameObject> characterSlots = new List<GameObject>();
 
@@ -39,16 +39,27 @@ public class RecruitmentManager : MonoBehaviour {
             UpdateListOfHeroes();
             DisplayCurrentListOfWanderers();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+
+            RemoveWanderers();
+        }
+
     }
     
 
     void UpdateListOfHeroes()//TODO: Add some logic here that updates the list after a certain amount of time.
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
+        RemoveWanderers();
 
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
-            //characterSlots.Remove(characterSlot);
+
+
+            /*
+            
+            */
             //characterSlots.RemoveAt(i);
             //Destroy(characterSlots[i]);
             Character newWanderer = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
@@ -73,7 +84,7 @@ public class RecruitmentManager : MonoBehaviour {
         {
             characterSlots.Add(Instantiate(characterSlot));
             characterSlots[i].transform.SetParent(characterSlotPanel.transform);
-
+            characterSlots[i].GetComponent<ItemSlot>().id = i;
             
             characterObject.Add(Instantiate(characterObjectPrefab));
             characterObject[i].transform.SetParent(characterSlots[i].transform);
@@ -85,6 +96,7 @@ public class RecruitmentManager : MonoBehaviour {
     }
     void DisplayCurrentListOfWanderers()
     {
+        AddUIStuffFirst();
         for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
         {
 
@@ -105,7 +117,7 @@ public class RecruitmentManager : MonoBehaviour {
                             "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
 
                 characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
-                characterObject[i].GetComponent<CharacterData>().thisCharactersID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
+                characterObject[i].GetComponent<CharacterData>().thisObjectsID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
             
 
             //Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
@@ -119,9 +131,22 @@ public class RecruitmentManager : MonoBehaviour {
         }
     }
 
-    public void RemoveWanderer()
+    public void RemoveWanderers()
     {
-        
+        for (int i = 0; i < characterSlots.Count; i++)
+        {
+            
+            Destroy(characterSlots[i].gameObject);
+
+        }
+
+        for (int i = 0; i < characterObject.Count; i++)
+        {
+            
+            Destroy(characterObject[i].gameObject);
+        }
+        characterSlots.Clear();
+        characterObject.Clear();
     }
 
 }
