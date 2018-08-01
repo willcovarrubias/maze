@@ -78,7 +78,7 @@ public class VillageInventoryManager : MonoBehaviour
         }
         if (amountCanFit <= 0)
         {
-            Debug.Log("CANNOT FIT");
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Inventory full!");
         }
         return movedAll;
     }
