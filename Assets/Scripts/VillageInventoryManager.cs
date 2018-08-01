@@ -76,6 +76,10 @@ public class VillageInventoryManager : MonoBehaviour
             CreateNewItem(items.Item, amountCanFit);
             gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
         }
+        if (amountCanFit <= 0)
+        {
+            Debug.Log("CANNOT FIT");
+        }
         return movedAll;
     }
 
