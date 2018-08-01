@@ -29,7 +29,6 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             villageManager.GetComponent<RecruitmentManager>().characterObject.Remove(this.gameObject);
             villageManager.GetComponent<RecruitmentManager>().characterSlots.Remove(transform.parent.gameObject);
             Destroy(transform.parent.gameObject);
-            Destroy(gameObject);
         }
         
     }
