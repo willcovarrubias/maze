@@ -27,7 +27,7 @@ public class InventoryManager : MonoBehaviour
     public ScrollRect scrollView;
 
     GameObject villageInventory;
-    int sorting = 0;
+    int sorting;
 
     void Start()
     {
@@ -199,7 +199,7 @@ public class InventoryManager : MonoBehaviour
             });
             ChangeDialogBox("Sorted by size");
         }
-        else if(sorting == 1)
+        else if (sorting == 1)
         {
             temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
             {
