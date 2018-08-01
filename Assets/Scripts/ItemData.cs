@@ -214,6 +214,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             {
                 villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
                 villageSceneController.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, slotID, 1);
+                villageSceneController.GetComponent<VillageInventoryManager>().SaveVillageInventory();
                 CheckCount();
             }
         }

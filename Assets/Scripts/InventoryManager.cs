@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject slot;
     public GameObject itemPrefab;
     public GameObject inventoryText;
+    public GameObject dialogBox;
     public int slotAmount;
     public List<GameObject> slots = new List<GameObject>();
     Scene currentScene;
@@ -106,6 +107,10 @@ public class InventoryManager : MonoBehaviour
                 panel.GetComponent<DynamicInventory>().RemoveItemsFromInventory(items, amountCanFit, thisSlotId);
             }
         }
+        if (amountCanFit <= 0)
+        {
+            ChangeDialogBox("Inventory full!");
+        }
         return movedAll;
     }
 
@@ -162,6 +167,8 @@ public class InventoryManager : MonoBehaviour
                 i++;
             }
         }
+        villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
+        SaveInventory();
     }
 
     public void UpdateInventoryText()
@@ -349,6 +356,28 @@ public class InventoryManager : MonoBehaviour
     public int GetFreeSpaceCount()
     {
         return maxInventorySize - currentSize;
+    }
+
+    public void ChangeDialogBox(string text)
+    {
+        if (text != "")
+        {
+            dialogBox.SetActive(true);
+            if (dialogBox.GetComponent<DialogTimer>() != null)
+            {
+                dialogBox.GetComponent<DialogTimer>().ResetCurrentTime();
+            }
+            else
+            {
+                dialogBox.AddComponent<DialogTimer>();
+            }
+        }
+        else
+        {
+            dialogBox.SetActive(false);
+            Destroy(dialogBox.GetComponent<DialogTimer>());
+        }
+        dialogBox.GetComponentInChildren<Text>().text = text;
     }
 
     public void PrintInventory()
