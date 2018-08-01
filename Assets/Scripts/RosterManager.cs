@@ -59,7 +59,7 @@ public class RosterManager : MonoBehaviour
             //characterSlots[i].transform.SetParent(characterSlotPanel.transform);
 
             GameObject characterObj = Instantiate(characterObjectPrefab);
-            characterObj.transform.SetParent(characterSlots[i].transform);
+            characterObj.transform.SetParent(slot.transform);
             characterObj.transform.localPosition = Vector2.zero;
             characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
 
