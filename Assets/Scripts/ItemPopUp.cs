@@ -233,6 +233,7 @@ public class ItemPopUp : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "VillageScene")
             {
                 bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, 1);
+                villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
                 CloseOrUpdate(movedAll);
             }
             else if (SceneManager.GetActiveScene().name == "LootScene")
@@ -267,6 +268,7 @@ public class ItemPopUp : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "VillageScene")
             {
                 bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, item.Count);
+                villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
                 CloseOrUpdate(movedAll);
             }
             else if (SceneManager.GetActiveScene().name == "LootScene")

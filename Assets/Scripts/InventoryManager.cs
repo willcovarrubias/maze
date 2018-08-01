@@ -162,6 +162,8 @@ public class InventoryManager : MonoBehaviour
                 i++;
             }
         }
+        villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
+        SaveInventory();
     }
 
     public void UpdateInventoryText()
@@ -356,7 +358,7 @@ public class InventoryManager : MonoBehaviour
         foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
         {
             int key = keyValue.Key;
-            Debug.Log(playerItems[key].Item.Title + ".....Slot Num: " + playerItems[key].SlotNum);
+            UnityEngine.Debug.Log(playerItems[key].Item.Title + ".....Slot Num: " + playerItems[key].SlotNum);
         }
     }
 }

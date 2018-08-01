@@ -67,7 +67,6 @@ public class VillageInventoryManager : MonoBehaviour
             {
                 villageItems[items.Item.ID].Count += amountCanFit;
                 currentSize += items.Item.Size * amountCanFit;
-                SaveVillageInventory();
                 slots[villageItems[items.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[items.Item.ID].Count;
                 slots[villageItems[items.Item.ID].SlotNum].GetComponentInChildren<Text>().text = villageItems[items.Item.ID].Item.Title + " x" + villageItems[items.Item.ID].Count;
                 UpdateInventoryText();
@@ -277,7 +276,7 @@ public class VillageInventoryManager : MonoBehaviour
         foreach (KeyValuePair<int, Inventory> keyValue in villageItems)
         {
             int key = keyValue.Key;
-            Debug.Log(villageItems[key].Item.Title + ".....Slot Num: " + villageItems[key].SlotNum);
+            UnityEngine.Debug.Log(villageItems[key].Item.Title + ".....Slot Num: " + villageItems[key].SlotNum);
         }
     }
 }
