@@ -27,6 +27,7 @@ public class InventoryManager : MonoBehaviour
     public ScrollRect scrollView;
 
     GameObject villageInventory;
+    int sorting;
 
     void Start()
     {
@@ -39,9 +40,9 @@ public class InventoryManager : MonoBehaviour
     /*
     private void Update()
     {
-        if (Input.GetKeyUp("p"))
+        if (Input.GetKeyUp("s"))
         {
-            PrintInventory();
+            SortInventory();
         }
     }
     */
@@ -168,6 +169,62 @@ public class InventoryManager : MonoBehaviour
             }
         }
         villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
+        SaveInventory();
+    }
+
+    public void SortInventory()
+    {
+        List<KeyValuePair<int, Inventory>> temp = new List<KeyValuePair<int, Inventory>>();
+        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
+        {
+            int key = keyValue.Key;
+            int size = playerItems[key].Item.Size;
+            int id = playerItems[key].Item.ID;
+            KeyValuePair<int, Inventory> item = new KeyValuePair<int, Inventory>(playerItems[key].SlotNum, playerItems[key]);
+            temp.Add(item);
+        }
+        if (sorting > 2)
+        {
+            sorting = 0;
+        }
+        if (sorting == 0)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                if (x.Value.Item.Size == y.Value.Item.Size)
+                {
+                    return x.Value.Item.ID.CompareTo(y.Value.Item.ID);
+                }
+                return x.Value.Item.Size.CompareTo(y.Value.Item.Size);
+            });
+            ChangeDialogBox("Sorted by size");
+        }
+        else if (sorting == 1)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                return x.Value.Item.ID.CompareTo(y.Value.Item.ID);
+            });
+            ChangeDialogBox("Sorted by type");
+        }
+        else if (sorting == 2)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                return string.Compare(x.Value.Item.Title, y.Value.Item.Title, System.StringComparison.Ordinal);
+            });
+            ChangeDialogBox("Sorted by name");
+        }
+        ClearSlots();
+        playerItems.Clear();
+        currentSize = 0;
+        for (int i = 0; i < temp.Count; i++)
+        {
+            temp[i].Value.SlotNum = i;
+            playerItems.Add(temp[i].Value.Item.ID, temp[i].Value);
+            AddItemToSlots(temp[i].Value);
+        }
+        sorting++;
         SaveInventory();
     }
 
@@ -343,6 +400,19 @@ public class InventoryManager : MonoBehaviour
             playerItems[slots[i].GetComponentInChildren<ItemData>().GetItem().Item.ID].SlotNum = i;
         }
         Destroy(currentSlot);
+        ResizeSlotPanel();
+    }
+
+    public void ClearSlots()
+    {
+        int i = 0;
+        while (i < slotPanel.transform.childCount)
+        {
+            Destroy(slotPanel.transform.GetChild(i).gameObject);
+            i++;
+        }
+        slots.Clear();
+        slotAmount = 0;
         ResizeSlotPanel();
     }
 
