@@ -87,7 +87,7 @@ public class RosterManager : MonoBehaviour
         characterSlotAmount++;
 
         GameObject characterObj = Instantiate(characterObjectPrefab);
-        characterObj.transform.SetParent(characterSlots[maxRosterSize].transform);
+        characterObj.transform.SetParent(slot.transform);
         characterObj.transform.localPosition = Vector2.zero;
         characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
         characterObject.Add(characterObj);
