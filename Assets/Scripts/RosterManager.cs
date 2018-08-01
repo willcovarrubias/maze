@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RosterManager : MonoBehaviour {
+public class RosterManager : MonoBehaviour
+{
 
     private int maxRosterSize;
 
@@ -18,7 +19,8 @@ public class RosterManager : MonoBehaviour {
 
     public RectTransform slotPanelRectTransform;
 
-    void Start () {
+    void Start()
+    {
         maxRosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
 
         GenerateHeroSlotsBasedOnStartupRosterSize();
@@ -48,16 +50,20 @@ public class RosterManager : MonoBehaviour {
     {
         for (int i = 0; i < maxRosterSize; i++)
         {
-            characterSlots.Add(Instantiate(characterSlot));
+            GameObject slot = Instantiate(characterSlot);
+            slot.transform.SetParent(characterSlotPanel.transform);
+            characterSlots.Add(slot);
             //Adds an ID to each slot when it generates the slots. Used for drag/drop.
             //characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
             //characterSlots[characterSlotAmount - 1].name = "Slot" + (characterSlotAmount - 1);
-            characterSlots[i].transform.SetParent(characterSlotPanel.transform);
+            //characterSlots[i].transform.SetParent(characterSlotPanel.transform);
 
-            characterObject.Add(Instantiate(characterObjectPrefab));
-            characterObject[i].transform.SetParent(characterSlots[i].transform);
-            characterObject[i].transform.localPosition = Vector2.zero;
-            characterObject[i].GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+            GameObject characterObj = Instantiate(characterObjectPrefab);
+            characterObj.transform.SetParent(slot.transform);
+            characterObj.transform.localPosition = Vector2.zero;
+            characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+
+            characterObject.Add(characterObj);
 
             characterSlotAmount++;
 
@@ -75,14 +81,16 @@ public class RosterManager : MonoBehaviour {
 
     public void AddACharacterSlotInBarracksUI()
     {
-        characterSlots.Add(Instantiate(characterSlot));
-        characterSlots[maxRosterSize].transform.SetParent(characterSlotPanel.transform);
+        GameObject slot = Instantiate(characterSlot);
+        slot.transform.transform.SetParent(characterSlotPanel.transform);
+        characterSlots.Add(slot);
         characterSlotAmount++;
 
-        characterObject.Add(Instantiate(characterObjectPrefab));
-        characterObject[maxRosterSize].transform.SetParent(characterSlots[maxRosterSize].transform);
-        characterObject[maxRosterSize].transform.localPosition = Vector2.zero;
-        characterObject[maxRosterSize].GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+        GameObject characterObj = Instantiate(characterObjectPrefab);
+        characterObj.transform.SetParent(slot.transform);
+        characterObj.transform.localPosition = Vector2.zero;
+        characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+        characterObject.Add(characterObj);
 
         ResizeSlotPanelUI();
     }
@@ -91,7 +99,7 @@ public class RosterManager : MonoBehaviour {
     {
         //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
         //TODO: Maybe figure out a way to not hard code these values below?
-        slotPanelRectTransform.Translate(0, ((characterSlotAmount ) * -250), 0);
-        slotPanelRectTransform.sizeDelta = new Vector2(590, ((characterSlotAmount ) * 72));
+        slotPanelRectTransform.Translate(0, ((characterSlotAmount) * -250), 0);
+        slotPanelRectTransform.sizeDelta = new Vector2(590, ((characterSlotAmount) * 72));
     }
 }

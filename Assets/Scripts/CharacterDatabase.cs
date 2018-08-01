@@ -176,25 +176,6 @@ public class CharacterDatabase : MonoBehaviour
 
     void SaveNewHero(Character hero, int index)
     {
-
-
-        /*
-        PlayerPrefs.SetInt("Hero Num " + index, hero.id);
-        PlayerPrefs.SetInt("Hero " + index + " ID", hero.id);
-        PlayerPrefs.SetString("Hero " + index + " Name", hero.name);
-        PlayerPrefs.SetString("Hero " + index + " Job", hero.job);
-        PlayerPrefs.SetInt("Hero " + index + " HP", hero.hp);
-        PlayerPrefs.SetInt("Hero " + index + " MP", hero.mp);
-        PlayerPrefs.SetInt("Hero " + index + " Attack", hero.attack);
-        PlayerPrefs.SetInt("Hero " + index + " Special", hero.special);
-        PlayerPrefs.SetInt("Hero " + index + " Defense", hero.defense);
-        PlayerPrefs.SetInt("Hero " + index + " Luck", hero.luck);
-        PlayerPrefs.SetInt("Hero " + index + " Items", hero.items);
-        PlayerPrefs.SetInt("Hero " + index + " Exp", hero.exp);
-        PlayerPrefs.SetInt("Hero " + index + " Lives", hero.lives);
-        PlayerPrefs.SetString("Hero " + index + " Slug", hero.slug);
-        PlayerPrefs.Save();
-        //Debug.Log("Added " + hero.name);*/
     }
 
     /*
@@ -202,22 +183,7 @@ public class CharacterDatabase : MonoBehaviour
     */
 
     void SaveNewWanderer(Character hero, int index)
-    {/*
-        PlayerPrefs.SetInt("Wanderer Num " + index, hero.id);
-        PlayerPrefs.SetInt("Wanderer " + index + " ID", hero.id);
-        PlayerPrefs.SetString("Wanderer " + index + " Name", hero.name);
-        PlayerPrefs.SetString("Wanderer " + index + " Job", hero.job);
-        PlayerPrefs.SetInt("Wanderer " + index + " HP", hero.hp);
-        PlayerPrefs.SetInt("Wanderer " + index + " MP", hero.mp);
-        PlayerPrefs.SetInt("Wanderer " + index + " Attack", hero.attack);
-        PlayerPrefs.SetInt("Wanderer " + index + " Special", hero.special);
-        PlayerPrefs.SetInt("Wanderer " + index + " Defense", hero.defense);
-        PlayerPrefs.SetInt("Wanderer " + index + " Luck", hero.luck);
-        PlayerPrefs.SetInt("Wanderer " + index + " Items", hero.items);
-        PlayerPrefs.SetInt("Wanderer " + index + " Exp", hero.exp);
-        PlayerPrefs.SetInt("Wanderer " + index + " Lives", hero.lives);
-        PlayerPrefs.SetString("Wanderer " + index + " Slug", hero.slug);
-        PlayerPrefs.Save();*/
+    {
     }
 
     /*
@@ -225,28 +191,7 @@ public class CharacterDatabase : MonoBehaviour
      */
 
     public void SaveCharacter(Character hero)
-    {/*
-        for (int i = 0; i < amountOfSavedHeroes; i++)
-        {
-            if (PlayerPrefs.GetInt("Hero Num " + i) == hero.id)
-            {
-                PlayerPrefs.SetInt("Hero " + i + " ID", hero.id);
-                PlayerPrefs.SetString("Hero " + i + " Name", hero.name);
-                PlayerPrefs.SetString("Hero " + i + " Job", hero.job);
-                PlayerPrefs.SetInt("Hero " + i + " HP", hero.hp);
-                PlayerPrefs.SetInt("Hero " + i + " MP", hero.mp);
-                PlayerPrefs.SetInt("Hero " + i + " Attack", hero.attack);
-                PlayerPrefs.SetInt("Hero " + i + " Special", hero.special);
-                PlayerPrefs.SetInt("Hero " + i + " Defense", hero.defense);
-                PlayerPrefs.SetInt("Hero " + i + " Luck", hero.luck);
-                PlayerPrefs.SetInt("Hero " + i + " Items", hero.items);
-                PlayerPrefs.SetInt("Hero " + i + " Exp", hero.exp);
-                PlayerPrefs.SetInt("Hero " + i + " Lives", hero.lives);
-                PlayerPrefs.SetString("Hero " + i + " Slug", hero.slug);
-                return;
-            }
-        }
-        PlayerPrefs.Save();*/
+    {
     }
 
     void LoadHeroCharacters()
@@ -257,31 +202,6 @@ public class CharacterDatabase : MonoBehaviour
         {
             listOfHeroes[i] = GameMaster.gameMaster.characterDB.listOfHeroes[i];
         }
-        /*
-        amountOfSavedHeroes = PlayerPrefs.GetInt("Hero Count", 0);
-        listOfHeroes.Clear();
-        for (int i = 0; i < amountOfSavedHeroes; i++)
-        {
-            int characterNum = PlayerPrefs.GetInt("Hero Num " + i);
-            if (characterNum != 0)
-            {
-                int id = PlayerPrefs.GetInt("Hero " + i + " ID");
-                string heroName = PlayerPrefs.GetString("Hero " + i + " Name");
-                string job = PlayerPrefs.GetString("Hero " + i + " Job");
-                int hp = PlayerPrefs.GetInt("Hero " + i + " HP");
-                int mp = PlayerPrefs.GetInt("Hero " + i + " MP");
-                int att = PlayerPrefs.GetInt("Hero " + i + " Attack");
-                int spec = PlayerPrefs.GetInt("Hero " + i + " Special");
-                int def = PlayerPrefs.GetInt("Hero " + i + " Defense");
-                int luck = PlayerPrefs.GetInt("Hero " + i + " Luck");
-                int item = PlayerPrefs.GetInt("Hero " + i + " Items");
-                int exp = PlayerPrefs.GetInt("Hero " + i + " Exp");
-                int lives = PlayerPrefs.GetInt("Hero " + i + " Lives");
-                string slug = PlayerPrefs.GetString("Hero " + i + " Slug");
-                Character character = new Character(id, heroName, job, hp, mp, att, spec, def, luck, item, exp, lives, slug);
-                listOfHeroes.Add(character);
-            }
-        }*/
     }
 
     void LoadWandererCharacters()
@@ -292,52 +212,11 @@ public class CharacterDatabase : MonoBehaviour
         {
             listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];            
         }
-
-        /*
-        amountOfSavedWanderers = PlayerPrefs.GetInt("Wanderer Count", 0);
-        listOfWanderers.Clear();
-        for (int i = 0; i < amountOfSavedWanderers; i++)
-        {
-            int characterNum = PlayerPrefs.GetInt("Wanderer Num " + i);
-            if (characterNum != 0)
-            {
-                int id = PlayerPrefs.GetInt("Wanderer " + i + " ID");
-                string heroName = PlayerPrefs.GetString("Wanderer " + i + " Name");
-                string job = PlayerPrefs.GetString("Wanderer " + i + " Job");
-                int hp = PlayerPrefs.GetInt("Wanderer " + i + " HP");
-                int mp = PlayerPrefs.GetInt("Wanderer " + i + " MP");
-                int att = PlayerPrefs.GetInt("Wanderer " + i + " Attack");
-                int spec = PlayerPrefs.GetInt("Wanderer " + i + " Special");
-                int def = PlayerPrefs.GetInt("Wanderer " + i + " Defense");
-                int luck = PlayerPrefs.GetInt("Wanderer " + i + " Luck");
-                int item = PlayerPrefs.GetInt("Wanderer " + i + " Items");
-                int exp = PlayerPrefs.GetInt("Wanderer " + i + " Exp");
-                int lives = PlayerPrefs.GetInt("Wanderer " + i + " Lives");
-                string slug = PlayerPrefs.GetString("Wanderer " + i + " Slug");
-                Character character = new Character(id, heroName, job, hp, mp, att, spec, def, luck, item, exp, lives, slug);
-                listOfWanderers.Add(character);
-            }
-        }*/
     }
 
     public void DeleteWanderer(Character character)
     {
         listOfWanderers.Remove(character);
-        /*
-        PlayerPrefs.DeleteKey("Hero Num " + character.id);
-        PlayerPrefs.DeleteKey("Hero " + character.id + " ID");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Name");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Job");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " HP");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " MP");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Attack");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Special");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Defense");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Luck");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Items");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Exp");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Lives");
-        PlayerPrefs.DeleteKey("Hero " + character.id + " Slug");*/
         Debug.Log("Deleted " + character.name);
                 
         
