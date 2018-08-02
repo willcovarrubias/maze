@@ -14,7 +14,7 @@ public class CharacterDatabase : MonoBehaviour
     public List<Character> listOfHeroes = new List<Character>();
 
     private JsonData enemyData;
-    Character currentCharacter;
+    public Character activeCharacter;
     static int maxAmountOfHeroes = 4;
     int currentAmountOfHeroes;
     int amountOfSavedHeroes;
@@ -102,6 +102,7 @@ public class CharacterDatabase : MonoBehaviour
         
         //PlayerPrefs.SetInt("Hero Count", amountOfSavedHeroes);
         listOfHeroes.Add(characterToRecruit);
+        listOfHeroes.Last().id = listOfHeroes.Count;
         DeleteWanderer(characterToRecruit);
 
         //SaveNewHero(characterToRecruit, slotNumber);
@@ -233,15 +234,24 @@ public class CharacterDatabase : MonoBehaviour
         }
     }
 
-    public void ChangeCurrentCharacter(int id)
+    public void ChangeActiveCharacter(int id)
     {
         for (int i = 0; i < listOfHeroes.Count; i++)
         {
             if (listOfHeroes[i].id == id)
             {
-                currentCharacter = listOfHeroes[i];
+                activeCharacter = listOfHeroes[i];
+                //GameMaster.gameMaster.activeCharacter = activeCharacter;
             }
         }
+
+        GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+        GameMaster.gameMaster.Save();
+    }
+
+    public void GetActiveCharacter()
+    {
+       // activeCharacter = GameMaster.gameMaster.activeCharacter;
     }
 
     void PrintCreatedCharacters()
@@ -254,7 +264,9 @@ public class CharacterDatabase : MonoBehaviour
 
         for (int i = 0; i < listOfHeroes.Count; i++)
         {
-            Debug.Log("Heroes: " + listOfHeroes[i].name);
+            Debug.Log("Heroes: " + listOfHeroes[i].name +
+                "\nID: " + listOfHeroes[i].id);
+
 
         }
     }

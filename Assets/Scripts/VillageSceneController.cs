@@ -9,6 +9,7 @@ public class VillageSceneController : MonoBehaviour
     public GameObject mainMenu, labyrinthConfirmation, barracksMenu, blacksmithMenu, itemShopMenu, inventoryUI, villInventoryUI, recruitmentUI;
 
     GameObject gameMaster;
+    public Canvas canvasForAllMenusInVillageScene;
 
     private void Start()
     {
@@ -72,13 +73,14 @@ public class VillageSceneController : MonoBehaviour
     public void BarracksMenu()//This'll pop up a menu that'll allow the player to upgrade the barracks but also select a character.
     {
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-
+        //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = 3;
         barracksMenu.SetActive(true);
         Debug.Log("You have accessed the Barracks Menu.");
     }
 
     public void BarracksMenuClose()
     {
+        //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = -1;
         barracksMenu.SetActive(false);
     }
 

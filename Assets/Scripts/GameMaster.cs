@@ -12,7 +12,7 @@ public class GameMaster : MonoBehaviour {
     public int roomCount = -1;
 
     public CharacterDatabase characterDB;
-
+    
     public void Awake()
     {
         if (gameMaster == null)
@@ -43,6 +43,7 @@ public class GameMaster : MonoBehaviour {
         SavedPlayerData data = new SavedPlayerData();
         data.savedListOfHeroes = characterDB.listOfHeroes;
         data.savedListOfWanderers = characterDB.listOfWanderers;
+        data.savedActiveCharacter = characterDB.activeCharacter;
         
         bf.Serialize(file, data);
         file.Close();
@@ -61,6 +62,7 @@ public class GameMaster : MonoBehaviour {
 
             characterDB.listOfHeroes = data.savedListOfHeroes;
             characterDB.listOfWanderers = data.savedListOfWanderers;
+            characterDB.activeCharacter = data.savedActiveCharacter;
 
             Debug.Log("Stats loaded!");
 
@@ -75,5 +77,6 @@ class SavedPlayerData
 {
     public List<Character> savedListOfHeroes;
     public List<Character> savedListOfWanderers;
+    public Character savedActiveCharacter;
 
 }
