@@ -17,13 +17,17 @@ public class DynamicInventory : MonoBehaviour
     ScrollRect scrollView;
     public GameObject openButton;
     GameObject sendAllButton;
+    GameObject sortButton;
 
     GameObject gameMaster;
     Location.WhereAmI location;
+    int sorting;
 
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
+        gameObject.transform.SetParent(gameMaster.transform.Find("Canvas").transform, true);
+        gameObject.transform.SetSiblingIndex(1);
     }
 
     public void Initialize(Location.WhereAmI loc, List<Inventory> createdItems, GameObject slotPre, GameObject itemPre, GameObject button)
@@ -35,12 +39,15 @@ public class DynamicInventory : MonoBehaviour
         inventoryPane = gameObject.transform.Find("ScrollView").gameObject;
         slotPanel = inventoryPane.transform.Find("SlotPanel").gameObject;
         sendAllButton = gameObject.transform.Find("SendAll").gameObject;
+        sortButton = gameObject.transform.Find("Sort").gameObject;
         slotPanelRectTransform = slotPanel.GetComponent<RectTransform>();
         scrollView = inventoryPane.GetComponent<ScrollRect>();
         Button open = button.GetComponent<Button>();
         open.onClick.AddListener(OpenUI);
         Button sendAll = sendAllButton.GetComponent<Button>();
         sendAll.onClick.AddListener(MoveWholeInventoryToPlayer);
+        Button sort = sortButton.GetComponent<Button>();
+        sort.onClick.AddListener(SortInventory);
         InitalizeSlots(createdItems);
     }
 
@@ -114,6 +121,60 @@ public class DynamicInventory : MonoBehaviour
         }
     }
 
+    public void SortInventory()
+    {
+        List<KeyValuePair<int, Inventory>> temp = new List<KeyValuePair<int, Inventory>>();
+        foreach (KeyValuePair<int, Inventory> keyValue in items)
+        {
+            int key = keyValue.Key;
+            int size = items[key].Item.Size;
+            int id = items[key].Item.ID;
+            KeyValuePair<int, Inventory> item = new KeyValuePair<int, Inventory>(items[key].SlotNum, items[key]);
+            temp.Add(item);
+        }
+        if (sorting > 2)
+        {
+            sorting = 0;
+        }
+        if (sorting == 0)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                if (x.Value.Item.Size == y.Value.Item.Size)
+                {
+                    return x.Value.Item.ID.CompareTo(y.Value.Item.ID);
+                }
+                return x.Value.Item.Size.CompareTo(y.Value.Item.Size);
+            });
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sorted by size");
+        }
+        else if (sorting == 1)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                return x.Value.Item.ID.CompareTo(y.Value.Item.ID);
+            });
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sorted by type");
+        }
+        else if (sorting == 2)
+        {
+            temp.Sort(delegate (KeyValuePair<int, Inventory> x, KeyValuePair<int, Inventory> y)
+            {
+                return string.Compare(x.Value.Item.Title, y.Value.Item.Title, System.StringComparison.Ordinal);
+            });
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sorted by name");
+        }
+        ClearSlots();
+        items.Clear();
+        for (int i = 0; i < temp.Count; i++)
+        {
+            temp[i].Value.SlotNum = i;
+            items.Add(temp[i].Value.Item.ID, temp[i].Value);
+            AddItemToSlots(temp[i].Value);
+        }
+        sorting++;
+    }
+
     void CreateNewItem(Items item, int count)
     {
         Inventory newItem;
@@ -170,6 +231,19 @@ public class DynamicInventory : MonoBehaviour
     {
         slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
         slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
+    }
+
+    public void ClearSlots()
+    {
+        int i = 0;
+        while (i < slotPanel.transform.childCount)
+        {
+            Destroy(slotPanel.transform.GetChild(i).gameObject);
+            i++;
+        }
+        slots.Clear();
+        slotAmount = 0;
+        ResizeSlotPanel();
     }
 
     public bool IsWeapon(int id)

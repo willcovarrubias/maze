@@ -19,6 +19,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     GameObject gameMaster;
     GameObject villageSceneController;
     GameObject currentSlot;
+    GameObject currentPanel;
 
     Scene currentScene;
     string sceneName;
@@ -40,6 +41,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }
+        currentPanel = transform.parent.parent.parent.parent.gameObject;
     }
 
     public void SetItem(Inventory itemToBeSet)
@@ -94,7 +96,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-        this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
         this.transform.position = eventData.position - offsetToReturnItem;
         beingDragged = true;
     }
@@ -151,17 +152,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         else if (currentLocation == Location.WhereAmI.temp && goingToLocation == Location.WhereAmI.temp)
         {
-            GameObject panel;
-            if (transform.parent.parent.parent.gameObject.name == "Manager")
-            {
-                panel = transform.parent.gameObject;
-            }
-            else
-            {
-                panel = transform.parent.parent.parent.parent.gameObject;
-            }
-            this.transform.SetParent(panel.GetComponent<DynamicInventory>().slots[slotID].transform);
-            this.transform.position = panel.GetComponent<DynamicInventory>().slots[slotID].transform.position;
+            this.transform.SetParent(currentPanel.GetComponent<DynamicInventory>().slots[slotID].transform);
+            this.transform.position = currentPanel.GetComponent<DynamicInventory>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
         else if (goingToLocation == Location.WhereAmI.notSet)
@@ -177,18 +169,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerDown(PointerEventData eventData)
     {
         sceneName = SceneManager.GetActiveScene().name;
-        this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 2;
-        gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 2;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        this.transform.root.GetComponentInChildren<Canvas>().sortingOrder = 1;
         if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp))
         {
-            gameMaster.GetComponentInChildren<Canvas>().sortingOrder = 3;
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
         }
         if (sceneName == "VillageScene")
@@ -236,17 +224,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             goingToLocation = Location.WhereAmI.temp;
             if (currentLocation == Location.WhereAmI.player)
             {
-                GameObject panel = GameObject.Find("Manager");
-                panel = panel.transform.GetChild(0).gameObject;
-                for (int i = 0; i < panel.transform.childCount; i++)
-                {
-                    if (panel.transform.GetChild(i).gameObject.activeInHierarchy == true && panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")
-                    {
-                        panel = panel.transform.GetChild(i).gameObject;
-                        panel.GetComponent<DynamicInventory>().MoveItemsToHere(item, slotID, 1);
-                        break;
-                    }
-                }
+                GameObject panel = GetCurrentDynamicPanel();
+                panel.GetComponent<DynamicInventory>().MoveItemsToHere(item, slotID, 1);
                 CheckCount();
             }
         }
@@ -255,7 +234,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             goingToLocation = Location.WhereAmI.player;
             if (currentLocation == Location.WhereAmI.temp)
             {
-                GameObject panel = transform.parent.gameObject;
+                GameObject panel = currentPanel;
                 gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1, false, panel);
                 CheckCount();
             }
@@ -276,5 +255,18 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             Destroy(gameObject);
         }
+    }
+
+    GameObject GetCurrentDynamicPanel()
+    {
+        GameObject panel = gameMaster.transform.GetChild(0).gameObject;
+        for (int i = 0; i < panel.transform.childCount; i++)
+        {
+            if (panel.transform.GetChild(i).gameObject.activeInHierarchy == true && panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")
+            {
+                return panel.transform.GetChild(i).gameObject;
+            }
+        }
+        return null;
     }
 }
