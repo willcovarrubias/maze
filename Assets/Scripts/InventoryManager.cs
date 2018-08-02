@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject itemPrefab;
     public GameObject inventoryText;
     public GameObject dialogBox;
+    public GameObject otherSortButton, sendToPlayerButton, sendToVillage;
     public int slotAmount;
     public List<GameObject> slots = new List<GameObject>();
     Scene currentScene;
@@ -31,21 +32,14 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
+        Button actionButton = otherSortButton.GetComponent<Button>();
+        actionButton.onClick.AddListener(OtherSortButtonAction);
+        Button discardButton = sendToPlayerButton.GetComponent<Button>();
+        discardButton.onClick.AddListener(SendToPlayerAction);
     }
-
-    /*
-    private void Update()
-    {
-        if (Input.GetKeyUp("s"))
-        {
-            SortInventory();
-        }
-    }
-    */
 
     public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount, bool fromVillage, GameObject panel)
     {
@@ -230,7 +224,7 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventoryText()
     {
-        inventoryText.GetComponent<Text>().text = "Inventory: " + currentSize + " / " + maxInventorySize;
+        inventoryText.GetComponent<Text>().text = "Limit: " + currentSize + " / " + maxInventorySize;
     }
 
     public bool CanFitInInventory(int itemSize)
@@ -357,37 +351,6 @@ public class InventoryManager : MonoBehaviour
         slots[slotAmount - 1].transform.SetParent(slotPanel.transform);
     }
 
-    public void OpenInventoryPanelUI()
-    {
-        inventoryPanel.SetActive(true);
-        currentScene = SceneManager.GetActiveScene();
-        sceneName = currentScene.name;
-        if (sceneName == "VillageScene")
-        {
-            inventoryPanel.transform.Find("SendToVillage").gameObject.SetActive(true);
-        }
-        else
-        {
-            inventoryPanel.transform.Find("SendToVillage").gameObject.SetActive(false);
-        }
-    }
-
-    public void CloseInventoryPanelUI()
-    {
-        inventoryPanel.SetActive(false);
-        currentScene = SceneManager.GetActiveScene();
-        sceneName = currentScene.name;
-        //Closes the inventory panel no matter what scene the player is currently in.
-        if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
-        {
-            GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
-        }
-        if (sceneName == "VillageScene")
-        {
-            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
-        }
-    }
-
     public void ReorganizeSlots(int slotID)
     {
         GameObject currentSlot = slots[slotID];
@@ -456,6 +419,68 @@ public class InventoryManager : MonoBehaviour
         {
             int key = keyValue.Key;
             Debug.Log(playerItems[key].Item.Title + ".....Slot Num: " + playerItems[key].SlotNum);
+        }
+    }
+
+    public void OpenInventoryPanelUI()
+    {
+        inventoryPanel.SetActive(true);
+        currentScene = SceneManager.GetActiveScene();
+        sceneName = currentScene.name;
+        if (sceneName == "VillageScene")
+        {
+            otherSortButton.SetActive(true);
+            sendToVillage.SetActive(true);
+            sendToPlayerButton.SetActive(false);
+        }
+        else if (sceneName == "LootScene")
+        {
+            otherSortButton.SetActive(false);
+            sendToVillage.SetActive(false);
+            sendToPlayerButton.SetActive(false);
+        }
+        else
+        {
+            otherSortButton.SetActive(false);
+            sendToVillage.SetActive(false);
+            sendToPlayerButton.SetActive(false);
+        }
+    }
+
+    public void CloseInventoryPanelUI()
+    {
+        inventoryPanel.SetActive(false);
+        currentScene = SceneManager.GetActiveScene();
+        sceneName = currentScene.name;
+        //Closes the inventory panel no matter what scene the player is currently in.
+        if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
+        {
+            GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
+        }
+        if (sceneName == "VillageScene")
+        {
+            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
+        }
+    }
+
+    void OtherSortButtonAction()
+    {
+        if (SceneManager.GetActiveScene().name == "VillageScene")
+        {
+            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
+            villageInventory.GetComponent<VillageInventoryManager>().SortInventory();
+        }
+        else if (SceneManager.GetActiveScene().name == "LootScene")
+        {
+
+        }
+    }
+
+    void SendToPlayerAction()
+    {
+        if (SceneManager.GetActiveScene().name == "LootScene")
+        {
+
         }
     }
 }
