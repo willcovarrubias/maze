@@ -99,7 +99,7 @@ public class RosterManager : MonoBehaviour
     {
         //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
         //TODO: Maybe figure out a way to not hard code these values below?
-        slotPanelRectTransform.Translate(0, ((characterSlotAmount) * -250), 0);
-        slotPanelRectTransform.sizeDelta = new Vector2(590, ((characterSlotAmount) * 72));
+        slotPanelRectTransform.Translate(0, (int)(Mathf.Ceil((float)characterSlotAmount / 2) * -250), 0);
+        slotPanelRectTransform.sizeDelta = new Vector2(590, (Mathf.Ceil((float)characterSlotAmount / 2) * 155));
     }
 }
