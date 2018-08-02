@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CharacterBattleController : MonoBehaviour {
+public class FightSceneController : MonoBehaviour {
 
     private void Start()
     {
@@ -33,6 +33,7 @@ public class CharacterBattleController : MonoBehaviour {
 
     public void GoToPathRoom()
     {
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GiveExpForBattleToActiveCharacter();
         SceneManager.LoadScene("PathScene");
     }
 }

@@ -50,16 +50,16 @@ public class PathSceneManager : MonoBehaviour {
     public void SelectPath()
     {
         //Testing - set to only spawn chest rooms for now
-        int roomType = Random.Range(3, 4);
+        int roomType = Random.Range(1, 2);
 
 
         if (roomType == 0)
         {
-            SceneManager.LoadScene("FightScene");
+            SceneManager.LoadScene("PuzzleScene");
         }
         else if (roomType == 1)
         {
-            SceneManager.LoadScene("PuzzleScene");
+            SceneManager.LoadScene("FightScene");
         }
         else
         {
