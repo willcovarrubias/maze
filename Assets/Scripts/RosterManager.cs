@@ -28,12 +28,20 @@ public class RosterManager : MonoBehaviour
         PopulateCurrentRoster();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("List of heros count: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count);
+        }
+    }
+
     public void PopulateCurrentRoster()
     {
         //This should update every time the roster is populated so that the newest size of the roster is reflected.
         maxRosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
 
-        for (int i = 0; i < maxRosterSize; i++)
+        for (int i = 0; i < GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count; i++)
         {
             characterObject[i].GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
             characterObject[i].GetComponent<CharacterData>().thisObjectsID = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].id;
@@ -62,6 +70,8 @@ public class RosterManager : MonoBehaviour
             characterObj.transform.SetParent(slot.transform);
             characterObj.transform.localPosition = Vector2.zero;
             characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+            characterObj.GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
+
 
             characterObject.Add(characterObj);
 

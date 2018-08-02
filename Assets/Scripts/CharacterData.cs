@@ -30,6 +30,10 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             villageManager.GetComponent<RecruitmentManager>().characterSlots.Remove(transform.parent.gameObject);
             Destroy(transform.parent.gameObject);
         }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<CharacterDatabase>().ChangeActiveCharacter(character.id);
+        }
         
     }
 
