@@ -48,6 +48,7 @@ public class VillageSceneController : MonoBehaviour
     }
     public void EnterLabyrinthConfirmation()
     {
+        GetComponent<VillageInventoryManager>().DestroyPanel();
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
         SceneManager.LoadScene("PathScene");
 

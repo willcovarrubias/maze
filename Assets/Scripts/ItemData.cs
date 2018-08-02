@@ -86,7 +86,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             }
             GetComponent<Text>().text = item.Item.Title;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
-            this.transform.SetParent(this.transform.parent.parent.parent.parent);
+            this.transform.SetParent(this.transform.parent.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
             GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
