@@ -1768,6 +1768,7 @@ MonoBehaviour:
   slot: {fileID: 1055738467480586, guid: d12b0ebc72d7a184595d0de557ef8663, type: 2}
   itemPrefab: {fileID: 1444504196538504, guid: c35001eb86a28374f9b30d4547db93d3, type: 2}
   inventoryText: {fileID: 1642265882816644}
+  inventoryName: {fileID: 1458578313246314}
   dialogBox: {fileID: 1622030358405182}
   otherSortButton: {fileID: 1996249831712628}
   sendToPlayerButton: {fileID: 1416818135884230}

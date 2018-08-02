@@ -303,8 +303,7 @@ public class ItemPopUp : MonoBehaviour
 
     GameObject GetActivePanel()
     {
-        GameObject panel = GameObject.Find("Manager");
-        panel = panel.transform.GetChild(0).gameObject;
+        GameObject panel = gameMaster.transform.GetChild(0).gameObject;
         for (int i = 0; i < panel.transform.childCount; i++)
         {
             if (panel.transform.GetChild(i).gameObject.activeInHierarchy == true && panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")
