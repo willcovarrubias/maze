@@ -328,7 +328,7 @@ public class InventoryManager : MonoBehaviour
     {
         GameObject itemObject = Instantiate(itemPrefab);
         AddDynamicSlot();
-        itemObject.transform.SetParent(slots[slotAmount - 1].transform);
+        itemObject.transform.SetParent(slots[slotAmount - 1].transform, false);
         itemObject.transform.localPosition = Vector2.zero;
         itemObject.name = item.Item.Title;
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
@@ -352,7 +352,7 @@ public class InventoryManager : MonoBehaviour
         //Adds an ID to each slot when it generates the slots. Used for drag/drop.
         slots[slotAmount - 1].GetComponent<ItemSlot>().id = slotAmount - 1;
         slots[slotAmount - 1].name = "Slot" + (slotAmount - 1);
-        slots[slotAmount - 1].transform.SetParent(slotPanel.transform);
+        slots[slotAmount - 1].transform.SetParent(slotPanel.transform, false);
     }
 
     public void ReorganizeSlots(int slotID)
