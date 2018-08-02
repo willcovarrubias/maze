@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject slot;
     public GameObject itemPrefab;
     public GameObject inventoryText;
+    public GameObject inventoryName;
     public GameObject dialogBox;
     public GameObject otherSortButton, sendToPlayerButton, sendToVillage;
     public int slotAmount;
@@ -29,6 +30,7 @@ public class InventoryManager : MonoBehaviour
 
     GameObject villageInventory;
     int sorting;
+    Vector3 originalPosition;
 
     void Start()
     {
@@ -39,6 +41,7 @@ public class InventoryManager : MonoBehaviour
         actionButton.onClick.AddListener(OtherSortButtonAction);
         Button discardButton = sendToPlayerButton.GetComponent<Button>();
         discardButton.onClick.AddListener(SendToPlayerAction);
+        originalPosition = scrollView.transform.position;
     }
 
     public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount, bool fromVillage, GameObject panel)
@@ -137,6 +140,7 @@ public class InventoryManager : MonoBehaviour
 
     public void RemoveWholeStackFromInventory(Inventory items)
     {
+        Debug.Log(items.Item.Size * items.Count);
         currentSize -= items.Item.Size * items.Count;
         playerItems.Remove(items.Item.ID);
         items.Count = 0;
@@ -427,6 +431,7 @@ public class InventoryManager : MonoBehaviour
         inventoryPanel.SetActive(true);
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
+        MoveInventory();
         if (sceneName == "VillageScene")
         {
             otherSortButton.SetActive(true);
@@ -481,6 +486,22 @@ public class InventoryManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "LootScene")
         {
 
+        }
+    }
+
+    void MoveInventory()
+    {
+        if (SceneManager.GetActiveScene().name == "LootScene" || SceneManager.GetActiveScene().name == "VillageScene")
+        {
+            inventoryName.transform.position = new Vector3(originalPosition.x, inventoryName.transform.position.y, originalPosition.z);
+            inventoryText.transform.position = new Vector3(originalPosition.x, inventoryText.transform.position.y, originalPosition.z);
+            scrollView.transform.position = new Vector3(originalPosition.x, originalPosition.y, originalPosition.z);
+        }
+        else
+        {
+            inventoryName.transform.position = new Vector3(Screen.width / 2, inventoryName.transform.position.y, originalPosition.z);
+            inventoryText.transform.position = new Vector3(Screen.width / 2, inventoryText.transform.position.y, originalPosition.z);
+            scrollView.transform.position = new Vector3(Screen.width / 2, originalPosition.y, originalPosition.z);
         }
     }
 }
