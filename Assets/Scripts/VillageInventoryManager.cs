@@ -103,11 +103,12 @@ public class VillageInventoryManager : MonoBehaviour
         }
     }
 
-    public void RemoveWholeStackFromInventory(Inventory items)
+    public void RemoveWholeStackFromInventory(Inventory items, int slot)
     {
         currentSize -= items.Item.Size * items.Count;
         villageItems.Remove(items.Item.ID);
         items.Count = 0;
+        ReorganizeSlots(slot);
         SaveVillageInventory();
         UpdateInventoryText();
     }
@@ -157,7 +158,6 @@ public class VillageInventoryManager : MonoBehaviour
         }
         ClearSlots();
         villageItems.Clear();
-        currentSize = 0;
         for (int i = 0; i < temp.Count; i++)
         {
             temp[i].Value.SlotNum = i;

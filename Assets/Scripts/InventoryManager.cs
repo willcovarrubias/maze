@@ -34,6 +34,7 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
+        //PlayerPrefs.DeleteAll();
         maxInventorySize = 100; // set this somewhere
         currentSize = 0;
         LoadInventory();
@@ -138,12 +139,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void RemoveWholeStackFromInventory(Inventory items)
+    public void RemoveWholeStackFromInventory(Inventory items, int slot)
     {
-        Debug.Log(items.Item.Size * items.Count);
         currentSize -= items.Item.Size * items.Count;
         playerItems.Remove(items.Item.ID);
         items.Count = 0;
+        ReorganizeSlots(slot);
         SaveInventory();
         UpdateInventoryText();
     }
@@ -215,7 +216,6 @@ public class InventoryManager : MonoBehaviour
         }
         ClearSlots();
         playerItems.Clear();
-        currentSize = 0;
         for (int i = 0; i < temp.Count; i++)
         {
             temp[i].Value.SlotNum = i;
