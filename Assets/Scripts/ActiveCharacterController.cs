@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActiveCharacterController : MonoBehaviour {
+public class ActiveCharacterController : MonoBehaviour
+{
 
     public GameObject activeCharacterPanel;
     public Text nameTextObject;
     Character activeCharacter;
 
-
-    void Start () {
-
+    void Start()
+    {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetActiveCharacter();
-        
         UpdateActiveCharacterVisuals();
         //nameTextObject.text = ;
-	}
+    }
 
     public void UpdateActiveCharacterVisuals()
     {
@@ -24,7 +23,11 @@ public class ActiveCharacterController : MonoBehaviour {
                                 "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
                                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
                                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
-
+        GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
     }
-	
+
+    public Character GetActiveCharacter()
+    {
+        return GetComponent<CharacterDatabase>().activeCharacter;
+    }
 }
