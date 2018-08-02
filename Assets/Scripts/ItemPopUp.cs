@@ -205,15 +205,13 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item);
-            gameMaster.GetComponent<InventoryManager>().ReorganizeSlots(currentSlot);
+            gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item, currentSlot);
             Destroy(itemHolder);
             Close();
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            villageInventory.GetComponent<VillageInventoryManager>().RemoveWholeStackFromInventory(item);
-            villageInventory.GetComponent<VillageInventoryManager>().ReorganizeSlots(currentSlot);
+            villageInventory.GetComponent<VillageInventoryManager>().RemoveWholeStackFromInventory(item, currentSlot);
             Destroy(itemHolder);
             Close();
         }
