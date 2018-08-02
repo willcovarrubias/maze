@@ -9,6 +9,7 @@ public class VillageInventoryManager : MonoBehaviour
     int currentSize;
     public Dictionary<int, Inventory> villageItems = new Dictionary<int, Inventory>();
 
+    public GameObject inventoryPanel;
     public GameObject slotPanel;
     public GameObject slot;
     public GameObject itemPrefab;
@@ -23,23 +24,15 @@ public class VillageInventoryManager : MonoBehaviour
     public ScrollRect scrollViewVillage;
     int sorting;
 
-    /*
-    private void Update()
-    {
-        if (Input.GetKeyUp("s"))
-        {
-            SortInventory();
-        }
-    }
-    */
-
-    private void Start()
+    void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        maxVillageInventorySize = 1000;
+        maxVillageInventorySize = 1000; //TODO: Set this from upgrades
         currentSize = 0;
         LoadVillageInventory();
         ResizeSlotPanel();
+        inventoryPanel.transform.SetParent(gameMaster.transform.Find("Canvas").transform, true);
+        inventoryPanel.transform.SetSiblingIndex(1);
     }
 
     public bool MoveItemsToVillageInventory(Inventory items, int thisSlotId, int amount)
@@ -177,7 +170,7 @@ public class VillageInventoryManager : MonoBehaviour
 
     public void UpdateInventoryText()
     {
-        villageInventoryText.GetComponent<Text>().text = "Inventory: " + currentSize + " / " + maxVillageInventorySize;
+        villageInventoryText.GetComponent<Text>().text = "Limit: " + currentSize + " / " + maxVillageInventorySize;
     }
 
     public bool CanFitInInventory(int itemSize)
@@ -350,8 +343,13 @@ public class VillageInventoryManager : MonoBehaviour
         foreach (KeyValuePair<int, Inventory> keyValue in villageItems)
         {
             int key = keyValue.Key;
-            UnityEngine.Debug.Log(villageItems[key].Item.Title + ".....Slot Num: " + villageItems[key].SlotNum);
+            Debug.Log(villageItems[key].Item.Title + ".....Slot Num: " + villageItems[key].SlotNum);
         }
+    }
+
+    public void DestroyPanel()
+    {
+        Destroy(inventoryPanel);
     }
 }
 
