@@ -245,6 +245,7 @@ public class CharacterDatabase : MonoBehaviour
             }
         }
 
+        GetComponent<ActiveCharacterController>().DetermineActiveCharacterCurrentLevel();
         GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
     }
