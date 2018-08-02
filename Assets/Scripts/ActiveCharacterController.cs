@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ActiveCharacterController : MonoBehaviour {
+public class ActiveCharacterController : MonoBehaviour
+{
 
     public GameObject activeCharacterPanel;
     public GameObject expBarFront;
@@ -9,18 +10,15 @@ public class ActiveCharacterController : MonoBehaviour {
     Character activeCharacter;
     int activeCharacterLevel;
 
-
-
     int[] expLevels = new int[5] {0, 200, 400, 800, 1600 };
 
     void Start () {
 
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetActiveCharacter();
-
         DetermineActiveCharacterCurrentLevel();
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetActiveCharacter();
         UpdateActiveCharacterVisuals();
         //nameTextObject.text = ;
-	}
+    }
 
     private void Update()
     {
@@ -47,7 +45,12 @@ public class ActiveCharacterController : MonoBehaviour {
                                 "\nLevel: " + activeCharacterLevel + 
                                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
                                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
+        GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
+    }
 
+    public Character GetActiveCharacter()
+    {
+        return GetComponent<CharacterDatabase>().activeCharacter;
     }
 
     public void GiveExpForRoomClearToActiveCharacter()
@@ -75,5 +78,4 @@ public class ActiveCharacterController : MonoBehaviour {
             }
         }
     }
-
 }
