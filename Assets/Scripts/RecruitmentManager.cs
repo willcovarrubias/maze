@@ -8,6 +8,8 @@ public class RecruitmentManager : MonoBehaviour
 
     GameObject gameMaster;
     private int maxAmountOfHeroesToRecruit;
+    Character currentlyClickedCharacter;
+    GameObject objectsToDestroyWhenWandererIsRecruited;
 
     //UI Stuff.
     public GameObject recruitmentPanel;
@@ -17,6 +19,9 @@ public class RecruitmentManager : MonoBehaviour
     public List<GameObject> characterObject = new List<GameObject>();
     public int characterSlotAmount;
     public List<GameObject> characterSlots = new List<GameObject>();
+    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public GameObject caravanPopUPObject;
+
 
     // Use this for initialization
     void Start()
@@ -76,6 +81,7 @@ public class RecruitmentManager : MonoBehaviour
             //characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
             //characterObject.GetComponent<Image>().sprite = gameMaster.GetComponent<CharacterDatabase>().CreateHero().sprite;
         }
+        CaravanAdvancedUIClose();
         GameMaster.gameMaster.Save();
     }
 
@@ -113,7 +119,7 @@ public class RecruitmentManager : MonoBehaviour
 
             //Debug.Log("This is NOT null");
             characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
-            characterObject[i].GetComponent<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
+            characterObject[i].GetComponentInChildren<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
                         "\nClass: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
                         "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].hp +
                         "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
@@ -127,6 +133,47 @@ public class RecruitmentManager : MonoBehaviour
 
 
         }
+    }
+
+    public void PopulateCaravanPopUp(Character character)
+    {
+        nameText.text = character.name;
+        //levelText.text = "Lv. " + activeCharacterLevel.ToString();
+        jobText.text = character.job;
+        hpText.text = "HP: " + character.hp.ToString();
+        mpText.text = "MP: " + character.mp.ToString();
+        attackText.text = "Attack: " + character.attack.ToString();
+        specialText.text = "Special: " + character.special.ToString();
+        defenseText.text = "Defense: " + character.defense.ToString();
+        //speedText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed.ToString();
+        luckText.text = "Luck: " + character.luck.ToString();
+        //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
+
+    }
+
+    public void FinalizeRecruitment()
+    {
+        characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
+        characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+        Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
+        CaravanAdvancedUIClose();
+    }
+
+    public void SetCurrentlyClickedCharacter(Character characterClicked, GameObject objectToDestroy)
+    {
+        currentlyClickedCharacter = characterClicked;
+        objectsToDestroyWhenWandererIsRecruited = objectToDestroy;
+    }
+
+    internal void CaravanAdvancedUIOpen()
+    {
+        caravanPopUPObject.SetActive(true);
+    }
+
+    public void CaravanAdvancedUIClose()
+    {
+        caravanPopUPObject.SetActive(false);
     }
 
     public void RemoveWanderers()
