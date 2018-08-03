@@ -17,9 +17,7 @@ public class FightSceneController : MonoBehaviour
     float initialSliderHeight;
     float heightOfMeter;
 
-    int playerAttackNum;
-    int enemyIndex;
-    int attackNum;
+    int playerAttackNum, enemyIndex, attackNum;
 
     void Start()
     {
@@ -54,9 +52,10 @@ public class FightSceneController : MonoBehaviour
     {
         if (moveSlider)
         {
+            float speed = 1000 - (activeCharacter.speed * 10) + (listOfEnemies[0].speed * 10);
             slider.transform.localPosition = new Vector3(
                 slider.transform.localPosition.x,
-                initialSliderHeight + Mathf.PingPong(Time.time * activeCharacter.speed / listOfEnemies[0].speed * 100, heightOfMeter),
+                initialSliderHeight + Mathf.PingPong(Time.time * speed, heightOfMeter),
                 slider.transform.localPosition.z);
         }
         else
@@ -84,7 +83,7 @@ public class FightSceneController : MonoBehaviour
         if (waitingForAttack)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > 3) // use enemy speed
+            if (currentTime > 3)
             {
                 float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].attack) * 200;
                 star.SetActive(true);
@@ -100,7 +99,7 @@ public class FightSceneController : MonoBehaviour
         else
         {
             currentTime += Time.deltaTime;
-            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f) // use stat
+            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f)
             {
                 EnemyAttack(false);
             }
@@ -134,8 +133,8 @@ public class FightSceneController : MonoBehaviour
         moveSlider = false;
         currentTime = 0;
         float pos = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
-        float percentage = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
-        float playerAttack = ((float)activeCharacter.attack / listOfEnemies[0].defense) * percentage * 10;
+        float percentToMiddle = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
+        float playerAttack = ((float)activeCharacter.attack / listOfEnemies[0].defense) * percentToMiddle * 10;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + listOfEnemies[0].name);
         listOfEnemies[0].hp -= Mathf.RoundToInt(playerAttack);
         Debug.Log("Enemy HP: " + listOfEnemies[0].hp);
