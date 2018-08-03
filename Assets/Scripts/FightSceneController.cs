@@ -38,55 +38,64 @@ public class FightSceneController : MonoBehaviour
         {
             if (onOffense)
             {
-                if (moveSlider)
-                {
-                    slider.transform.localPosition = new Vector3(
-                        slider.transform.localPosition.x,
-                        initialSliderHeight + Mathf.PingPong(Time.time * activeCharacter.speed / listOfEnemies[0].speed * 100, heightOfMeter),
-                        slider.transform.localPosition.z);
-                }
-                else
-                {
-                    currentTime += Time.deltaTime;
-                    if (currentTime > timeForNext)
-                    {
-                        onOffense = false;
-                        currentTime = 0;
-                        fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
-                    }
-                }
+                Offense();
             }
             else
             {
-                if (waitingForAttack)
-                {
-                    currentTime += Time.deltaTime;
-                    if (currentTime > 3) // use enemy speed
-                    {
-                        float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].attack) * 200;
-                        star.SetActive(true);
-                        star.transform.localPosition = new Vector3(
-                            Random.Range(-Screen.width / 2, Screen.width / 2),
-                            Random.Range(-Screen.height / 2, Screen.height / 2),
-                            0);
-                        star.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeOfStar, sizeOfStar);
-                        currentTime = 0;
-                        waitingForAttack = false;
-                    }
-                }
-                else
-                {
-                    currentTime += Time.deltaTime;
-                    Debug.Log((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed);
-                    if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f) // use stat
-                    {
-                        NextEnemyAttack(false);
-                    }
-                }
+                Defense();
             }
         }
         //Determine rewards, calculate EXP, etc.
         //End fight.?
+    }
+
+    void Offense()
+    {
+        if (moveSlider)
+        {
+            slider.transform.localPosition = new Vector3(
+                slider.transform.localPosition.x,
+                initialSliderHeight + Mathf.PingPong(Time.time * activeCharacter.speed / listOfEnemies[0].speed * 100, heightOfMeter),
+                slider.transform.localPosition.z);
+        }
+        else
+        {
+            currentTime += Time.deltaTime;
+            if (currentTime > timeForNext)
+            {
+                onOffense = false;
+                currentTime = 0;
+                fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+            }
+        }
+    }
+
+    void Defense()
+    {
+        if (waitingForAttack)
+        {
+            currentTime += Time.deltaTime;
+            if (currentTime > 3) // use enemy speed
+            {
+                float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].attack) * 200;
+                star.SetActive(true);
+                star.transform.localPosition = new Vector3(
+                    Random.Range(-Screen.width / 2, Screen.width / 2),
+                    Random.Range(-Screen.height / 2, Screen.height / 2),
+                    0);
+                star.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeOfStar, sizeOfStar);
+                currentTime = 0;
+                waitingForAttack = false;
+            }
+        }
+        else
+        {
+            currentTime += Time.deltaTime;
+            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f) // use stat
+            {
+                EnemyAttack(false);
+            }
+        }
     }
 
     public void ScreenPressed()
@@ -95,24 +104,7 @@ public class FightSceneController : MonoBehaviour
         {
             if (onOffense && moveSlider)
             {
-                moveSlider = false;
-                currentTime = 0;
-                float pos = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
-                float percentage = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
-                float playerAttack = ((float)activeCharacter.attack / listOfEnemies[0].defense) * percentage * 10;
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + listOfEnemies[0].name);
-                listOfEnemies[0].hp -= Mathf.RoundToInt(playerAttack);
-                Debug.Log("Enemy HP: " + listOfEnemies[0].hp);
-                if (listOfEnemies[0].hp <= 0)
-                {
-                    listOfEnemies.RemoveAt(0);
-                    Debug.Log("Enemy Died");
-                    if (listOfEnemies.Count == 0)
-                    {
-                        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("ALL ENEMIES DEAD");
-                        isFighting = false;
-                    }
-                }
+                PlayerAttack();
             }
             else if (!onOffense)
             {
@@ -122,13 +114,35 @@ public class FightSceneController : MonoBehaviour
                 }
                 else
                 {
-                    NextEnemyAttack(true);
+                    EnemyAttack(true);
                 }
             }
         }
     }
 
-    void NextEnemyAttack(bool pressed)
+    void PlayerAttack()
+    {
+        moveSlider = false;
+        currentTime = 0;
+        float pos = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
+        float percentage = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
+        float playerAttack = ((float)activeCharacter.attack / listOfEnemies[0].defense) * percentage * 10;
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + listOfEnemies[0].name);
+        listOfEnemies[0].hp -= Mathf.RoundToInt(playerAttack);
+        Debug.Log("Enemy HP: " + listOfEnemies[0].hp);
+        if (listOfEnemies[0].hp <= 0)
+        {
+            listOfEnemies.RemoveAt(0);
+            Debug.Log("Enemy Died");
+            if (listOfEnemies.Count == 0)
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("ALL ENEMIES DEAD");
+                isFighting = false;
+            }
+        }
+    }
+
+    void EnemyAttack(bool pressed)
     {
         float initialAttack = (float)listOfEnemies[enemyIndex].attack / activeCharacter.defense;
         float enemyAttack = initialAttack;
@@ -179,34 +193,19 @@ public class FightSceneController : MonoBehaviour
         }
     }
 
-    void EnemyAttacks()
-    {
-
-    }
-
     void LoadEnemies()
     {
         //Come up with algorithm here to determine amount of enemies and which enemies.
     }
 
-    void CalculateEnemyAttackRounds()
-    {
-
-    }
-    public void Attack()
-    {
-    }
-
-    public void Guard()
-    {
-    }
-
     public void Inventory()
     {
+
     }
 
     public void Special()
     {
+
     }
 
     public void GoToVillage()
