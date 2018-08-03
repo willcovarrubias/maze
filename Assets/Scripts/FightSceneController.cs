@@ -17,6 +17,7 @@ public class FightSceneController : MonoBehaviour
     float initialSliderHeight;
     float heightOfMeter;
 
+    int playerAttackNum;
     int enemyIndex;
     int attackNum;
 
@@ -63,9 +64,17 @@ public class FightSceneController : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > timeForNext)
             {
-                onOffense = false;
+                playerAttackNum++;
                 currentTime = 0;
-                fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+                if (playerAttackNum >= activeCharacter.numberOfAttacks)
+                {
+                    onOffense = false;
+                    fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+                }
+                else
+                {
+                    moveSlider = true;
+                }
             }
         }
     }
@@ -182,6 +191,7 @@ public class FightSceneController : MonoBehaviour
                 onOffense = true;
                 moveSlider = true;
                 fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0);
+                playerAttackNum = 0;
                 attackNum = 0;
                 enemyIndex = 0;
             }
