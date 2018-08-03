@@ -8,21 +8,24 @@ public class FightSceneController : MonoBehaviour
 {
     List<Character> listOfEnemies;
     Character activeCharacter;
-    private bool onOffense, isFighting, moveSlider;
+    private bool onOffense, isFighting, moveSlider, waitingForAttack;
 
     int timeForNext = 1;
     float currentTime;
 
-    //Offence UI
-    public GameObject meter, slider, fightButton;
+    public GameObject meter, slider, fightButton, star;
     float initialSliderHeight;
     float heightOfMeter;
+
+    int enemyIndex;
+    int attackNum;
 
     void Start()
     {
         isFighting = true;
         onOffense = true;
         moveSlider = true;
+        waitingForAttack = true;
         listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetListofEnemies();
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
@@ -48,28 +51,38 @@ public class FightSceneController : MonoBehaviour
                     if (currentTime > timeForNext)
                     {
                         onOffense = false;
+                        currentTime = 0;
                         fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
                     }
                 }
-                //Player's turn to attack with meter.
-                //Meter UI pops up. It moves up and down.
-                //Player taps to stop the meter. His damage is calculated.
-                //Enemy's vitals are updated.
-                //Message is displayed for how much damage was dealt.
-                //Check if 1 enemy is still alive, if so set onOffense to false. If not, isFighting is false;
-                //onOffense is set to false.
             }
             else
             {
-                //Player's turn to defense (with stars).
-                //Calculate number of attacks.
-                //Screen dims.
-                //Begin timer.
-                //Star UI pops up depending on timer (randomization?)
-                //Player taps star(s) and their damage taken is calculated.
-                //Character's vitals are  updated.
-                //Results are displayed to the player.
-                //onOffense is set to true.
+                if (waitingForAttack)
+                {
+                    currentTime += Time.deltaTime;
+                    if (currentTime > 3) // use enemy speed
+                    {
+                        float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].attack) * 200;
+                        star.SetActive(true);
+                        star.transform.localPosition = new Vector3(
+                            Random.Range(-Screen.width / 2, Screen.width / 2),
+                            Random.Range(-Screen.height / 2, Screen.height / 2),
+                            0);
+                        star.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeOfStar, sizeOfStar);
+                        currentTime = 0;
+                        waitingForAttack = false;
+                    }
+                }
+                else
+                {
+                    currentTime += Time.deltaTime;
+                    Debug.Log((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed);
+                    if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f) // use stat
+                    {
+                        NextEnemyAttack(false);
+                    }
+                }
             }
         }
         //Determine rewards, calculate EXP, etc.
@@ -87,7 +100,7 @@ public class FightSceneController : MonoBehaviour
                 float pos = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
                 float percentage = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
                 float playerAttack = ((float)activeCharacter.attack / listOfEnemies[0].defense) * percentage * 10;
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage");
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + listOfEnemies[0].name);
                 listOfEnemies[0].hp -= Mathf.RoundToInt(playerAttack);
                 Debug.Log("Enemy HP: " + listOfEnemies[0].hp);
                 if (listOfEnemies[0].hp <= 0)
@@ -96,16 +109,72 @@ public class FightSceneController : MonoBehaviour
                     Debug.Log("Enemy Died");
                     if (listOfEnemies.Count == 0)
                     {
-                        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("FIGHTING OVER");
+                        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("ALL ENEMIES DEAD");
                         isFighting = false;
                     }
                 }
             }
             else if (!onOffense)
             {
+                if (waitingForAttack)
+                {
+                    //take full damage?
+                }
+                else
+                {
+                    NextEnemyAttack(true);
+                }
+            }
+        }
+    }
+
+    void NextEnemyAttack(bool pressed)
+    {
+        float initialAttack = (float)listOfEnemies[enemyIndex].attack / activeCharacter.defense;
+        float enemyAttack = initialAttack;
+        star.SetActive(false);
+        waitingForAttack = true;
+        if (pressed)
+        {
+            float distance = Vector3.Distance(Input.mousePosition, star.transform.position);
+            distance /= star.GetComponent<RectTransform>().sizeDelta.x / 10;
+            enemyAttack *= (currentTime / (((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f)) * distance;
+            if (enemyAttack > initialAttack * 5)
+            {
+                enemyAttack = initialAttack * 5;
+            }
+        }
+        else
+        {
+            initialAttack *= 5;
+        }
+        currentTime = 0;
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].name);
+        activeCharacter.hp -= Mathf.RoundToInt(enemyAttack);
+        Debug.Log("Your HP " + activeCharacter.hp);
+        if (activeCharacter.hp <= 0)
+        {
+            isFighting = false;
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("YOU ARE DEAD");
+        }
+        if (listOfEnemies[enemyIndex].numberOfAttacks > attackNum + 1)
+        {
+            attackNum++;
+        }
+        else
+        {
+            if (enemyIndex >= listOfEnemies.Count - 1)
+            {
                 onOffense = true;
                 moveSlider = true;
                 fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0);
+                attackNum = 0;
+                enemyIndex = 0;
+            }
+            else
+            {
+                attackNum = 0;
+                enemyIndex++;
             }
         }
     }
