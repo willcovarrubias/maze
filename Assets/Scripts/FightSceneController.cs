@@ -2,30 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class FightSceneController : MonoBehaviour {
-
-    Character enemy1, enemy2;
+public class FightSceneController : MonoBehaviour
+{
     List<Character> listOfEnemies;
+    Character activeCharacter;
+    private bool onOffense, isFighting, moveSlider;
 
+    int timeForNext = 1;
+    float currentTime;
 
-     
-    private bool onOffense;
-    private bool isFighting;
+    //Offence UI
+    public GameObject meter, slider, fightButton;
+    float initialSliderHeight;
+    float heightOfMeter;
 
-    private void Start()
+    void Start()
     {
-        Debug.Log("You're in the Fight scene!");
+        isFighting = true;
+        onOffense = true;
+        moveSlider = true;
         listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetListofEnemies();
-
+        heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
+        initialSliderHeight = slider.transform.localPosition.y;
+        activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
     }
 
-    private void Update()
+    void Update()
     {
         if (isFighting)
         {
             if (onOffense)
             {
+                if (moveSlider)
+                {
+                    slider.transform.localPosition = new Vector3(
+                        slider.transform.localPosition.x,
+                        initialSliderHeight + Mathf.PingPong(Time.time * activeCharacter.speed / listOfEnemies[0].speed * 100, heightOfMeter),
+                        slider.transform.localPosition.z);
+                }
+                else
+                {
+                    currentTime += Time.deltaTime;
+                    if (currentTime > timeForNext)
+                    {
+                        onOffense = false;
+                        fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+                    }
+                }
                 //Player's turn to attack with meter.
                 //Meter UI pops up. It moves up and down.
                 //Player taps to stop the meter. His damage is calculated.
@@ -45,25 +70,54 @@ public class FightSceneController : MonoBehaviour {
                 //Character's vitals are  updated.
                 //Results are displayed to the player.
                 //onOffense is set to true.
-
             }
         }
         //Determine rewards, calculate EXP, etc.
         //End fight.?
+    }
 
-        
+    public void ScreenPressed()
+    {
+        if (isFighting)
+        {
+            if (onOffense && moveSlider)
+            {
+                moveSlider = false;
+                currentTime = 0;
+                float pos = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
+                float percentage = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
+                float playerAttack = ((float)activeCharacter.attack / listOfEnemies[0].defense) * percentage * 10;
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage");
+                listOfEnemies[0].hp -= Mathf.RoundToInt(playerAttack);
+                Debug.Log("Enemy HP: " + listOfEnemies[0].hp);
+                if (listOfEnemies[0].hp <= 0)
+                {
+                    listOfEnemies.RemoveAt(0);
+                    Debug.Log("Enemy Died");
+                    if (listOfEnemies.Count == 0)
+                    {
+                        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("FIGHTING OVER");
+                        isFighting = false;
+                    }
+                }
+            }
+            else if (!onOffense)
+            {
+                onOffense = true;
+                moveSlider = true;
+                fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0);
+            }
+        }
     }
 
     void EnemyAttacks()
     {
-        
+
     }
 
     void LoadEnemies()
     {
         //Come up with algorithm here to determine amount of enemies and which enemies.
-        enemy1 = listOfEnemies[0];
-        enemy2 = listOfEnemies[1];
     }
 
     void CalculateEnemyAttackRounds()
