@@ -87,6 +87,7 @@ public class CharacterDatabase : MonoBehaviour
                 (int)json[i]["attack"],
                 (int)json[i]["special"],
                 (int)json[i]["defense"],
+                (int)json[i]["speed"],
                 (int)json[i]["luck"],
                 (int)json[i]["items"],
                 (int)json[i]["exp"],
@@ -105,7 +106,7 @@ public class CharacterDatabase : MonoBehaviour
         int slotNumber = listOfHeroes.Count;
         amountOfSavedHeroes += 1;
         amountOfSavedWanderers -= 1;
-        
+
         //PlayerPrefs.SetInt("Hero Count", amountOfSavedHeroes);
         listOfHeroes.Add(characterToRecruit);
         listOfHeroes.Last().id = listOfHeroes.Count;
@@ -132,6 +133,7 @@ public class CharacterDatabase : MonoBehaviour
             attack = UnityEngine.Random.Range(3, 20),
             special = UnityEngine.Random.Range(3, 20),
             defense = UnityEngine.Random.Range(3, 20),
+            speed = UnityEngine.Random.Range(3, 20),
             luck = UnityEngine.Random.Range(3, 20),
             items = UnityEngine.Random.Range(3, 20),
             exp = 0,
@@ -188,30 +190,6 @@ public class CharacterDatabase : MonoBehaviour
             return 1;
     }
 
-    /*
-     * save new character
-     */
-
-    void SaveNewHero(Character hero, int index)
-    {
-    }
-
-    /*
-    * save new wanderer
-    */
-
-    void SaveNewWanderer(Character hero, int index)
-    {
-    }
-
-    /*
-     * update stats of a hero
-     */
-
-    public void SaveCharacter(Character hero)
-    {
-    }
-
     void LoadHeroCharacters()
     {
         amountOfSavedHeroes = GameMaster.gameMaster.characterDB.listOfHeroes.Count();
@@ -228,7 +206,7 @@ public class CharacterDatabase : MonoBehaviour
 
         for (int i = 0; i < amountOfSavedWanderers; i++)
         {
-            listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];            
+            listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];
         }
     }
 
@@ -236,8 +214,6 @@ public class CharacterDatabase : MonoBehaviour
     {
         listOfWanderers.Remove(character);
         Debug.Log("Deleted " + character.name);
-                
-        
         //PlayerPrefs.Save();
     }
 
@@ -269,7 +245,7 @@ public class CharacterDatabase : MonoBehaviour
 
     public void GetActiveCharacter()
     {
-       // activeCharacter = GameMaster.gameMaster.activeCharacter;
+        // activeCharacter = GameMaster.gameMaster.activeCharacter;
     }
 
     void PrintCreatedCharacters()
@@ -277,19 +253,14 @@ public class CharacterDatabase : MonoBehaviour
         for (int i = 0; i < listOfWanderers.Count; i++)
         {
             Debug.Log("Wanderers: " + listOfWanderers[i].name);
-
         }
 
         for (int i = 0; i < listOfHeroes.Count; i++)
         {
             Debug.Log("Heroes: " + listOfHeroes[i].name +
                 "\nID: " + listOfHeroes[i].id);
-
-
         }
     }
-
-   
 }
 
 [Serializable]
@@ -304,6 +275,7 @@ public class Character
     public int attack { get; set; }
     public int special { get; set; }
     public int defense { get; set; }
+    public int speed { get; set; }
     public int luck { get; set; }
     public int items { get; set; }
     public int exp { get; set; }
@@ -312,7 +284,7 @@ public class Character
     //public Sprite sprite { get; set; }
 
     public Character(int id, string name, string job, int numberOfAttacks, int hp, int mp, int attack, int special,
-                     int defense, int luck, int items, int exp, int lives, string slug)
+                     int defense, int speed, int luck, int items, int exp, int lives, string slug)
     {
         this.id = id;
         this.name = name;
@@ -323,6 +295,7 @@ public class Character
         this.attack = attack;
         this.special = special;
         this.defense = defense;
+        this.speed = speed;
         this.luck = luck;
         this.items = items;
         this.exp = exp;
