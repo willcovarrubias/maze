@@ -6,7 +6,14 @@ public class ActiveCharacterController : MonoBehaviour
 
     public GameObject activeCharacterPanel;
     public GameObject expBarFront;
+
     public Text nameTextObject;
+
+    //UI stuff for MoreInfo Panel
+    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public GameObject activeCharacterMoreInfoPanel;
+    public GameObject expBarMoreInfo;
+
     Character activeCharacter;
     int activeCharacterLevel;
 
@@ -31,6 +38,9 @@ public class ActiveCharacterController : MonoBehaviour
     {
         expBarFront.transform.localScale = new Vector3(exp, expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
         expBarFront.transform.localScale = new Vector3(Mathf.Clamp(exp, 0f, 1f), expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
+
+        expBarMoreInfo.transform.localScale = new Vector3(exp, expBarMoreInfo.transform.localScale.y, expBarMoreInfo.transform.localScale.z);
+        expBarMoreInfo.transform.localScale = new Vector3(Mathf.Clamp(exp, 0f, 1f), expBarMoreInfo.transform.localScale.y, expBarMoreInfo.transform.localScale.z);
     }
 
     void UpdateEXPBar()
@@ -42,15 +52,39 @@ public class ActiveCharacterController : MonoBehaviour
         SetXPBar(calc_Level);
     }
 
+    public void MoreInfoUIOpen()
+    {
+        activeCharacterMoreInfoPanel.SetActive(true);
+    }
+
+    public void MoreInfoUIClose()
+    {
+        activeCharacterMoreInfoPanel.SetActive(false);
+    }
+
     public void UpdateActiveCharacterVisuals()
     {
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
                                 "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
                                 "\nXP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp +
-                                "\nLevel: " + activeCharacterLevel + 
+                                "\nLv. " + activeCharacterLevel + 
                                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
                                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
+
+
+        nameText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name;
+        levelText.text = "Lv. " + activeCharacterLevel.ToString();
+        jobText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
+        hpText.text = "HP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp.ToString();
+        mpText.text = "MP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp.ToString();
+        attackText.text = "Attack: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.attack.ToString();
+        specialText.text = "Special: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special.ToString();
+        defenseText.text = "Defense: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense.ToString();
+        //speedText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed.ToString();
+        luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
+        expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
+
 
         UpdateEXPBar();
     }
