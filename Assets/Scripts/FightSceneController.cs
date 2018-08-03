@@ -48,7 +48,6 @@ public class FightSceneController : MonoBehaviour
                     if (currentTime > timeForNext)
                     {
                         onOffense = false;
-                        slider.transform.position = new Vector3(slider.transform.position.x, initialSliderHeight, slider.transform.position.z);
                         fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
                     }
                 }
