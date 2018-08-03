@@ -22,11 +22,7 @@ public class ActiveCharacterController : MonoBehaviour
 
     private void Update()
     {
-        float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) / (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel -1]);
-
-        //float calc_level = (expLevels[activeCharacterLevel] - GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp)
-
-        SetXPBar(calc_Level);
+        
         //Debug.Log("Level:" + activeCharacterLevel);
 
     }
@@ -35,6 +31,15 @@ public class ActiveCharacterController : MonoBehaviour
     {
         expBarFront.transform.localScale = new Vector3(exp, expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
         expBarFront.transform.localScale = new Vector3(Mathf.Clamp(exp, 0f, 1f), expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
+    }
+
+    void UpdateEXPBar()
+    {
+        float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) / (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
+
+        //float calc_level = (expLevels[activeCharacterLevel] - GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp)
+
+        SetXPBar(calc_Level);
     }
 
     public void UpdateActiveCharacterVisuals()
@@ -46,6 +51,8 @@ public class ActiveCharacterController : MonoBehaviour
                                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
                                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
+
+        UpdateEXPBar();
     }
 
     public Character GetActiveCharacter()
