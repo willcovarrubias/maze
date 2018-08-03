@@ -81,6 +81,7 @@ public class CharacterDatabase : MonoBehaviour
             characters.Add(new Character((int)json[i]["id"],
                 json[i]["name"].ToString(),
                 json[i]["job"].ToString(),
+                (int)json[i]["numberOfAttacks"],
                 (int)json[i]["hp"],
                 (int)json[i]["mp"],
                 (int)json[i]["attack"],
@@ -92,6 +93,11 @@ public class CharacterDatabase : MonoBehaviour
                 (int)json[i]["lives"],
                 json[i]["slug"].ToString()));
         }
+    }
+
+    public List<Character> GetListofEnemies()
+    {
+        return enemyDatabase;
     }
 
     public void RecruitHero(Character characterToRecruit)
@@ -113,11 +119,14 @@ public class CharacterDatabase : MonoBehaviour
 
     public Character CreateRandomWanderer()
     {
+        string currentJob = GetRandomJob();
+
         Character newCharacter = new Character
         {
             id = GenerateWandererID(),
             name = GetRandomName(),
-            job = GetRandomJob(),
+            job = currentJob,
+            numberOfAttacks = DetermineNumberOfAttacks(currentJob),
             hp = UnityEngine.Random.Range(3, 20),
             mp = UnityEngine.Random.Range(3, 20),
             attack = UnityEngine.Random.Range(3, 20),
@@ -169,6 +178,14 @@ public class CharacterDatabase : MonoBehaviour
         string[] jobs = { "Warrior", "Knight", "Thief" };
         int pickAJob = UnityEngine.Random.Range(0, 3);
         return jobs[pickAJob];
+    }
+
+    int DetermineNumberOfAttacks(string currentJob)
+    {
+        if (currentJob == "Thief")
+            return 2;
+        else
+            return 1;
     }
 
     /*
@@ -281,6 +298,7 @@ public class Character
     public int id { get; set; }
     public string name { get; set; }
     public string job { get; set; }
+    public int numberOfAttacks { get; set; }
     public int hp { get; set; }
     public int mp { get; set; }
     public int attack { get; set; }
@@ -293,12 +311,13 @@ public class Character
     public string slug { get; set; }
     //public Sprite sprite { get; set; }
 
-    public Character(int id, string name, string job, int hp, int mp, int attack, int special,
+    public Character(int id, string name, string job, int numberOfAttacks, int hp, int mp, int attack, int special,
                      int defense, int luck, int items, int exp, int lives, string slug)
     {
         this.id = id;
         this.name = name;
         this.job = job;
+        this.numberOfAttacks = numberOfAttacks;
         this.hp = hp;
         this.mp = mp;
         this.attack = attack;
