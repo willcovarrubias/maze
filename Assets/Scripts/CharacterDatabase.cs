@@ -34,6 +34,7 @@ public class CharacterDatabase : MonoBehaviour
         PrintCreatedCharacters();
     }
 
+    /*
     private void Update()
     {
         if (Input.GetKeyUp("c"))
@@ -53,6 +54,7 @@ public class CharacterDatabase : MonoBehaviour
             PlayerPrefs.DeleteAll();
         }
     }
+    */
 
     public Character FetchHeroByID(int id)
     {
@@ -121,7 +123,6 @@ public class CharacterDatabase : MonoBehaviour
     public Character CreateRandomWanderer()
     {
         string currentJob = GetRandomJob();
-
         Character newCharacter = new Character
         {
             id = GenerateWandererID(),
@@ -193,7 +194,6 @@ public class CharacterDatabase : MonoBehaviour
     void LoadHeroCharacters()
     {
         amountOfSavedHeroes = GameMaster.gameMaster.characterDB.listOfHeroes.Count();
-
         for (int i = 0; i < amountOfSavedHeroes; i++)
         {
             listOfHeroes[i] = GameMaster.gameMaster.characterDB.listOfHeroes[i];
@@ -203,7 +203,6 @@ public class CharacterDatabase : MonoBehaviour
     void LoadWandererCharacters()
     {
         amountOfSavedWanderers = GameMaster.gameMaster.characterDB.listOfWanderers.Count();
-
         for (int i = 0; i < amountOfSavedWanderers; i++)
         {
             listOfWanderers[i] = GameMaster.gameMaster.characterDB.listOfWanderers[i];
@@ -237,7 +236,6 @@ public class CharacterDatabase : MonoBehaviour
                 //GameMaster.gameMaster.activeCharacter = activeCharacter;
             }
         }
-
         GetComponent<ActiveCharacterController>().DetermineActiveCharacterCurrentLevel();
         GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
@@ -254,12 +252,23 @@ public class CharacterDatabase : MonoBehaviour
         {
             Debug.Log("Wanderers: " + listOfWanderers[i].name);
         }
-
         for (int i = 0; i < listOfHeroes.Count; i++)
         {
             Debug.Log("Heroes: " + listOfHeroes[i].name +
                 "\nID: " + listOfHeroes[i].id);
         }
+    }
+
+    public List<Enemy> GetEnemiesForFightScene(/*int mazeRoomNumber*/)
+    {
+        List<Enemy> enemies = new List<Enemy>();
+        int amountOfEnemies = UnityEngine.Random.Range(1, 6);
+        for (int i = 0; i < amountOfEnemies; i++)
+        {
+            Enemy newEnemy = new Enemy(enemyDatabase[UnityEngine.Random.Range(0, enemyDatabase.Count)]);
+            enemies.Add(newEnemy);
+        }
+        return enemies;
     }
 }
 
@@ -307,5 +316,17 @@ public class Character
     public Character()
     {
         this.id = -1;
+    }
+}
+
+public class Enemy
+{
+    public Character EnemyData { get; set; }
+    public int EnemyHP { get; set; }
+
+    public Enemy(Character character)
+    {
+        EnemyData = character;
+        EnemyHP = character.hp;
     }
 }

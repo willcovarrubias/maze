@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class FightSceneController : MonoBehaviour
 {
-    List<Character> listOfEnemies;
+    List<Enemy> listOfEnemies;
     Character activeCharacter;
-    Character activeEnemy;
+    Enemy activeEnemy;
     GameObject activeEnemySprite;
     private bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy;
 
@@ -27,7 +27,6 @@ public class FightSceneController : MonoBehaviour
         moveSlider = true;
         waitingForAttack = true;
         timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
-        listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetListofEnemies();
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
@@ -56,7 +55,7 @@ public class FightSceneController : MonoBehaviour
     {
         if (moveSlider)
         {
-            float speed = 1000 - (activeCharacter.speed * 10) + (activeEnemy.speed * 10);
+            float speed = 1000 - (activeCharacter.speed * 10) + (activeEnemy.EnemyData.speed * 10);
             slider.transform.localPosition = new Vector3(
                 slider.transform.localPosition.x,
                 initialSliderHeight + Mathf.PingPong(Time.time * speed, heightOfMeter),
@@ -94,7 +93,7 @@ public class FightSceneController : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > timeForNextEnemyAttack)
             {
-                float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].attack) * 200;
+                float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].EnemyData.attack) * 200;
                 star.SetActive(true);
                 star.transform.localPosition = new Vector3(
                     Random.Range(-Screen.width / 2, Screen.width / 2),
@@ -109,7 +108,7 @@ public class FightSceneController : MonoBehaviour
         else
         {
             currentTime += Time.deltaTime;
-            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.2f)
+            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f)
             {
                 EnemyAttack(false);
             }
@@ -144,12 +143,12 @@ public class FightSceneController : MonoBehaviour
         currentTime = 0;
         float posOfSlider = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
         float percentToMiddle = 1 - Mathf.Abs(posOfSlider / (heightOfMeter / 2));
-        float playerAttack = ((float)(activeCharacter.attack * activeCharacter.attack) / (activeCharacter.attack + activeEnemy.defense)) * percentToMiddle;
-        activeEnemy.hp -= Mathf.RoundToInt(playerAttack);
-        Debug.Log("Enemy HP: " + activeEnemy.hp);
-        if (activeEnemy.hp <= 0)
+        float playerAttack = ((float)(activeCharacter.attack * activeCharacter.attack) / (activeCharacter.attack + activeEnemy.EnemyData.defense)) * percentToMiddle;
+        activeEnemy.EnemyHP -= Mathf.RoundToInt(playerAttack);
+        Debug.Log("Enemy HP: " + activeEnemy.EnemyHP);
+        if (activeEnemy.EnemyHP <= 0)
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.name + " has fainted.");
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.EnemyData.name + " has fainted.");
             listOfEnemies.Remove(activeEnemy);
             Destroy(activeEnemySprite);
             if (listOfEnemies.Count == 0)
@@ -160,21 +159,21 @@ public class FightSceneController : MonoBehaviour
         }
         else
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + activeEnemy.name);
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + activeEnemy.EnemyData.name);
         }
         enemyHighlightSprite.SetActive(false);
     }
 
     void EnemyAttack(bool pressed)
     {
-        float initialAttack = (float)(listOfEnemies[enemyIndex].attack * listOfEnemies[enemyIndex].attack) / (listOfEnemies[enemyIndex].attack + activeCharacter.defense);
+        float initialAttack = (float)(listOfEnemies[enemyIndex].EnemyData.attack * listOfEnemies[enemyIndex].EnemyData.attack) / (listOfEnemies[enemyIndex].EnemyData.attack + activeCharacter.defense);
         float enemyAttack = initialAttack;
         star.SetActive(false);
         waitingForAttack = true;
         if (pressed)
         {
             float distance = Vector3.Distance(Input.mousePosition, star.transform.position);
-            float timePercentage = currentTime / (((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.2f);
+            float timePercentage = currentTime / (((float)activeCharacter.speed / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f);
             distance /= star.GetComponent<RectTransform>().sizeDelta.x / 10;
             if (distance > 5)
             {
@@ -191,7 +190,7 @@ public class FightSceneController : MonoBehaviour
             initialAttack *= 3;
         }
         currentTime = 0;
-        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].name);
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].EnemyData.name);
         activeCharacter.hp -= Mathf.RoundToInt(enemyAttack);
         Debug.Log("Your HP " + activeCharacter.hp);
         if (activeCharacter.hp <= 0)
@@ -199,7 +198,7 @@ public class FightSceneController : MonoBehaviour
             isFighting = false;
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("YOU ARE DEAD");
         }
-        if (listOfEnemies[enemyIndex].numberOfAttacks > attackNum + 1)
+        if (listOfEnemies[enemyIndex].EnemyData.numberOfAttacks > attackNum + 1)
         {
             attackNum++;
         }
@@ -226,7 +225,7 @@ public class FightSceneController : MonoBehaviour
         }
     }
 
-    public void SelectEnemy(Character character, GameObject enemySprite)
+    public void SelectEnemy(Enemy character, GameObject enemySprite)
     {
         if (onOffense)
         {
@@ -249,20 +248,15 @@ public class FightSceneController : MonoBehaviour
 
     void LoadEnemies()
     {
+        listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetEnemiesForFightScene();
+        int offSet = (listOfEnemies.Count - 1) * (155 / 2);
         for (int i = 0; i < listOfEnemies.Count; i++)
         {
             GameObject enemy = Instantiate(enemySprite, enemySprite.transform.parent, true);
-            if (i % 2 == 0)
-            {
-                enemy.transform.localPosition = new Vector3(enemy.transform.localPosition.x - i * 155, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
-            }
-            else
-            {
-                enemy.transform.localPosition = new Vector3(enemy.transform.localPosition.x + i * 155, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
-            }
+            enemy.transform.localPosition = new Vector3((enemy.transform.localPosition.x + i * 155) - offSet, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
             enemy.AddComponent<EnemyHolder>();
             enemy.GetComponent<EnemyHolder>().SetEnemyData(listOfEnemies[i]);
-            enemy.GetComponentInChildren<Text>().text = listOfEnemies[i].name + "\nAtt:" + listOfEnemies[i].attack + "\nDef:" + listOfEnemies[i].defense + "\nSpd:" + listOfEnemies[i].speed;
+            enemy.GetComponentInChildren<Text>().text = listOfEnemies[i].EnemyData.name + "\nAtt:" + listOfEnemies[i].EnemyData.attack + "\nDef:" + listOfEnemies[i].EnemyData.defense + "\nSpd:" + listOfEnemies[i].EnemyData.speed;
             enemy.SetActive(true);
         }
     }
