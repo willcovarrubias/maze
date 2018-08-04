@@ -17,9 +17,10 @@ public class ActiveCharacterController : MonoBehaviour
     Character activeCharacter;
     int activeCharacterLevel;
 
-    int[] expLevels = new int[5] {0, 200, 400, 800, 1600 };
+    int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
 
-    void Start () {
+    void Start()
+    {
 
         DetermineActiveCharacterCurrentLevel();
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetActiveCharacter();
@@ -29,7 +30,7 @@ public class ActiveCharacterController : MonoBehaviour
 
     private void Update()
     {
-        
+
         //Debug.Log("Level:" + activeCharacterLevel);
 
     }
@@ -67,7 +68,7 @@ public class ActiveCharacterController : MonoBehaviour
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
                                 "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
                                 "\nXP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp +
-                                "\nLv. " + activeCharacterLevel + 
+                                "\nLv. " + activeCharacterLevel +
                                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
                                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);

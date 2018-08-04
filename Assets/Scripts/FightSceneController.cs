@@ -13,11 +13,10 @@ public class FightSceneController : MonoBehaviour
     private bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy;
 
     int timeForNext = 1;
-    float currentTime;
+    float currentTime, timeForNextEnemyAttack;
 
     public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite;
-    float initialSliderHeight;
-    float heightOfMeter;
+    float initialSliderHeight, heightOfMeter;
 
     int playerAttackNum, enemyIndex, attackNum;
 
@@ -27,26 +26,12 @@ public class FightSceneController : MonoBehaviour
         onOffense = true;
         moveSlider = true;
         waitingForAttack = true;
+        timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
         listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetListofEnemies();
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
-        for (int i = 0; i < listOfEnemies.Count; i++)
-        {
-            GameObject enemy = Instantiate(enemySprite, enemySprite.transform.parent, true);
-            if (i % 2 == 0)
-            {
-                enemy.transform.localPosition = new Vector3(enemy.transform.localPosition.x - i * 155, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
-            }
-            else
-            {
-                enemy.transform.localPosition = new Vector3(enemy.transform.localPosition.x + i * 155, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
-            }
-            enemy.AddComponent<EnemyHolder>();
-            enemy.GetComponent<EnemyHolder>().SetEnemyData(listOfEnemies[i]);
-            enemy.GetComponentInChildren<Text>().text = listOfEnemies[i].name;
-            enemy.SetActive(true);
-        }
+        LoadEnemies();
         star.transform.SetAsLastSibling();
     }
 
@@ -92,6 +77,10 @@ public class FightSceneController : MonoBehaviour
                 }
                 else
                 {
+                    if (listOfEnemies.Count == 1)
+                    {
+                        AutoHighlightEnemy();
+                    }
                     moveSlider = true;
                 }
             }
@@ -103,7 +92,7 @@ public class FightSceneController : MonoBehaviour
         if (waitingForAttack)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > 3)
+            if (currentTime > timeForNextEnemyAttack)
             {
                 float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].attack) * 200;
                 star.SetActive(true);
@@ -114,12 +103,13 @@ public class FightSceneController : MonoBehaviour
                 star.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeOfStar, sizeOfStar);
                 currentTime = 0;
                 waitingForAttack = false;
+                timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
             }
         }
         else
         {
             currentTime += Time.deltaTime;
-            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f)
+            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.2f)
             {
                 EnemyAttack(false);
             }
@@ -152,14 +142,14 @@ public class FightSceneController : MonoBehaviour
     {
         moveSlider = false;
         currentTime = 0;
-        float pos = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
-        float percentToMiddle = 1 - Mathf.Abs(pos / (heightOfMeter / 2));
-        float playerAttack = ((float)activeCharacter.attack / activeEnemy.defense) * percentToMiddle * 10;
+        float posOfSlider = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
+        float percentToMiddle = 1 - Mathf.Abs(posOfSlider / (heightOfMeter / 2));
+        float playerAttack = ((float)(activeCharacter.attack * activeCharacter.attack) / (activeCharacter.attack + activeEnemy.defense)) * percentToMiddle;
         activeEnemy.hp -= Mathf.RoundToInt(playerAttack);
         Debug.Log("Enemy HP: " + activeEnemy.hp);
         if (activeEnemy.hp <= 0)
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(activeEnemy.name + " has fainted. Delt " + Mathf.RoundToInt(playerAttack) + " damage");
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.name + " has fainted.");
             listOfEnemies.Remove(activeEnemy);
             Destroy(activeEnemySprite);
             if (listOfEnemies.Count == 0)
@@ -177,23 +167,28 @@ public class FightSceneController : MonoBehaviour
 
     void EnemyAttack(bool pressed)
     {
-        float initialAttack = (float)listOfEnemies[enemyIndex].attack / activeCharacter.defense;
+        float initialAttack = (float)(listOfEnemies[enemyIndex].attack * listOfEnemies[enemyIndex].attack) / (listOfEnemies[enemyIndex].attack + activeCharacter.defense);
         float enemyAttack = initialAttack;
         star.SetActive(false);
         waitingForAttack = true;
         if (pressed)
         {
             float distance = Vector3.Distance(Input.mousePosition, star.transform.position);
+            float timePercentage = currentTime / (((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.2f);
             distance /= star.GetComponent<RectTransform>().sizeDelta.x / 10;
-            enemyAttack *= (currentTime / (((float)activeCharacter.speed / listOfEnemies[enemyIndex].speed) + 0.25f)) * distance;
-            if (enemyAttack > initialAttack * 5)
+            if (distance > 5)
             {
-                enemyAttack = initialAttack * 5;
+                distance = 5;
+            }
+            enemyAttack *= timePercentage * distance;
+            if (enemyAttack > initialAttack * 3)
+            {
+                enemyAttack = initialAttack * 3;
             }
         }
         else
         {
-            initialAttack *= 5;
+            initialAttack *= 3;
         }
         currentTime = 0;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].name);
@@ -214,11 +209,7 @@ public class FightSceneController : MonoBehaviour
             {
                 if (listOfEnemies.Count == 1)
                 {
-                    selectedEnemy = true;
-                    activeEnemySprite = GameObject.Find("Enemy(Clone)");
-                    activeEnemy = listOfEnemies[0];
-                    enemyHighlightSprite.transform.position = activeEnemySprite.transform.position;
-                    enemyHighlightSprite.SetActive(true);
+                    AutoHighlightEnemy();
                 }
                 onOffense = true;
                 moveSlider = true;
@@ -237,11 +228,43 @@ public class FightSceneController : MonoBehaviour
 
     public void SelectEnemy(Character character, GameObject enemySprite)
     {
+        if (onOffense)
+        {
+            selectedEnemy = true;
+            activeEnemySprite = enemySprite;
+            activeEnemy = character;
+            enemyHighlightSprite.transform.position = activeEnemySprite.transform.position;
+            enemyHighlightSprite.SetActive(true);
+        }
+    }
+
+    void AutoHighlightEnemy()
+    {
         selectedEnemy = true;
-        activeEnemySprite = enemySprite;
-        activeEnemy = character;
+        activeEnemySprite = GameObject.Find("Enemy(Clone)");
+        activeEnemy = listOfEnemies[0];
         enemyHighlightSprite.transform.position = activeEnemySprite.transform.position;
         enemyHighlightSprite.SetActive(true);
+    }
+
+    void LoadEnemies()
+    {
+        for (int i = 0; i < listOfEnemies.Count; i++)
+        {
+            GameObject enemy = Instantiate(enemySprite, enemySprite.transform.parent, true);
+            if (i % 2 == 0)
+            {
+                enemy.transform.localPosition = new Vector3(enemy.transform.localPosition.x - i * 155, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
+            }
+            else
+            {
+                enemy.transform.localPosition = new Vector3(enemy.transform.localPosition.x + i * 155, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
+            }
+            enemy.AddComponent<EnemyHolder>();
+            enemy.GetComponent<EnemyHolder>().SetEnemyData(listOfEnemies[i]);
+            enemy.GetComponentInChildren<Text>().text = listOfEnemies[i].name + "\nAtt:" + listOfEnemies[i].attack + "\nDef:" + listOfEnemies[i].defense + "\nSpd:" + listOfEnemies[i].speed;
+            enemy.SetActive(true);
+        }
     }
 
     public void Inventory()
