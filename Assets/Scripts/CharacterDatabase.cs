@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 public class CharacterDatabase : MonoBehaviour
 {
-    private List<Character> enemyDatabase = new List<Character>();
+    List<Character> enemyDatabase = new List<Character>();
     public List<Character> listOfWanderers = new List<Character>();
     public List<Character> listOfHeroes = new List<Character>();
 

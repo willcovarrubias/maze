@@ -15,7 +15,6 @@ public class EnemyHolder : MonoBehaviour
     public void SetEnemyData(Character enemy)
     {
         enemyData = enemy;
-        Debug.Log(enemyData.name);
     }
 
     public Character GetEnemyData()
@@ -25,6 +24,6 @@ public class EnemyHolder : MonoBehaviour
 
     public void SetSelectedEnemy()
     {
-        fightSceneController.GetComponent<FightSceneController>().SelectEnemy(enemyData, gameObject);   
+        fightSceneController.GetComponent<FightSceneController>().SelectEnemy(enemyData, gameObject);
     }
 }
