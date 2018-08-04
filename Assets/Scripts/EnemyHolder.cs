@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyHolder : MonoBehaviour
 {
-    Character enemyData;
+    Enemy enemyData;
     GameObject fightSceneController;
 
     void Start()
@@ -12,12 +12,12 @@ public class EnemyHolder : MonoBehaviour
         fightSceneController = GameObject.Find("FightController");
     }
 
-    public void SetEnemyData(Character enemy)
+    public void SetEnemyData(Enemy enemy)
     {
         enemyData = enemy;
     }
 
-    public Character GetEnemyData()
+    public Enemy GetEnemyData()
     {
         return enemyData;
     }
