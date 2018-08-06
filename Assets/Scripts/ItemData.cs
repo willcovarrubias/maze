@@ -183,7 +183,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             OnPointerUpVillage(eventData);
         }
-        if (sceneName == "BrandonTest" || sceneName == "LootScene")
+        if (sceneName == "BrandonTest" || sceneName == "LootScene" || sceneName == "FightScene")
         {
             OnPointerUpLootScene(eventData);
         }
