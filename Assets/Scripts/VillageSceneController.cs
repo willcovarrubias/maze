@@ -37,14 +37,18 @@ public class VillageSceneController : MonoBehaviour
     //This function will ask the player if they're sure they want to enter the maze. If so, the next scene will load.
     public void EnterLabyrinth() //TODO: Need to add a confirmation to this, so players don't accidentally enter the labyrinth  when they didn't mean to.
     {
-        if (gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() >= 0)
+        if (gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() >= 0 && gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().currentHP > 0)
         {
             gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
             labyrinthConfirmation.SetActive(true);
         }
-        else
+        else if (gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() < 0)
         {
             gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Inventory Full! Discard some items before entering the maze.");
+        }
+        else if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().currentHP <= 0)
+        {
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Knocked out!");
         }
     }
     public void EnterLabyrinthConfirmation()

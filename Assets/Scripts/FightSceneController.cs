@@ -204,6 +204,10 @@ public class FightSceneController : MonoBehaviour
         currentTime = 0;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].EnemyData.name);
         activeCharacter.currentHP -= Mathf.RoundToInt(enemyAttack);
+        if (activeCharacter.currentHP < 0)
+        {
+            activeCharacter.currentHP = 0;
+        }
         GameMaster.gameMaster.Save();
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         if (activeCharacter.currentHP <= 0)
@@ -288,8 +292,9 @@ public class FightSceneController : MonoBehaviour
         }
     }
 
-    public void Special()
+    public bool IsFighting()
     {
+        return isFighting;
     }
 
     public void OpenInventory()

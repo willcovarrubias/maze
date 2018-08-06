@@ -151,8 +151,11 @@ public class ItemPopUp : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "FightScene")
             {
                 GameObject.Find("FightController").GetComponent<FightSceneController>().UsedItem();
-                Close();
-                GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+                if (GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
+                {
+                    Close();
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+                }
             }
             GameMaster.gameMaster.Save();
         }
