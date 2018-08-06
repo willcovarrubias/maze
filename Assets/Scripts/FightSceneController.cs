@@ -10,7 +10,7 @@ public class FightSceneController : MonoBehaviour
     Character activeCharacter;
     Enemy activeEnemy;
     GameObject activeEnemySprite;
-    bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy;
+    bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy, pressedButton;
 
     int timeForNext = 1;
     float currentTime, timeForNextEnemyAttack;
@@ -50,6 +50,10 @@ public class FightSceneController : MonoBehaviour
             else if (!onOffense)
             {
                 Defense();
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                pressedButton = false;
             }
         }
         //Determine rewards, calculate EXP, etc.
@@ -123,8 +127,9 @@ public class FightSceneController : MonoBehaviour
 
     public void ScreenPressed()
     {
-        if (isFighting)
+        if (isFighting && !pressedButton)
         {
+            pressedButton = true;
             if (onOffense && moveSlider && selectedEnemy)
             {
                 PlayerAttack();
@@ -161,6 +166,7 @@ public class FightSceneController : MonoBehaviour
             {
                 GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("ALL ENEMIES DEAD");
                 isFighting = false;
+                inventoryButton.SetActive(true);
             }
         }
         else
@@ -198,6 +204,7 @@ public class FightSceneController : MonoBehaviour
         currentTime = 0;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].EnemyData.name);
         activeCharacter.currentHP -= Mathf.RoundToInt(enemyAttack);
+        GameMaster.gameMaster.Save();
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         if (activeCharacter.currentHP <= 0)
         {
@@ -270,12 +277,15 @@ public class FightSceneController : MonoBehaviour
 
     public void UsedItem()
     {
-        moveSlider = false;
-        currentTime = 0;
-        enemyHighlightSprite.SetActive(false);
-        onOffense = false;
-        fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
-        inventoryButton.SetActive(false);
+        if (isFighting)
+        {
+            moveSlider = false;
+            currentTime = 0;
+            enemyHighlightSprite.SetActive(false);
+            onOffense = false;
+            fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+            inventoryButton.SetActive(false);
+        }
     }
 
     public void Special()
