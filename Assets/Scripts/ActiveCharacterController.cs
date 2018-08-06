@@ -66,18 +66,18 @@ public class ActiveCharacterController : MonoBehaviour
     public void UpdateActiveCharacterVisuals()
     {
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
-                                "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
-                                "\nLv. " + activeCharacterLevel + 
-                                "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
-                                "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
+            "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
+            "\nLv. " + activeCharacterLevel + 
+            "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP +
+            "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
 
 
         nameText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name;
         levelText.text = "Lv. " + activeCharacterLevel.ToString();
         jobText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
-        hpText.text = "HP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp.ToString();
-        mpText.text = "MP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp.ToString();
+        hpText.text = "HP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP;
+        mpText.text = "MP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
         attackText.text = "Attack: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.attack.ToString();
         specialText.text = "Special: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special.ToString();
         defenseText.text = "Defense: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense.ToString();
@@ -92,6 +92,16 @@ public class ActiveCharacterController : MonoBehaviour
     public Character GetActiveCharacter()
     {
         return GetComponent<CharacterDatabase>().activeCharacter;
+    }
+
+    public void IncreaseHP(int amout)
+    {
+        GetComponent<CharacterDatabase>().activeCharacter.currentHP += amout;
+        if (GetComponent<CharacterDatabase>().activeCharacter.currentHP > GetComponent<CharacterDatabase>().activeCharacter.maxHP)
+        {
+            GetComponent<CharacterDatabase>().activeCharacter.currentHP = GetComponent<CharacterDatabase>().activeCharacter.maxHP;
+        }
+        UpdateActiveCharacterVisuals();
     }
 
     public void GiveExpForRoomClearToActiveCharacter()
