@@ -67,8 +67,7 @@ public class ActiveCharacterController : MonoBehaviour
     {
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
                                 "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
-                                "\nXP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp +
-                                "\nLv. " + activeCharacterLevel +
+                                "\nLv. " + activeCharacterLevel + 
                                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.hp +
                                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.mp;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);

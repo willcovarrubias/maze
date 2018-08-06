@@ -96,7 +96,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amount: 0
   slotID: 0
-  itemCameFromLoot: 1
 --- !u!222 &222336985685050638
 CanvasRenderer:
   m_ObjectHideFlags: 1
