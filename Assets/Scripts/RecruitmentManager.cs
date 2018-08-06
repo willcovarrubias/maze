@@ -120,7 +120,7 @@ public class RecruitmentManager : MonoBehaviour
             //Debug.Log("This is NOT null");
             characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
             characterObject[i].GetComponentInChildren<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-                        "\nClass: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
+                        "\n: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
                         "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].hp +
                         "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
 
