@@ -145,8 +145,15 @@ public class ItemPopUp : MonoBehaviour
     {
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
-            //ThrowAwayOne();
-            //change HP or MP
+            Consumable consumable = (Consumable)item.Item;
+            gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
+            ThrowAwayOne();
+            if (SceneManager.GetActiveScene().name == "FightScene")
+            {
+                GameObject.Find("FightController").GetComponent<FightSceneController>().UsedItem();
+                Close();
+                GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+            }
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {

@@ -10,28 +10,33 @@ public class FightSceneController : MonoBehaviour
     Character activeCharacter;
     Enemy activeEnemy;
     GameObject activeEnemySprite;
-    private bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy;
+    bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy;
 
     int timeForNext = 1;
     float currentTime, timeForNextEnemyAttack;
 
-    public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite;
+    public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite, inventoryButton;
     float initialSliderHeight, heightOfMeter;
 
     int playerAttackNum, enemyIndex, attackNum;
 
     void Start()
     {
-        isFighting = true;
-        onOffense = true;
-        moveSlider = true;
-        waitingForAttack = true;
         timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
         LoadEnemies();
         star.transform.SetAsLastSibling();
+        isFighting = true;
+        onOffense = true;
+        moveSlider = true;
+        waitingForAttack = true;
+        inventoryButton.SetActive(true);
+        if (listOfEnemies.Count == 1)
+        {
+            AutoHighlightEnemy();
+        }
     }
 
     void Update()
@@ -69,6 +74,7 @@ public class FightSceneController : MonoBehaviour
                 selectedEnemy = false;
                 playerAttackNum++;
                 currentTime = 0;
+                inventoryButton.SetActive(false);
                 if (playerAttackNum >= activeCharacter.numberOfAttacks)
                 {
                     onOffense = false;
@@ -191,9 +197,9 @@ public class FightSceneController : MonoBehaviour
         }
         currentTime = 0;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].EnemyData.name);
-        activeCharacter.hp -= Mathf.RoundToInt(enemyAttack);
-        Debug.Log("Your HP " + activeCharacter.hp);
-        if (activeCharacter.hp <= 0)
+        activeCharacter.currentHP -= Mathf.RoundToInt(enemyAttack);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+        if (activeCharacter.currentHP <= 0)
         {
             isFighting = false;
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("YOU ARE DEAD");
@@ -212,6 +218,7 @@ public class FightSceneController : MonoBehaviour
                 }
                 onOffense = true;
                 moveSlider = true;
+                inventoryButton.SetActive(true);
                 fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0);
                 playerAttackNum = 0;
                 attackNum = 0;
@@ -261,14 +268,23 @@ public class FightSceneController : MonoBehaviour
         }
     }
 
-    public void Inventory()
+    public void UsedItem()
     {
-
+        moveSlider = false;
+        currentTime = 0;
+        enemyHighlightSprite.SetActive(false);
+        onOffense = false;
+        fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+        inventoryButton.SetActive(false);
     }
 
     public void Special()
     {
+    }
 
+    public void OpenInventory()
+    {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
     }
 
     public void GoToVillage()
