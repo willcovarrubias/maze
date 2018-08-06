@@ -6,6 +6,7 @@ public class EnemyHolder : MonoBehaviour
 {
     Enemy enemyData;
     GameObject fightSceneController;
+    bool living = true;
 
     void Start()
     {
@@ -25,5 +26,16 @@ public class EnemyHolder : MonoBehaviour
     public void SetSelectedEnemy()
     {
         fightSceneController.GetComponent<FightSceneController>().SelectEnemy(enemyData, gameObject);
+    }
+
+    public void Dead()
+    {
+        living = false;
+        name += "dead";
+    }
+
+    public bool IsLiving()
+    {
+        return living;
     }
 }

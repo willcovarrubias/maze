@@ -161,7 +161,8 @@ public class FightSceneController : MonoBehaviour
         {
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.EnemyData.name + " has fainted.");
             listOfEnemies.Remove(activeEnemy);
-            Destroy(activeEnemySprite);
+            activeEnemySprite.GetComponent<EnemyHolder>().Dead();
+            activeEnemySprite.GetComponentInChildren<Text>().text = "Dead";
             if (listOfEnemies.Count == 0)
             {
                 GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("ALL ENEMIES DEAD");
@@ -245,7 +246,7 @@ public class FightSceneController : MonoBehaviour
 
     public void SelectEnemy(Enemy character, GameObject enemySprite)
     {
-        if (onOffense)
+        if (onOffense && isFighting && enemySprite.GetComponent<EnemyHolder>().IsLiving())
         {
             selectedEnemy = true;
             activeEnemySprite = enemySprite;
@@ -267,16 +268,7 @@ public class FightSceneController : MonoBehaviour
     void LoadEnemies()
     {
         listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetEnemiesForFightScene();
-        int offSet = (listOfEnemies.Count - 1) * (155 / 2);
-        for (int i = 0; i < listOfEnemies.Count; i++)
-        {
-            GameObject enemy = Instantiate(enemySprite, enemySprite.transform.parent, true);
-            enemy.transform.localPosition = new Vector3((enemy.transform.localPosition.x + i * 155) - offSet, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
-            enemy.AddComponent<EnemyHolder>();
-            enemy.GetComponent<EnemyHolder>().SetEnemyData(listOfEnemies[i]);
-            enemy.GetComponentInChildren<Text>().text = listOfEnemies[i].EnemyData.name + "\nAtt:" + listOfEnemies[i].EnemyData.attack + "\nDef:" + listOfEnemies[i].EnemyData.defense + "\nSpd:" + listOfEnemies[i].EnemyData.speed;
-            enemy.SetActive(true);
-        }
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().CreateForFightScene(listOfEnemies);
     }
 
     public void UsedItem()
@@ -304,11 +296,13 @@ public class FightSceneController : MonoBehaviour
 
     public void GoToVillage()
     {
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().DestroyDynamicPanels();
         SceneManager.LoadScene("VillageScene");
     }
 
     public void GoToPathRoom()
     {
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().DestroyDynamicPanels();
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GiveExpForBattleToActiveCharacter();
         SceneManager.LoadScene("PathScene");
     }
