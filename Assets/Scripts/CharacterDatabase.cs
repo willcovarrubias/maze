@@ -266,7 +266,7 @@ public class CharacterDatabase : MonoBehaviour
     public List<Enemy> GetEnemiesForFightScene(/*int mazeRoomNumber*/)
     {
         List<Enemy> enemies = new List<Enemy>();
-        int amountOfEnemies = UnityEngine.Random.Range(1, 6);
+        int amountOfEnemies = UnityEngine.Random.Range(1, 4);
         for (int i = 0; i < amountOfEnemies; i++)
         {
             Enemy newEnemy = new Enemy(enemyDatabase[UnityEngine.Random.Range(0, enemyDatabase.Count)]);
