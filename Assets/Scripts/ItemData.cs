@@ -89,6 +89,21 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         equippedCheckMarkForWeapon.SetActive(false);
     }
 
+    public void EquipHat()
+    {
+        equippedCheckMarkForHat.SetActive(true);
+    }
+
+    public void EquipBody()
+    {
+        equippedCheckMarkForBody.SetActive(true);
+    }
+
+    public void EquipWeapon()
+    {
+        equippedCheckMarkForWeapon.SetActive(true);
+    }
+
     public void UpdateTheEquippedBody()
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID())

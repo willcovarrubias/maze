@@ -76,17 +76,17 @@ public class ActiveCharacterController : MonoBehaviour
         int special = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special;
         int defense = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense;
         int speed = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed;
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != 0)
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
         {
             attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
         }
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != 0)
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() > 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
         }
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != 0)
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;

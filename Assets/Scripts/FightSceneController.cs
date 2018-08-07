@@ -15,6 +15,7 @@ public class FightSceneController : MonoBehaviour
     float initialSliderHeight, heightOfMeter, currentTime, timeForNextEnemyAttack;
     int playerAttackNum, enemyIndex, attackNum;
     int timeForDefense = 1;
+    int playerAttack, playerDefense, playerSpecial, playerSpeed;
 
     void Start()
     {
@@ -342,6 +343,14 @@ public class FightSceneController : MonoBehaviour
             waitingForAttack = true;
             fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
         }
+    }
+
+    void UpdatePlayerStats()
+    {
+        playerAttack = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.attack;
+        playerSpecial = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special;
+        playerDefense = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense;
+        playerSpeed = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed;
     }
 
     void LoadEnemies()
