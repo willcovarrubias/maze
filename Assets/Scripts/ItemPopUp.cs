@@ -109,7 +109,7 @@ public class ItemPopUp : MonoBehaviour
                 action.GetComponentInChildren<Text>().text = "Unequip";
             }
             UpdateCount();
-            stats += "Weapon\nAtk " + weap.Attack + "\nSpec " + weap.Special + "\nDu " + weap.Durability + "\nWgt " + item.Item.Size;
+            stats += "Weapon\nAtk " + weap.Attack + "\nSpec " + weap.Special + "\nSpd " + weap.Speed + "\nDu " + weap.Durability + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
         }
