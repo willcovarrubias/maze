@@ -121,9 +121,9 @@ public class RecruitmentManager : MonoBehaviour
             //Debug.Log("This is NOT null");
             characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
             characterObject[i].GetComponentInChildren<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-                        "\n: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
-                        "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].hp +
-                        "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].mp;
+                "\n: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
+                "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxHP +
+                "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxMP;
 
             characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
             characterObject[i].GetComponent<CharacterData>().thisObjectsID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
@@ -142,8 +142,8 @@ public class RecruitmentManager : MonoBehaviour
         nameText.text = character.name;
         //levelText.text = "Lv. " + activeCharacterLevel.ToString();
         jobText.text = character.job;
-        hpText.text = "HP: " + character.hp.ToString();
-        mpText.text = "MP: " + character.mp.ToString();
+        hpText.text = "HP: " + character.maxHP.ToString();
+        mpText.text = "MP: " + character.maxMP.ToString();
         attackText.text = "Attack: " + character.attack.ToString();
         specialText.text = "Special: " + character.special.ToString();
         defenseText.text = "Defense: " + character.defense.ToString();

@@ -123,14 +123,18 @@ public class CharacterDatabase : MonoBehaviour
     public Character CreateRandomWanderer()
     {
         string currentJob = GetRandomJob();
+        int maxHP = UnityEngine.Random.Range(3, 20);
+        int maxMP = UnityEngine.Random.Range(3, 20);
         Character newCharacter = new Character
         {
             id = GenerateWandererID(),
             name = GetRandomName(),
             job = currentJob,
             numberOfAttacks = DetermineNumberOfAttacks(currentJob),
-            hp = UnityEngine.Random.Range(3, 20),
-            mp = UnityEngine.Random.Range(3, 20),
+            maxHP = maxHP,
+            maxMP = maxMP,
+            currentHP = maxHP,
+            currentMP = maxMP,
             attack = UnityEngine.Random.Range(3, 20),
             special = UnityEngine.Random.Range(3, 20),
             defense = UnityEngine.Random.Range(3, 20),
@@ -262,7 +266,7 @@ public class CharacterDatabase : MonoBehaviour
     public List<Enemy> GetEnemiesForFightScene(/*int mazeRoomNumber*/)
     {
         List<Enemy> enemies = new List<Enemy>();
-        int amountOfEnemies = UnityEngine.Random.Range(1, 6);
+        int amountOfEnemies = UnityEngine.Random.Range(1, 4);
         for (int i = 0; i < amountOfEnemies; i++)
         {
             Enemy newEnemy = new Enemy(enemyDatabase[UnityEngine.Random.Range(0, enemyDatabase.Count)]);
@@ -279,8 +283,10 @@ public class Character
     public string name { get; set; }
     public string job { get; set; }
     public int numberOfAttacks { get; set; }
-    public int hp { get; set; }
-    public int mp { get; set; }
+    public int maxHP { get; set; }
+    public int currentHP { get; set; }
+    public int maxMP { get; set; }
+    public int currentMP { get; set; }
     public int attack { get; set; }
     public int special { get; set; }
     public int defense { get; set; }
@@ -299,8 +305,10 @@ public class Character
         this.name = name;
         this.job = job;
         this.numberOfAttacks = numberOfAttacks;
-        this.hp = hp;
-        this.mp = mp;
+        this.maxHP = hp;
+        this.maxMP = mp;
+        this.currentHP = hp;
+        this.currentMP = mp;
         this.attack = attack;
         this.special = special;
         this.defense = defense;
@@ -327,6 +335,6 @@ public class Enemy
     public Enemy(Character character)
     {
         EnemyData = character;
-        EnemyHP = character.hp;
+        EnemyHP = character.maxHP;
     }
 }

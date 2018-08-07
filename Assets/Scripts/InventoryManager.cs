@@ -486,7 +486,7 @@ public class InventoryManager : MonoBehaviour
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
         //Closes the inventory panel no matter what scene the player is currently in.
-        if (sceneName == "LootScene" || sceneName == "BrandonTest") //Close the chest/player inventory
+        if (sceneName == "LootScene" || sceneName == "BrandonTest" || sceneName == "FightScene") //Close the chest/player inventory
         {
             GameObject.Find("Manager").gameObject.GetComponent<CreateDynamicInventory>().CloseUi();
         }
@@ -519,7 +519,7 @@ public class InventoryManager : MonoBehaviour
 
     void MoveInventory()
     {
-        if (SceneManager.GetActiveScene().name == "LootScene" || SceneManager.GetActiveScene().name == "VillageScene")
+        if (SceneManager.GetActiveScene().name == "LootScene" || SceneManager.GetActiveScene().name == "VillageScene" || SceneManager.GetActiveScene().name == "FightScene")
         {
             inventoryName.transform.position = new Vector3(originalPosition.x, inventoryName.transform.position.y, originalPosition.z);
             inventoryText.transform.position = new Vector3(originalPosition.x, inventoryText.transform.position.y, originalPosition.z);

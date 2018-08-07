@@ -13,19 +13,7 @@ public class LootSceneController : MonoBehaviour
 
     public void GoToPathScene()
     {
-        DestroyDynamicPanels();
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().DestroyDynamicPanels();
         SceneManager.LoadScene("PathScene");
-    }
-
-    void DestroyDynamicPanels()
-    {
-        GameObject panel = GameMaster.gameMaster.transform.GetChild(0).gameObject;
-        for (int i = 0; i < panel.transform.childCount; i++)
-        {
-            if (panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")
-            {
-                Destroy(panel.transform.GetChild(i).gameObject);
-            }
-        }
     }
 }

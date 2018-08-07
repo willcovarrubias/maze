@@ -91,8 +91,8 @@ public class RosterManager : MonoBehaviour
         nameText.text = character.name;
         levelText.text = "Lv. " + DetermineActiveCharacterCurrentLevel(character.exp);
         jobText.text = character.job;
-        hpText.text = "HP: " + character.hp.ToString();
-        mpText.text = "MP: " + character.mp.ToString();
+        hpText.text = "HP: " + character.currentHP + " / " + character.maxHP;
+        mpText.text = "MP: " + character.currentMP + " / " + character.maxMP;
         attackText.text = "Attack: " + character.attack.ToString();
         specialText.text = "Special: " + character.special.ToString();
         defenseText.text = "Defense: " + character.defense.ToString();

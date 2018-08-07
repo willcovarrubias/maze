@@ -10,28 +10,29 @@ public class FightSceneController : MonoBehaviour
     Character activeCharacter;
     Enemy activeEnemy;
     GameObject activeEnemySprite;
-    private bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy;
-
-    int timeForNext = 1;
-    float currentTime, timeForNextEnemyAttack;
-
-    public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite;
-    float initialSliderHeight, heightOfMeter;
-
+    public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite, inventoryButton;
+    bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy, pressedButton;
+    float initialSliderHeight, heightOfMeter, currentTime, timeForNextEnemyAttack;
     int playerAttackNum, enemyIndex, attackNum;
+    int timeForDefense = 1;
 
     void Start()
     {
-        isFighting = true;
-        onOffense = true;
-        moveSlider = true;
-        waitingForAttack = true;
         timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
         LoadEnemies();
         star.transform.SetAsLastSibling();
+        isFighting = true;
+        onOffense = true;
+        moveSlider = true;
+        waitingForAttack = true;
+        inventoryButton.SetActive(true);
+        if (listOfEnemies.Count == 1)
+        {
+            AutoHighlightEnemy();
+        }
     }
 
     void Update()
@@ -45,6 +46,10 @@ public class FightSceneController : MonoBehaviour
             else if (!onOffense)
             {
                 Defense();
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                pressedButton = false;
             }
         }
         //Determine rewards, calculate EXP, etc.
@@ -64,11 +69,12 @@ public class FightSceneController : MonoBehaviour
         else
         {
             currentTime += Time.deltaTime;
-            if (currentTime > timeForNext)
+            if (currentTime > timeForDefense)
             {
+                currentTime = 0;
                 selectedEnemy = false;
                 playerAttackNum++;
-                currentTime = 0;
+                inventoryButton.SetActive(false);
                 if (playerAttackNum >= activeCharacter.numberOfAttacks)
                 {
                     onOffense = false;
@@ -93,7 +99,8 @@ public class FightSceneController : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > timeForNextEnemyAttack)
             {
-                float sizeOfStar = ((float)activeCharacter.defense / listOfEnemies[enemyIndex].EnemyData.attack) * 200;
+                float sizeOfStar = ((float)(activeCharacter.speed + activeCharacter.speed) /
+                                    (activeCharacter.speed + activeEnemy.EnemyData.speed)) * 400;
                 star.SetActive(true);
                 star.transform.localPosition = new Vector3(
                     Random.Range(-Screen.width / 2, Screen.width / 2),
@@ -117,8 +124,9 @@ public class FightSceneController : MonoBehaviour
 
     public void ScreenPressed()
     {
-        if (isFighting)
+        if (isFighting && !pressedButton)
         {
+            pressedButton = true;
             if (onOffense && moveSlider && selectedEnemy)
             {
                 PlayerAttack();
@@ -139,34 +147,90 @@ public class FightSceneController : MonoBehaviour
 
     void PlayerAttack()
     {
+        int playerAttack = CalculatePlayerAttack();
+        activeEnemy.EnemyHP -= playerAttack;
         moveSlider = false;
         currentTime = 0;
-        float posOfSlider = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
-        float percentToMiddle = 1 - Mathf.Abs(posOfSlider / (heightOfMeter / 2));
-        float playerAttack = ((float)(activeCharacter.attack * activeCharacter.attack) / (activeCharacter.attack + activeEnemy.EnemyData.defense)) * percentToMiddle;
-        activeEnemy.EnemyHP -= Mathf.RoundToInt(playerAttack);
         Debug.Log("Enemy HP: " + activeEnemy.EnemyHP);
         if (activeEnemy.EnemyHP <= 0)
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.EnemyData.name + " has fainted.");
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
+                "Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.EnemyData.name + " has fainted.");
             listOfEnemies.Remove(activeEnemy);
-            Destroy(activeEnemySprite);
+            activeEnemySprite.GetComponent<EnemyHolder>().Dead();
+            activeEnemySprite.GetComponentInChildren<Text>().text = "Dead";
             if (listOfEnemies.Count == 0)
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("ALL ENEMIES DEAD");
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("All enemies have fainted");
                 isFighting = false;
+                inventoryButton.SetActive(true);
             }
         }
         else
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + activeEnemy.EnemyData.name);
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
+                "Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + activeEnemy.EnemyData.name);
         }
         enemyHighlightSprite.SetActive(false);
     }
 
     void EnemyAttack(bool pressed)
     {
-        float initialAttack = (float)(listOfEnemies[enemyIndex].EnemyData.attack * listOfEnemies[enemyIndex].EnemyData.attack) / (listOfEnemies[enemyIndex].EnemyData.attack + activeCharacter.defense);
+        int enemyAttack = CalculateEnemyAttack(pressed);
+        currentTime = 0;
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().DecreaseHP(enemyAttack);
+        if (activeCharacter.currentHP <= 0)
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
+                "Recieved " + enemyAttack + " damage from " + listOfEnemies[enemyIndex].EnemyData.name + ". You have fainted.");
+            isFighting = false;
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
+                "Recieved " + enemyAttack + " damage from " + listOfEnemies[enemyIndex].EnemyData.name);
+        }
+        if (listOfEnemies[enemyIndex].EnemyData.numberOfAttacks > attackNum + 1)
+        {
+            attackNum++;
+        }
+        else
+        {
+            if (enemyIndex >= listOfEnemies.Count - 1)
+            {
+                if (listOfEnemies.Count == 1)
+                {
+                    AutoHighlightEnemy();
+                }
+                onOffense = true;
+                moveSlider = true;
+                inventoryButton.SetActive(true);
+                fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0);
+                playerAttackNum = 0;
+                attackNum = 0;
+                enemyIndex = 0;
+            }
+            else
+            {
+                attackNum = 0;
+                enemyIndex++;
+            }
+        }
+    }
+
+    int CalculatePlayerAttack()
+    {
+        float posOfSlider = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
+        float percentToMiddle = 1 - Mathf.Abs(posOfSlider / (heightOfMeter / 2));
+        float playerAttack = ((float)(activeCharacter.attack * activeCharacter.attack) /
+                              (activeCharacter.attack + activeEnemy.EnemyData.defense)) * percentToMiddle;
+        return Mathf.RoundToInt(playerAttack);
+    }
+
+    int CalculateEnemyAttack(bool pressed)
+    {
+        float initialAttack = (float)(listOfEnemies[enemyIndex].EnemyData.attack * listOfEnemies[enemyIndex].EnemyData.attack) /
+            (listOfEnemies[enemyIndex].EnemyData.attack + activeCharacter.defense);
         float enemyAttack = initialAttack;
         star.SetActive(false);
         waitingForAttack = true;
@@ -189,45 +253,12 @@ public class FightSceneController : MonoBehaviour
         {
             initialAttack *= 3;
         }
-        currentTime = 0;
-        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recieved " + Mathf.RoundToInt(enemyAttack) + " damage from " + listOfEnemies[enemyIndex].EnemyData.name);
-        activeCharacter.hp -= Mathf.RoundToInt(enemyAttack);
-        Debug.Log("Your HP " + activeCharacter.hp);
-        if (activeCharacter.hp <= 0)
-        {
-            isFighting = false;
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("YOU ARE DEAD");
-        }
-        if (listOfEnemies[enemyIndex].EnemyData.numberOfAttacks > attackNum + 1)
-        {
-            attackNum++;
-        }
-        else
-        {
-            if (enemyIndex >= listOfEnemies.Count - 1)
-            {
-                if (listOfEnemies.Count == 1)
-                {
-                    AutoHighlightEnemy();
-                }
-                onOffense = true;
-                moveSlider = true;
-                fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0);
-                playerAttackNum = 0;
-                attackNum = 0;
-                enemyIndex = 0;
-            }
-            else
-            {
-                attackNum = 0;
-                enemyIndex++;
-            }
-        }
+        return Mathf.RoundToInt(enemyAttack);
     }
 
     public void SelectEnemy(Enemy character, GameObject enemySprite)
     {
-        if (onOffense)
+        if (onOffense && isFighting && enemySprite.GetComponent<EnemyHolder>().IsLiving())
         {
             selectedEnemy = true;
             activeEnemySprite = enemySprite;
@@ -246,38 +277,44 @@ public class FightSceneController : MonoBehaviour
         enemyHighlightSprite.SetActive(true);
     }
 
-    void LoadEnemies()
+    public void UseItemFromInventory()
     {
-        listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetEnemiesForFightScene();
-        int offSet = (listOfEnemies.Count - 1) * (155 / 2);
-        for (int i = 0; i < listOfEnemies.Count; i++)
+        if (isFighting)
         {
-            GameObject enemy = Instantiate(enemySprite, enemySprite.transform.parent, true);
-            enemy.transform.localPosition = new Vector3((enemy.transform.localPosition.x + i * 155) - offSet, enemy.transform.localPosition.y, enemy.transform.localPosition.z);
-            enemy.AddComponent<EnemyHolder>();
-            enemy.GetComponent<EnemyHolder>().SetEnemyData(listOfEnemies[i]);
-            enemy.GetComponentInChildren<Text>().text = listOfEnemies[i].EnemyData.name + "\nAtt:" + listOfEnemies[i].EnemyData.attack + "\nDef:" + listOfEnemies[i].EnemyData.defense + "\nSpd:" + listOfEnemies[i].EnemyData.speed;
-            enemy.SetActive(true);
+            moveSlider = false;
+            currentTime = 0;
+            enemyHighlightSprite.SetActive(false);
+            onOffense = false;
+            fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+            inventoryButton.SetActive(false);
         }
     }
 
-    public void Inventory()
+    void LoadEnemies()
     {
-
+        listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetEnemiesForFightScene();
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().CreateForFightScene(listOfEnemies);
     }
 
-    public void Special()
+    public bool IsFighting()
     {
+        return isFighting;
+    }
 
+    public void OpenInventory()
+    {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
     }
 
     public void GoToVillage()
     {
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().DestroyDynamicPanels();
         SceneManager.LoadScene("VillageScene");
     }
 
     public void GoToPathRoom()
     {
+        GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().DestroyDynamicPanels();
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GiveExpForBattleToActiveCharacter();
         SceneManager.LoadScene("PathScene");
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DynamicInventory : MonoBehaviour
@@ -268,8 +269,19 @@ public class DynamicInventory : MonoBehaviour
 
     public void OpenUI()
     {
-        gameObject.SetActive(true);
-        GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
+        if (SceneManager.GetActiveScene().name == "LootScene")
+        {
+            gameObject.SetActive(true);
+            GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
+        }
+        else if (SceneManager.GetActiveScene().name == "FightScene")
+        {
+            if(!GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
+            {
+                gameObject.SetActive(true);
+                GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
+            }
+        }
     }
 
     public void CloseUI()
