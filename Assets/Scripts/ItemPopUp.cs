@@ -177,15 +177,7 @@ public class ItemPopUp : MonoBehaviour
             Consumable consumable = (Consumable)item.Item;
             gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
             ThrowAwayOne();
-            if (SceneManager.GetActiveScene().name == "FightScene")
-            {
-                GameObject.Find("FightController").GetComponent<FightSceneController>().UseItemFromInventory();
-                if (GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
-                {
-                    Close();
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-                }
-            }
+            CheckIfUsedItemDuringFight();
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
@@ -212,7 +204,7 @@ public class ItemPopUp : MonoBehaviour
                     GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipBody(item.Item);
                 }
             }
-            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+            CheckIfUsedItemDuringFight();
             Close();
 
         }
@@ -226,7 +218,7 @@ public class ItemPopUp : MonoBehaviour
             {
                 GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipWeapon(item.Item);
             }
-            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+            CheckIfUsedItemDuringFight();
             Close();
         }
     }
@@ -357,6 +349,20 @@ public class ItemPopUp : MonoBehaviour
         {
             bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
             CloseOrUpdate(movedAll);
+        }
+    }
+
+    void CheckIfUsedItemDuringFight()
+    {
+        if (SceneManager.GetActiveScene().name == "FightScene")
+        {
+            GameObject.Find("FightController").GetComponent<FightSceneController>().UseItemFromInventory();
+            GameObject.Find("FightController").GetComponent<FightSceneController>().UpdatePlayerStats();
+            if (GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
+            {
+                Close();
+                GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+            }
         }
     }
 
