@@ -28,7 +28,7 @@
 		"special": 1,
 		"defense": 2,
 		"speed": 6,
-		"luck": 1,
+		"luck": 2,
 		"items": 20,
 		"exp": 0,
 		"lives": 1,
