@@ -20,14 +20,13 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     GameObject villageSceneController;
     GameObject currentSlot;
     GameObject currentPanel;
-    public GameObject equippedCheckMark;
+    public GameObject equippedCheckMarkForWeapon, equippedCheckMarkForHat, equippedCheckMarkForBody;
 
     Scene currentScene;
     string sceneName;
 
     private Vector2 offsetToReturnItem;
     bool beingDragged = false;
-    public bool currentlyEquipped = false;
 
     Location.WhereAmI currentLocation;
     Location.WhereAmI goingToLocation;
@@ -44,22 +43,52 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }
         currentPanel = transform.parent.parent.parent.parent.gameObject;
-        equippedCheckMark.SetActive(false);
+        //equippedCheckMark.SetActive(false);
     }
 
-    public void UpdateTheEquippedItem()
+    public void UpdateTheEquippedWeapon()
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID())
         {
-            equippedCheckMark.SetActive(true);
+            Debug.Log("Is this ever true? ");
+            equippedCheckMarkForWeapon.SetActive(true);
         }
         else
         {
-            equippedCheckMark.SetActive(false);
+            Debug.Log("This is probably always true.");
+            equippedCheckMarkForWeapon.SetActive(false);
         }
     }
 
-   
+    public void UpdateTheEquippedHat()
+    {
+        if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID())
+        {
+            Debug.Log("Is this ever true? ");
+            equippedCheckMarkForHat.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("This is probably always true.");
+            equippedCheckMarkForHat.SetActive(false);
+        }
+    }
+
+    public void UpdateTheEquippedBody()
+    {
+        if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID())
+        {
+            Debug.Log("Is this ever true? ");
+            equippedCheckMarkForBody.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("This is probably always true.");
+            equippedCheckMarkForBody.SetActive(false);
+        }
+    }
+
+
 
     public void SetItem(Inventory itemToBeSet)
     {
