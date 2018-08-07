@@ -50,12 +50,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID())
         {
-            Debug.Log("Is this ever true? ");
             equippedCheckMarkForWeapon.SetActive(true);
         }
         else
         {
-            Debug.Log("This is probably always true.");
             equippedCheckMarkForWeapon.SetActive(false);
         }
     }
@@ -64,12 +62,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID())
         {
-            Debug.Log("Is this ever true? ");
             equippedCheckMarkForHat.SetActive(true);
         }
         else
         {
-            Debug.Log("This is probably always true.");
             equippedCheckMarkForHat.SetActive(false);
         }
     }
@@ -93,12 +89,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID())
         {
-            Debug.Log("Is this ever true? ");
             equippedCheckMarkForBody.SetActive(true);
         }
         else
         {
-            Debug.Log("This is probably always true.");
             equippedCheckMarkForBody.SetActive(false);
         }
     }

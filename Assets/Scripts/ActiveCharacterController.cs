@@ -12,7 +12,7 @@ public class ActiveCharacterController : MonoBehaviour
 
     //UI stuff for MoreInfo Panel
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
-    public Image activeHeroPortrait;
+    public Image activeHeroPortrait, equippedWeaponSprite, equippedHatSprite, equippedBodySprite;
     public GameObject activeCharacterMoreInfoPanel;
     public GameObject expBarMoreInfo;
 
@@ -80,16 +80,22 @@ public class ActiveCharacterController : MonoBehaviour
         {
             attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+            equippedWeaponSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Title);
+
         }
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
+            equippedHatSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Title);
+
         }
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
+            equippedBodySprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Title);
+
         }
 
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
@@ -111,7 +117,6 @@ public class ActiveCharacterController : MonoBehaviour
         luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
         expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
         activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
-
         UpdateEXPBar();
     }
 
