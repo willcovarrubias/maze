@@ -70,20 +70,48 @@ public class ItemPopUp : MonoBehaviour
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
             Armor armor = (Armor)item.Item;
+            if (armor.Appendage == "head")
+            {
+                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
+                {
+                    action.GetComponentInChildren<Text>().text = "Equip";
+                }
+                else
+                {
+                    action.GetComponentInChildren<Text>().text = "Unequip";
+                }
+            }
+            else
+            {
+                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
+                {
+                    action.GetComponentInChildren<Text>().text = "Equip";
+                }
+                else
+                {
+                    action.GetComponentInChildren<Text>().text = "Unequip";
+                }
+            }
             UpdateCount();
             stats += "Armor\nDef " + armor.Defense + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
-            action.GetComponentInChildren<Text>().text = "Equip";
         }
         else if (item.Item.ID >= 10000)
         {
-            Weapons weapon = (Weapons)item.Item;
+            Weapons weap = (Weapons)item.Item;
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+            {
+                action.GetComponentInChildren<Text>().text = "Equip";
+            }
+            else
+            {
+                action.GetComponentInChildren<Text>().text = "Unequip";
+            }
             UpdateCount();
-            stats += "Weapon\nAtk " + weapon.Attack + "\nSpec " + weapon.Special + "\nDu " + weapon.Durability + "\nWgt " + item.Item.Size;
+            stats += "Weapon\nAtk " + weap.Attack + "\nSpec " + weap.Special + "\nDu " + weap.Durability + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
-            action.GetComponentInChildren<Text>().text = "Equip";
         }
         if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "VillageScene")
         {
@@ -162,25 +190,42 @@ public class ItemPopUp : MonoBehaviour
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
             Armor piece = (Armor)item.Item;
-            //equip armor
             if (piece.Appendage == "head")
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayHatEquippedSpriteOnChange(item.Item);
-
+                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayHatEquippedSpriteOnChange(item.Item);
+                }
+                else
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipHat(item.Item);
+                }
             }
-            else if(piece.Appendage == "chest")
+            else if (piece.Appendage == "chest")
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayBodyEquippedSpriteOnChange(item.Item);
-
+                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayBodyEquippedSpriteOnChange(item.Item);
+                }
+                else
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipBody(item.Item);
+                }
             }
+            Close();
 
         }
         else if (item.Item.ID >= 10000)
         {
-            //equip weapon
-            GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayWeaponEquippedSpriteOnChange(item.Item);
-
-
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayWeaponEquippedSpriteOnChange(item.Item);
+            }
+            else
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipWeapon(item.Item);
+            }
+            Close();
         }
     }
 

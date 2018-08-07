@@ -74,6 +74,21 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
+    public void UnequipHat()
+    {
+        equippedCheckMarkForHat.SetActive(false);
+    }
+
+    public void UnequipBody()
+    {
+        equippedCheckMarkForBody.SetActive(false);
+    }
+
+    public void UnequipWeapon()
+    {
+        equippedCheckMarkForWeapon.SetActive(false);
+    }
+
     public void UpdateTheEquippedBody()
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID())
@@ -87,8 +102,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             equippedCheckMarkForBody.SetActive(false);
         }
     }
-
-
 
     public void SetItem(Inventory itemToBeSet)
     {
