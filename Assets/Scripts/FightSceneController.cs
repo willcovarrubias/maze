@@ -18,7 +18,7 @@ public class FightSceneController : MonoBehaviour
 
     void Start()
     {
-        timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
+        timeForNextEnemyAttack = Random.Range(1.0f, 4.0f);
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
@@ -58,7 +58,12 @@ public class FightSceneController : MonoBehaviour
                 pressedButton = false;
             }
         }
-        //calculate exp
+        if (!isFighting && !pickingOption)
+        {
+            //win or lose
+            //if lose, deduct lives, lose inventory items, show button to go back to the village
+            //if win, calculate exp, show rooms button
+        }
     }
 
     void Offense()
@@ -115,7 +120,7 @@ public class FightSceneController : MonoBehaviour
                 star.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeOfStar, sizeOfStar);
                 currentTime = 0;
                 waitingForAttack = false;
-                timeForNextEnemyAttack = Random.Range(2.0f, 5.0f);
+                timeForNextEnemyAttack = Random.Range(1.0f, 4.0f);
             }
         }
         else
