@@ -8,7 +8,7 @@
 		"speed": -1,
 		"appendage": "chest",
 		"size": 3,
-		"slug": "01"
+		"slug": "LeatherHat"
 	},
 	{
 		"id": 4001,
@@ -18,7 +18,7 @@
 		"speed": 0,
 		"appendage": "head",
 		"size": 2,
-		"slug": "02"
+		"slug": "LeatherHat"
 	}
 ]
 	
