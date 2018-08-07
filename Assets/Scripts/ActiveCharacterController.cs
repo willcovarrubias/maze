@@ -141,6 +141,7 @@ public class ActiveCharacterController : MonoBehaviour
             GetComponent<CharacterDatabase>().activeCharacter.currentHP = GetComponent<CharacterDatabase>().activeCharacter.maxHP;
         }
         UpdateActiveCharacterVisuals();
+        GameMaster.gameMaster.Save();
     }
 
     public void GiveExpForRoomClearToActiveCharacter()

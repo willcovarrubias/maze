@@ -10,8 +10,8 @@ public class FightSceneController : MonoBehaviour
     Character activeCharacter;
     Enemy activeEnemy;
     GameObject activeEnemySprite;
-    public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite, inventoryButton;
-    bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy, pressedButton;
+    public GameObject meter, slider, fightButton, star, enemySprite, enemyHighlightSprite, inventoryButton, selectOptionPopUp;
+    bool onOffense, isFighting, moveSlider, waitingForAttack, selectedEnemy, pressedButton, pickingOption, pickedOption;
     float initialSliderHeight, heightOfMeter, currentTime, timeForNextEnemyAttack;
     int playerAttackNum, enemyIndex, attackNum;
     int timeForDefense = 1;
@@ -24,20 +24,26 @@ public class FightSceneController : MonoBehaviour
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
         LoadEnemies();
         star.transform.SetAsLastSibling();
-        isFighting = true;
-        onOffense = true;
-        moveSlider = true;
-        waitingForAttack = true;
-        inventoryButton.SetActive(true);
-        if (listOfEnemies.Count == 1)
-        {
-            AutoHighlightEnemy();
-        }
+        selectOptionPopUp.transform.SetAsLastSibling();
+        pickingOption = true;
     }
 
     void Update()
     {
-        if (isFighting)
+        if (pickingOption)
+        {
+            if (pickedOption)
+            {
+                currentTime += Time.deltaTime;
+                if (currentTime > 1)
+                {
+                    currentTime = 0;
+                    pickingOption = false;
+                    isFighting = true;
+                }
+            }
+        }
+        if (isFighting && !pickingOption)
         {
             if (onOffense && selectedEnemy)
             {
@@ -52,8 +58,7 @@ public class FightSceneController : MonoBehaviour
                 pressedButton = false;
             }
         }
-        //Determine rewards, calculate EXP, etc.
-        //End fight.?
+        //calculate exp
     }
 
     void Offense()
@@ -79,6 +84,7 @@ public class FightSceneController : MonoBehaviour
                 {
                     onOffense = false;
                     fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Defend yourself!");
                 }
                 else
                 {
@@ -100,7 +106,7 @@ public class FightSceneController : MonoBehaviour
             if (currentTime > timeForNextEnemyAttack)
             {
                 float sizeOfStar = ((float)(activeCharacter.speed + activeCharacter.speed) /
-                                    (activeCharacter.speed + activeEnemy.EnemyData.speed)) * 400;
+                                    (activeCharacter.speed + listOfEnemies[enemyIndex].EnemyData.speed)) * 400;
                 star.SetActive(true);
                 star.transform.localPosition = new Vector3(
                     Random.Range(-Screen.width / 2, Screen.width / 2),
@@ -287,6 +293,49 @@ public class FightSceneController : MonoBehaviour
             onOffense = false;
             fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
             inventoryButton.SetActive(false);
+        }
+    }
+
+    public void SelectFight()
+    {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Let's fight!");
+        pickedOption = true;
+        selectOptionPopUp.SetActive(false);
+        currentTime = 0;
+        playerAttackNum = 0;
+        onOffense = true;
+        moveSlider = true;
+        waitingForAttack = true;
+        inventoryButton.SetActive(true);
+        selectedEnemy = false;
+        if (listOfEnemies.Count == 1)
+        {
+            AutoHighlightEnemy();
+        }
+    }
+
+    public void SelectSneak()
+    {
+        int maxAmount = 50;
+        for (int i = 0; i < listOfEnemies.Count; i++)
+        {
+            maxAmount += listOfEnemies[i].EnemyData.luck;
+        }
+        if (Random.Range(0, maxAmount) > activeCharacter.luck)
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Sneak successful!");
+            GoToPathRoom();
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("You've been spotted!");
+            pickedOption = true;
+            selectOptionPopUp.SetActive(false);
+            currentTime = 0;
+            playerAttackNum = 0;
+            onOffense = false;
+            waitingForAttack = true;
+            fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
         }
     }
 
