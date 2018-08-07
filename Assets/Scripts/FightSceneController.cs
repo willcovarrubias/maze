@@ -15,6 +15,7 @@ public class FightSceneController : MonoBehaviour
     float initialSliderHeight, heightOfMeter, currentTime, timeForNextEnemyAttack;
     int playerAttackNum, enemyIndex, attackNum;
     int timeForDefense = 1;
+    int playerAtkStat, playerDefStat, playerSpecStat, playerSpdStat;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class FightSceneController : MonoBehaviour
         heightOfMeter = meter.GetComponent<RectTransform>().rect.height;
         initialSliderHeight = slider.transform.localPosition.y;
         activeCharacter = GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter();
+        UpdatePlayerStats();
         LoadEnemies();
         star.transform.SetAsLastSibling();
         selectOptionPopUp.transform.SetAsLastSibling();
@@ -70,7 +72,7 @@ public class FightSceneController : MonoBehaviour
     {
         if (moveSlider)
         {
-            float speed = 1000 - (activeCharacter.speed * 10) + (activeEnemy.EnemyData.speed * 10);
+            float speed = 1000 - (playerSpdStat * 10) + (activeEnemy.EnemyData.speed * 10);
             slider.transform.localPosition = new Vector3(
                 slider.transform.localPosition.x,
                 initialSliderHeight + Mathf.PingPong(Time.time * speed, heightOfMeter),
@@ -110,8 +112,8 @@ public class FightSceneController : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > timeForNextEnemyAttack)
             {
-                float sizeOfStar = ((float)(activeCharacter.speed + activeCharacter.speed) /
-                                    (activeCharacter.speed + listOfEnemies[enemyIndex].EnemyData.speed)) * 400;
+                float sizeOfStar = ((float)(playerSpdStat + playerSpdStat) /
+                                    (playerSpdStat + listOfEnemies[enemyIndex].EnemyData.speed)) * 400;
                 star.SetActive(true);
                 star.transform.localPosition = new Vector3(
                     Random.Range(-Screen.width / 2, Screen.width / 2),
@@ -126,7 +128,7 @@ public class FightSceneController : MonoBehaviour
         else
         {
             currentTime += Time.deltaTime;
-            if (currentTime > ((float)activeCharacter.speed / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f)
+            if (currentTime > ((float)playerSpdStat / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f)
             {
                 EnemyAttack(false);
             }
@@ -233,22 +235,22 @@ public class FightSceneController : MonoBehaviour
     {
         float posOfSlider = (slider.transform.localPosition.y - initialSliderHeight) - heightOfMeter / 2;
         float percentToMiddle = 1 - Mathf.Abs(posOfSlider / (heightOfMeter / 2));
-        float playerAttack = ((float)(activeCharacter.attack * activeCharacter.attack) /
-                              (activeCharacter.attack + activeEnemy.EnemyData.defense)) * percentToMiddle;
+        float playerAttack = ((float)(playerAtkStat * playerAtkStat) /
+                              (playerAtkStat + activeEnemy.EnemyData.defense)) * percentToMiddle;
         return Mathf.RoundToInt(playerAttack);
     }
 
     int CalculateEnemyAttack(bool pressed)
     {
         float initialAttack = (float)(listOfEnemies[enemyIndex].EnemyData.attack * listOfEnemies[enemyIndex].EnemyData.attack) /
-            (listOfEnemies[enemyIndex].EnemyData.attack + activeCharacter.defense);
+            (listOfEnemies[enemyIndex].EnemyData.attack + playerDefStat);
         float enemyAttack = initialAttack;
         star.SetActive(false);
         waitingForAttack = true;
         if (pressed)
         {
             float distance = Vector3.Distance(Input.mousePosition, star.transform.position);
-            float timePercentage = currentTime / (((float)activeCharacter.speed / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f);
+            float timePercentage = currentTime / (((float)playerSpdStat / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f);
             distance /= star.GetComponent<RectTransform>().sizeDelta.x / 10;
             if (distance > 5)
             {
@@ -341,6 +343,29 @@ public class FightSceneController : MonoBehaviour
             onOffense = false;
             waitingForAttack = true;
             fightButton.GetComponent<Button>().image.color = new Color(0, 0, 0, 0.5f);
+        }
+    }
+
+    public void UpdatePlayerStats()
+    {
+        playerAtkStat = activeCharacter.attack;
+        playerSpecStat = activeCharacter.special;
+        playerDefStat = activeCharacter.defense;
+        playerSpdStat = activeCharacter.speed;
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+        {
+            playerAtkStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
+            playerSpecStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+        }
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() > 0)
+        {
+            playerDefStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
+            playerSpdStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
+        }
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
+        {
+            playerDefStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
+            playerSpdStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
         }
     }
 

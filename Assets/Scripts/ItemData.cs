@@ -56,6 +56,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             equippedCheckMarkForWeapon.SetActive(false);
         }
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void UpdateTheEquippedHat()
@@ -68,33 +69,58 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             equippedCheckMarkForHat.SetActive(false);
         }
-    }
-
-    public void UnequipHat()
-    {
-        equippedCheckMarkForHat.SetActive(false);
-    }
-
-    public void UnequipBody()
-    {
-        equippedCheckMarkForBody.SetActive(false);
-    }
-
-    public void UnequipWeapon()
-    {
-        equippedCheckMarkForWeapon.SetActive(false);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void UpdateTheEquippedBody()
     {
         if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID())
         {
+            Debug.Log("Is this ever true? ");
             equippedCheckMarkForBody.SetActive(true);
         }
         else
         {
+            Debug.Log("This is probably always true.");
             equippedCheckMarkForBody.SetActive(false);
         }
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
+    public void UnequipHat()
+    {
+        equippedCheckMarkForHat.SetActive(false);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
+    public void UnequipBody()
+    {
+        equippedCheckMarkForBody.SetActive(false);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
+    public void UnequipWeapon()
+    {
+        equippedCheckMarkForWeapon.SetActive(false);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
+    public void EquipHat()
+    {
+        equippedCheckMarkForHat.SetActive(true);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
+    public void EquipBody()
+    {
+        equippedCheckMarkForBody.SetActive(true);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
+    public void EquipWeapon()
+    {
+        equippedCheckMarkForWeapon.SetActive(true);
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void SetItem(Inventory itemToBeSet)
@@ -224,7 +250,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         sceneName = SceneManager.GetActiveScene().name;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
-        
+
     }
 
     public void OnPointerUp(PointerEventData eventData)

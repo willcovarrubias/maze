@@ -120,25 +120,14 @@ public class InventoryManager : MonoBehaviour
             currentSize -= item.Item.Size * count;
             if (IsWeapon(item.Item.ID))
             {
-                if (item.Item.ID == GetEquippedWeaponID()) //Check to see if it's the weapon that's currently equipped.
-                {
-                    PlayerPrefs.SetInt("Equipped Weapon", -1000);
-                }
-
+                CheckItemToUnequip(item.Item);
                 playerItems.Remove(item.Item.ID);
                 item.Count = 0;
                 ReorganizeSlots(slotId);
             }
             else
             {
-                if (item.Item.ID == GetEquippedHatID()) //Check to see if it's the hat that's currently equipped.
-                {
-                    PlayerPrefs.SetInt("Equipped Hat", -4000);
-                }
-                if (item.Item.ID == GetEquippedBodyID()) //Check to see if it's the body that's currently equipped.
-                {
-                    PlayerPrefs.SetInt("Equipped Body", -4001);
-                }
+                CheckItemToUnequip(item.Item);
                 playerItems[item.Item.ID].Count -= count;
                 if (playerItems[item.Item.ID].Count <= 0)
                 {
@@ -156,6 +145,7 @@ public class InventoryManager : MonoBehaviour
     {
         currentSize -= items.Item.Size * items.Count;
         playerItems.Remove(items.Item.ID);
+        CheckItemToUnequip(items.Item);
         items.Count = 0;
         ReorganizeSlots(slot);
         SaveInventory();
@@ -357,7 +347,7 @@ public class InventoryManager : MonoBehaviour
 
     public Weapons GetEquippedWeapon()
     {
-        if (GetEquippedWeaponID() != 0)
+        if (GetEquippedWeaponID() >= 0)
         {
             return (Weapons)playerItems[GetEquippedWeaponID()].Item;
         }
@@ -366,24 +356,22 @@ public class InventoryManager : MonoBehaviour
 
     public void DisplayWeaponEquippedSpriteOnChange(Items item)
     {
-        SetEquippedWeapon(item);
-        for (int i = 0; i < slots.Count; i++)
+        int weaponID = GetEquippedWeaponID();
+        if (weaponID != 0)
         {
-            slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedWeapon();
+            slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().UnequipWeapon();
         }
+        SetEquippedWeapon(item);
+        weaponID = GetEquippedWeaponID();
+        slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().UpdateTheEquippedWeapon();
     }
 
     void ShowWeaponEquippedOnStartUp()
     {
         int weaponID = GetEquippedWeaponID();
-        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
+        if (weaponID != 0)
         {
-            int key = keyValue.Key;
-            if (playerItems[key].Item.ID == weaponID)
-            {
-                Debug.Log("Currently equipped weapon is: " + playerItems[key].Item.Title);
-                DisplayWeaponEquippedSpriteOnChange(playerItems[key].Item);
-            }
+            slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().EquipWeapon();
         }
     }
 
@@ -440,24 +428,22 @@ public class InventoryManager : MonoBehaviour
 
     public void DisplayHatEquippedSpriteOnChange(Items item)
     {
-        SetEquippedHat(item);
-        for (int i = 0; i < slots.Count; i++)
+        int hatID = GetEquippedHatID();
+        if (hatID != 0)
         {
-            slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedHat();
+            slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().UnequipHat();
         }
+        SetEquippedHat(item);
+        hatID = GetEquippedHatID();
+        slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().UpdateTheEquippedHat();
     }
 
     void ShowHatEquippedOnStartUp()
     {
         int hatID = GetEquippedHatID();
-        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
+        if (hatID != 0)
         {
-            int key = keyValue.Key;
-            if (playerItems[key].Item.ID == hatID)
-            {
-                Debug.Log("Currently equipped hat is: " + playerItems[key].Item.Title);
-                DisplayHatEquippedSpriteOnChange(playerItems[key].Item);
-            }
+            slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().EquipHat();
         }
     }
 
@@ -473,26 +459,43 @@ public class InventoryManager : MonoBehaviour
         return PlayerPrefs.GetInt("Equipped Body");
     }
 
+    void CheckItemToUnequip(Items item)
+    {
+        if (item.ID == GetEquippedWeaponID())
+        {
+            PlayerPrefs.SetInt("Equipped Weapon", 0);
+            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+        }
+        else if (item.ID == GetEquippedHatID())
+        {
+            PlayerPrefs.SetInt("Equipped Hat", 0);
+            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+        }
+        else if (item.ID == GetEquippedBodyID())
+        {
+            PlayerPrefs.SetInt("Equipped Body", 0);
+            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+        }
+    }
+
     public void DisplayBodyEquippedSpriteOnChange(Items item)
     {
-        SetEquippedBody(item);
-        for (int i = 0; i < slots.Count; i++)
+        int bodyID = GetEquippedBodyID();
+        if (bodyID != 0)
         {
-            slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedBody();
+            slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().UnequipBody();
         }
+        SetEquippedBody(item);
+        bodyID = GetEquippedBodyID();
+        slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().UpdateTheEquippedBody();
     }
 
     void ShowBodyEquippedOnStartUp()
     {
         int bodyID = GetEquippedBodyID();
-        foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
+        if (bodyID != 0)
         {
-            int key = keyValue.Key;
-            if (playerItems[key].Item.ID == bodyID)
-            {
-                Debug.Log("Currently equipped body is: " + playerItems[key].Item.Title);
-                DisplayBodyEquippedSpriteOnChange(playerItems[key].Item);
-            }
+            slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().EquipBody();
         }
     }
 
