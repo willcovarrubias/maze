@@ -36,7 +36,7 @@ public class ActiveCharacterController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             Test();
-            
+
 
         }
 
@@ -72,23 +72,42 @@ public class ActiveCharacterController : MonoBehaviour
 
     public void UpdateActiveCharacterVisuals()
     {
+        int attack = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.attack;
+        int special = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special;
+        int defense = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense;
+        int speed = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed;
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != 0)
+        {
+            attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
+            special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+        }
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != 0)
+        {
+            defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
+            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
+        }
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != 0)
+        {
+            defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
+            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
+        }
+
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
             "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
-            "\nLv. " + activeCharacterLevel + 
+            "\nLv. " + activeCharacterLevel +
             "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP +
             "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
-
 
         nameText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name;
         levelText.text = "Lv. " + activeCharacterLevel.ToString();
         jobText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
         hpText.text = "HP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP;
         mpText.text = "MP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
-        attackText.text = "Attack: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.attack.ToString();
-        specialText.text = "Special: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special.ToString();
-        defenseText.text = "Defense: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense.ToString();
-        //speedText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed.ToString();
+        attackText.text = "Attack: " + attack;
+        defenseText.text = "Defense: " + defense;
+        specialText.text = "Special: " + special;
+        speedText.text = "Speed: " + speed;
         luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
         expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
         activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
@@ -116,7 +135,7 @@ public class ActiveCharacterController : MonoBehaviour
 
     void DestroyActiveWeapon()
     {
-	}
+    }
 
 
     public void DecreaseHP(int amount)

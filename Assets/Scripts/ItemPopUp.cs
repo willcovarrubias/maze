@@ -72,7 +72,7 @@ public class ItemPopUp : MonoBehaviour
             Armor armor = (Armor)item.Item;
             if (armor.Appendage == "head")
             {
-                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
+                if (GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
                 {
                     action.GetComponentInChildren<Text>().text = "Equip";
                 }
@@ -83,7 +83,7 @@ public class ItemPopUp : MonoBehaviour
             }
             else
             {
-                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
+                if (GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
                 {
                     action.GetComponentInChildren<Text>().text = "Equip";
                 }
@@ -93,14 +93,14 @@ public class ItemPopUp : MonoBehaviour
                 }
             }
             UpdateCount();
-            stats += "Armor\nDef " + armor.Defense + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
+            stats += "Armor\nDef " + armor.Defense + "\nspd " + armor.Speed + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
         }
         else if (item.Item.ID >= 10000)
         {
             Weapons weap = (Weapons)item.Item;
-            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+            if (GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
             {
                 action.GetComponentInChildren<Text>().text = "Equip";
             }
@@ -212,6 +212,7 @@ public class ItemPopUp : MonoBehaviour
                     GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipBody(item.Item);
                 }
             }
+            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
             Close();
 
         }
@@ -225,6 +226,7 @@ public class ItemPopUp : MonoBehaviour
             {
                 GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipWeapon(item.Item);
             }
+            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
             Close();
         }
     }

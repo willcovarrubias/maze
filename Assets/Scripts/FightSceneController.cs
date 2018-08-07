@@ -355,6 +355,11 @@ public class FightSceneController : MonoBehaviour
         return isFighting;
     }
 
+    public bool IsPickingOption()
+    {
+        return pickingOption;
+    }
+
     public void OpenInventory()
     {
         GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();

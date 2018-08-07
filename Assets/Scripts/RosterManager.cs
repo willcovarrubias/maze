@@ -96,7 +96,7 @@ public class RosterManager : MonoBehaviour
         attackText.text = "Attack: " + character.attack.ToString();
         specialText.text = "Special: " + character.special.ToString();
         defenseText.text = "Defense: " + character.defense.ToString();
-        //speedText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed.ToString();
+        speedText.text = "Speed: " + character.speed;
         luckText.text = "Luck: " + character.luck.ToString();
         characterPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);

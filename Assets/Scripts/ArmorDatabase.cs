@@ -24,6 +24,7 @@ public class ArmorDatabase : MonoBehaviour
                 (int)itemsData[i]["rarity"],
                 (int)itemsData[i]["size"],
                 (int)itemsData[i]["defense"],
+                (int)itemsData[i]["speed"],
                 itemsData[i]["appendage"].ToString(),
                 itemsData[i]["slug"].ToString());
             GetComponent<ItemDatabase>().AddToDatabase(armor);
@@ -41,9 +42,10 @@ public class ArmorDatabase : MonoBehaviour
 public class Armor : Items
 {
     public int Defense { get; set; }
+    public int Speed { get; set; }
     public string Appendage { get; set; }
 
-    public Armor(int id, string title, int rarity, int size, int defense, string appendage, string slug)
+    public Armor(int id, string title, int rarity, int size, int defense, int speed, string appendage, string slug)
     {
         this.ID = id;
         this.Title = title;
@@ -51,6 +53,7 @@ public class Armor : Items
         this.Size = size;
         this.Slug = slug;
         this.Defense = defense;
+        this.Speed = speed;
         this.Appendage = appendage;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
     }
