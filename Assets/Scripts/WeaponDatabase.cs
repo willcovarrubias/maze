@@ -25,6 +25,7 @@ public class WeaponDatabase : MonoBehaviour
             0,
             Random.Range(1, 10),
             Random.Range(1, 10),
+            Random.Range(-2, 2),
             Random.Range(1, 10),
             Random.Range(1, 10),
             "",
@@ -40,16 +41,18 @@ public class Weapons : Items
 {
     public int Attack { get; set; }
     public int Special { get; set; }
+    public int Speed { get; set; }
     public int Durability { get; set; }
     public int Equipped { get; set; }
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug, int equipped)
+    public Weapons(int id, string title, int rarity, int attack, int special, int speed, int durability, int size, string slug, int equipped)
     {
         this.ID = id;
         this.Title = title;
         this.Rarity = rarity;
         this.Attack = attack;
         this.Special = special;
+        this.Speed = speed;
         this.Durability = durability;
         this.Size = size;
         this.Slug = slug;

@@ -80,22 +80,20 @@ public class ActiveCharacterController : MonoBehaviour
         {
             attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
             equippedWeaponSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Title);
-
         }
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() > 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
             equippedHatSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Title);
-
         }
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
             equippedBodySprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Title);
-
         }
 
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +

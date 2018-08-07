@@ -128,7 +128,7 @@ public class FightSceneController : MonoBehaviour
         else
         {
             currentTime += Time.deltaTime;
-            if (currentTime > ((float)playerSpdStat / listOfEnemies[enemyIndex].EnemyData.speed) + 0.25f)
+            if (currentTime > (((float)(playerSpdStat + playerSpdStat) / (playerSpdStat + listOfEnemies[enemyIndex].EnemyData.speed)) + 0.25f))
             {
                 EnemyAttack(false);
             }
@@ -244,6 +244,7 @@ public class FightSceneController : MonoBehaviour
     {
         float initialAttack = (float)(listOfEnemies[enemyIndex].EnemyData.attack * listOfEnemies[enemyIndex].EnemyData.attack) /
             (listOfEnemies[enemyIndex].EnemyData.attack + playerDefStat);
+        Debug.Log(initialAttack);
         float enemyAttack = initialAttack;
         star.SetActive(false);
         waitingForAttack = true;
@@ -356,6 +357,7 @@ public class FightSceneController : MonoBehaviour
         {
             playerAtkStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             playerSpecStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+            playerSpdStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
         }
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() > 0)
         {
