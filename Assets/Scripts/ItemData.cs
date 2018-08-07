@@ -20,12 +20,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     GameObject villageSceneController;
     GameObject currentSlot;
     GameObject currentPanel;
+    public GameObject equippedCheckMark;
 
     Scene currentScene;
     string sceneName;
 
     private Vector2 offsetToReturnItem;
     bool beingDragged = false;
+    public bool currentlyEquipped = false;
 
     Location.WhereAmI currentLocation;
     Location.WhereAmI goingToLocation;
@@ -42,7 +44,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
         }
         currentPanel = transform.parent.parent.parent.parent.gameObject;
+        equippedCheckMark.SetActive(false);
     }
+
+    public void UpdateTheEquippedItem()
+    {
+        if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID())
+        {
+            equippedCheckMark.SetActive(true);
+        }
+        else
+        {
+            equippedCheckMark.SetActive(false);
+        }
+    }
+
+   
 
     public void SetItem(Inventory itemToBeSet)
     {
@@ -171,6 +188,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         sceneName = SceneManager.GetActiveScene().name;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
+        
     }
 
     public void OnPointerUp(PointerEventData eventData)

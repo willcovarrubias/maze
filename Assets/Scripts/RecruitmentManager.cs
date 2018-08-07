@@ -20,6 +20,7 @@ public class RecruitmentManager : MonoBehaviour
     public int characterSlotAmount;
     public List<GameObject> characterSlots = new List<GameObject>();
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public Image wandererPortrait;
     public GameObject caravanPopUPObject;
 
 
@@ -126,6 +127,7 @@ public class RecruitmentManager : MonoBehaviour
 
             characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
             characterObject[i].GetComponent<CharacterData>().thisObjectsID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
+            characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].slug);
 
 
             //Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
@@ -147,6 +149,7 @@ public class RecruitmentManager : MonoBehaviour
         defenseText.text = "Defense: " + character.defense.ToString();
         //speedText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed.ToString();
         luckText.text = "Luck: " + character.luck.ToString();
+        wandererPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
 
     }
