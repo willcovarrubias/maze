@@ -276,7 +276,8 @@ public class DynamicInventory : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "FightScene")
         {
-            if(!GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
+            if (!GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting() && 
+                !GameObject.Find("FightController").GetComponent<FightSceneController>().IsPickingOption())
             {
                 gameObject.SetActive(true);
                 GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();

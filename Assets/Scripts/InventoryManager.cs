@@ -355,6 +355,15 @@ public class InventoryManager : MonoBehaviour
         return PlayerPrefs.GetInt("Equipped Weapon");
     }
 
+    public Weapons GetEquippedWeapon()
+    {
+        if (GetEquippedWeaponID() != 0)
+        {
+            return (Weapons)playerItems[GetEquippedWeaponID()].Item;
+        }
+        return null;
+    }
+
     public void DisplayWeaponEquippedSpriteOnChange(Items item)
     {
         SetEquippedWeapon(item);
@@ -383,6 +392,24 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("Equipped the " + item.Title);
         PlayerPrefs.SetInt("Equipped Hat", item.ID);
         PlayerPrefs.Save();
+    }
+
+    public Armor GetEquippedHat()
+    {
+        if (GetEquippedHatID() != 0)
+        {
+            return (Armor)playerItems[GetEquippedHatID()].Item;
+        }
+        return null;
+    }
+
+    public Armor GetEquippedBody()
+    {
+        if (GetEquippedBodyID() != 0)
+        {
+            return (Armor)playerItems[GetEquippedBodyID()].Item;
+        }
+        return null;
     }
 
     public void UnequipHat(Items item)
@@ -449,7 +476,6 @@ public class InventoryManager : MonoBehaviour
     public void DisplayBodyEquippedSpriteOnChange(Items item)
     {
         SetEquippedBody(item);
-
         for (int i = 0; i < slots.Count; i++)
         {
             slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedBody();
