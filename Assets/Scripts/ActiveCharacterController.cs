@@ -94,9 +94,23 @@ public class ActiveCharacterController : MonoBehaviour
         return GetComponent<CharacterDatabase>().activeCharacter;
     }
 
-    public void IncreaseHP(int amout)
+    public void DecreaseHP(int amount)
     {
-        GetComponent<CharacterDatabase>().activeCharacter.currentHP += amout;
+        if (amount != 0)
+        {
+            GetComponent<CharacterDatabase>().activeCharacter.currentHP -= amount;
+            if (GetComponent<CharacterDatabase>().activeCharacter.currentHP < 0)
+            {
+                GetComponent<CharacterDatabase>().activeCharacter.currentHP = 0;
+            }
+            UpdateActiveCharacterVisuals();
+            GameMaster.gameMaster.Save();
+        }
+    }
+
+    public void IncreaseHP(int amount)
+    {
+        GetComponent<CharacterDatabase>().activeCharacter.currentHP += amount;
         if (GetComponent<CharacterDatabase>().activeCharacter.currentHP > GetComponent<CharacterDatabase>().activeCharacter.maxHP)
         {
             GetComponent<CharacterDatabase>().activeCharacter.currentHP = GetComponent<CharacterDatabase>().activeCharacter.maxHP;

@@ -150,7 +150,7 @@ public class ItemPopUp : MonoBehaviour
             ThrowAwayOne();
             if (SceneManager.GetActiveScene().name == "FightScene")
             {
-                GameObject.Find("FightController").GetComponent<FightSceneController>().UsedItem();
+                GameObject.Find("FightController").GetComponent<FightSceneController>().UseItemFromInventory();
                 if (GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
                 {
                     Close();
