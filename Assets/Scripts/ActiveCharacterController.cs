@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ActiveCharacterController : MonoBehaviour
@@ -11,10 +12,12 @@ public class ActiveCharacterController : MonoBehaviour
 
     //UI stuff for MoreInfo Panel
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public Image activeHeroPortrait;
     public GameObject activeCharacterMoreInfoPanel;
     public GameObject expBarMoreInfo;
 
     Character activeCharacter;
+    Weapons currentlyEquippedWeapon;
     int activeCharacterLevel;
 
     int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
@@ -30,8 +33,12 @@ public class ActiveCharacterController : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Test();
+            
 
-        //Debug.Log("Level:" + activeCharacterLevel);
+        }
 
     }
 
@@ -84,7 +91,7 @@ public class ActiveCharacterController : MonoBehaviour
         //speedText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed.ToString();
         luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
         expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
-
+        activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
 
         UpdateEXPBar();
     }
@@ -93,6 +100,24 @@ public class ActiveCharacterController : MonoBehaviour
     {
         return GetComponent<CharacterDatabase>().activeCharacter;
     }
+
+    public void Test()
+    {
+        int weaponID = GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID();
+        foreach (KeyValuePair<int, Inventory> keyValue in GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems)
+        {
+            int key = keyValue.Key;
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[key].Item.ID == weaponID)
+            {
+                Debug.Log("Currently equipped weapon is: " + GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[key].Item.Title);
+            }
+        }
+    }
+
+    void DestroyActiveWeapon()
+    {
+	}
+
 
     public void DecreaseHP(int amount)
     {

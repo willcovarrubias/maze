@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class ItemPopUp : MonoBehaviour
 {
     Inventory item;
+    Weapons weapon;
     GameObject gameMaster, villageInventory;
     GameObject itemHolder;
     int currentSlot;
@@ -165,6 +166,16 @@ public class ItemPopUp : MonoBehaviour
         else if (item.Item.ID >= 10000)
         {
             //equip weapon
+            GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
+
+
+            //itemHolder.GetComponent<ItemData>().currentlyEquipped = true;
+            itemHolder.GetComponent<ItemData>().UpdateTheEquippedItem();
+
+
+
+
+
         }
     }
 

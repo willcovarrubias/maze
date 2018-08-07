@@ -143,7 +143,7 @@ public class CharacterDatabase : MonoBehaviour
             items = UnityEngine.Random.Range(3, 20),
             exp = 0,
             lives = 3,
-            slug = "00"
+            slug = currentJob
         };
         int slotNumber = listOfWanderers.Count;
         amountOfSavedWanderers += 1;

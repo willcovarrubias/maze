@@ -120,6 +120,10 @@ public class InventoryManager : MonoBehaviour
             currentSize -= item.Item.Size * count;
             if (IsWeapon(item.Item.ID))
             {
+                if (item.Item.ID == GetEquippedWeaponID()) //Check to see if it's the weapon that's currently equipped.
+                {
+                    PlayerPrefs.SetInt("Equipped Weapon", -1000);
+                }
                 playerItems.Remove(item.Item.ID);
                 item.Count = 0;
                 ReorganizeSlots(slotId);
@@ -258,6 +262,7 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Player Item Special" + i, weapon.Special);
                 PlayerPrefs.SetInt("Player Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Player Item Size" + i, weapon.Size);
+                PlayerPrefs.SetInt("Player Item Equipped" + i, weapon.Equipped);
             }
             i++;
         }
@@ -283,9 +288,10 @@ public class InventoryManager : MonoBehaviour
                 int rarity = PlayerPrefs.GetInt("Player Item Rarity" + i);
                 int attack = PlayerPrefs.GetInt("Player Item Attack" + i);
                 int special = PlayerPrefs.GetInt("Player Item Special" + i);
-                int duribility = PlayerPrefs.GetInt("Player Item Duribility" + i);
+                int durability = PlayerPrefs.GetInt("Player Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Player Item Size" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "");
+                int equipped = PlayerPrefs.GetInt("Player Item Equipped" + i);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, durability, size, "", equipped);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -322,6 +328,28 @@ public class InventoryManager : MonoBehaviour
         SaveInventory();
         AddItemToSlots(newItem);
         UpdateInventoryText();
+    }
+
+    public void SetEquippedWeapon(Items item)
+    {
+        if (IsWeapon(item.ID))
+        {
+            Debug.Log("Equipped the " + item.Title);
+            
+            PlayerPrefs.SetInt("Equipped Weapon", item.ID);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public int GetEquippedWeaponID()
+    {
+        int weaponID = PlayerPrefs.GetInt("Equipped Weapon");
+        return weaponID;
+    }
+
+    public void ShowWeaponEquippedCheckmark(Items item)
+    {
+        
     }
 
     void AddItemToSlots(Inventory item)

@@ -200,6 +200,7 @@ public class VillageInventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Village Item Special" + i, weapon.Special);
                 PlayerPrefs.SetInt("Village Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Village Item Size" + i, weapon.Size);
+                PlayerPrefs.SetInt("Village Item Equipped" + i, 0);
             }
             i++;
         }
@@ -227,7 +228,8 @@ public class VillageInventoryManager : MonoBehaviour
                 int special = PlayerPrefs.GetInt("Village Item Special" + i);
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Village Item Size" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "");
+                int equipped = PlayerPrefs.GetInt("Village Item Equipped" + i);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, duribility, size, "", equipped);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else

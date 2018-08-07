@@ -27,7 +27,8 @@ public class WeaponDatabase : MonoBehaviour
             Random.Range(1, 10),
             Random.Range(1, 10),
             Random.Range(1, 10),
-            "");
+            "",
+            0);
         weaponCount++;
         PlayerPrefs.SetInt("Weapon Count", weaponCount);
         PlayerPrefs.Save();
@@ -40,8 +41,9 @@ public class Weapons : Items
     public int Attack { get; set; }
     public int Special { get; set; }
     public int Durability { get; set; }
+    public int Equipped { get; set; }
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug)
+    public Weapons(int id, string title, int rarity, int attack, int special, int durability, int size, string slug, int equipped)
     {
         this.ID = id;
         this.Title = title;
@@ -52,6 +54,7 @@ public class Weapons : Items
         this.Size = size;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
+        this.Equipped = equipped;
     }
 
     public Weapons()

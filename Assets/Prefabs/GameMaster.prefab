@@ -1571,6 +1571,7 @@ MonoBehaviour:
   speedText: {fileID: 114599694725844622}
   luckText: {fileID: 114275534833260956}
   expText: {fileID: 114918485360077666}
+  activeHeroPortrait: {fileID: 114427462693056670}
   activeCharacterMoreInfoPanel: {fileID: 1856104890471736}
   expBarMoreInfo: {fileID: 1854594289520336}
 --- !u!114 &114247332692679414
