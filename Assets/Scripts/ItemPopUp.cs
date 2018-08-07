@@ -157,7 +157,6 @@ public class ItemPopUp : MonoBehaviour
                     GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
                 }
             }
-            GameMaster.gameMaster.Save();
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
