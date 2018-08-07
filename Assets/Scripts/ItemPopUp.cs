@@ -161,19 +161,24 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
+            Armor piece = (Armor)item.Item;
             //equip armor
+            if (piece.Appendage == "head")
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayHatEquippedSpriteOnChange(item.Item);
+
+            }
+            else if(piece.Appendage == "chest")
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayBodyEquippedSpriteOnChange(item.Item);
+
+            }
+
         }
         else if (item.Item.ID >= 10000)
         {
             //equip weapon
-            GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
-
-
-            //itemHolder.GetComponent<ItemData>().currentlyEquipped = true;
-            itemHolder.GetComponent<ItemData>().UpdateTheEquippedItem();
-
-
-
+            GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayWeaponEquippedSpriteOnChange(item.Item);
 
 
         }
