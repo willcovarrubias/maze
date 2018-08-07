@@ -124,7 +124,7 @@ public class InventoryManager : MonoBehaviour
                 {
                     PlayerPrefs.SetInt("Equipped Weapon", -1000);
                 }
-                
+
                 playerItems.Remove(item.Item.ID);
                 item.Count = 0;
                 ReorganizeSlots(slotId);
@@ -345,7 +345,6 @@ public class InventoryManager : MonoBehaviour
         if (IsWeapon(item.ID))
         {
             Debug.Log("Equipped the " + item.Title);
-            
             PlayerPrefs.SetInt("Equipped Weapon", item.ID);
             PlayerPrefs.Save();
         }
@@ -353,19 +352,16 @@ public class InventoryManager : MonoBehaviour
 
     public int GetEquippedWeaponID()
     {
-        int weaponID = PlayerPrefs.GetInt("Equipped Weapon");
-        return weaponID;
+        return PlayerPrefs.GetInt("Equipped Weapon");
     }
 
     public void DisplayWeaponEquippedSpriteOnChange(Items item)
     {
         SetEquippedWeapon(item);
-
         for (int i = 0; i < slots.Count; i++)
         {
             slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedWeapon();
         }
-
     }
 
     void ShowWeaponEquippedOnStartUp()
@@ -383,29 +379,45 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void SetEquippedHat(Items item)
-    {        
-            Debug.Log("Equipped the " + item.Title);
+    {
+        Debug.Log("Equipped the " + item.Title);
+        PlayerPrefs.SetInt("Equipped Hat", item.ID);
+        PlayerPrefs.Save();
+    }
 
-            PlayerPrefs.SetInt("Equipped Hat", item.ID);
-            PlayerPrefs.Save();
-        
+    public void UnequipHat(Items item)
+    {
+        PlayerPrefs.SetInt("Equipped Hat", 0);
+        PlayerPrefs.Save();
+        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipHat();
+    }
+
+    public void UnequipBody(Items item)
+    {
+        PlayerPrefs.SetInt("Equipped Body", 0);
+        PlayerPrefs.Save();
+        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipBody();
+    }
+
+    public void UnequipWeapon(Items item)
+    {
+        PlayerPrefs.SetInt("Equipped Weapon", 0);
+        PlayerPrefs.Save();
+        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipWeapon();
     }
 
     public int GetEquippedHatID()
     {
-        int hatID = PlayerPrefs.GetInt("Equipped Hat");
-        return hatID;
+        return PlayerPrefs.GetInt("Equipped Hat");
     }
 
     public void DisplayHatEquippedSpriteOnChange(Items item)
     {
         SetEquippedHat(item);
-
         for (int i = 0; i < slots.Count; i++)
         {
             slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedHat();
         }
-
     }
 
     void ShowHatEquippedOnStartUp()
@@ -422,20 +434,16 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-
     public void SetEquippedBody(Items item)
     {
         Debug.Log("Equipped the " + item.Title);
-
         PlayerPrefs.SetInt("Equipped Body", item.ID);
         PlayerPrefs.Save();
-
     }
 
     public int GetEquippedBodyID()
     {
-        int bodyID = PlayerPrefs.GetInt("Equipped Body");
-        return bodyID;
+        return PlayerPrefs.GetInt("Equipped Body");
     }
 
     public void DisplayBodyEquippedSpriteOnChange(Items item)
@@ -446,7 +454,6 @@ public class InventoryManager : MonoBehaviour
         {
             slots[i].GetComponentInChildren<ItemData>().UpdateTheEquippedBody();
         }
-
     }
 
     void ShowBodyEquippedOnStartUp()
@@ -462,8 +469,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-
-
 
     void AddItemToSlots(Inventory item)
     {
