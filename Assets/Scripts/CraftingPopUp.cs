@@ -25,7 +25,17 @@ public class CraftingPopUp : MonoBehaviour
         craftableItem = item;
         string statsText = "";
         string materialsText = "";
-        craftedItem = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID);
+        if (item.CraftedItemID != 0)
+        {
+            craftedItem = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID);
+        }
+        else
+        {
+            Weapons weapon = new Weapons();
+            weapon = item.Weapon;
+            weapon.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
+            craftedItem = weapon;
+        }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
         if (craftedItem.ID >= 4000 && craftedItem.ID < 5000)
         {
@@ -37,7 +47,11 @@ public class CraftingPopUp : MonoBehaviour
         {
             Consumable consumable = (Consumable)craftedItem;
             statsText += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing + "\nWgt " + consumable.Size;
-
+        }
+        else
+        {
+            statsText += "Weapon\nAtk " + item.Weapon.Attack + "\nSpec " + item.Weapon.Special + "\nSpd " + item.Weapon.Speed + 
+                         "\nDu " + item.Weapon.Durability + "\nWgt " + item.Weapon.Size;
         }
         statsOfItem.GetComponent<Text>().text = statsText;
         materialsText += "<b>Materials Needed:</b>";
@@ -63,7 +77,7 @@ public class CraftingPopUp : MonoBehaviour
     {
         if (CheckIfHaveMaterials())
         {
-            if ((GameMaster.gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() - sizeOfAllMaterials) >= craftedItem.Size)
+            if ((GameMaster.gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() + sizeOfAllMaterials) >= craftedItem.Size)
             {
                 foreach (KeyValuePair<int, int> keyValue in craftableItem.Materials)
                 {

@@ -25,10 +25,17 @@ public class CraftingMenu : MonoBehaviour
         transform.SetSiblingIndex(1);
     }
 
-    public void CreateNewItem(CraftableItem item)
+    public void CreateNewItem(CraftableItem item, bool isWeapon)
     {
         items.Add(item);
-        AddItemToSlots(item);
+        if (isWeapon)
+        {
+            AddWeaponToSlots(item);
+        }
+        else
+        {
+            AddItemToSlots(item);
+        }
     }
 
     void AddItemToSlots(CraftableItem item)
@@ -44,6 +51,22 @@ public class CraftingMenu : MonoBehaviour
         itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
         itemObject.GetComponent<Text>().text = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title;
+        ResizeSlotPanel();
+    }
+
+    void AddWeaponToSlots(CraftableItem item)
+    {
+        GameObject itemObject = Instantiate(itemPrefab);
+        AddDynamicSlot();
+        itemObject.transform.SetParent(slots[slotAmount - 1].transform, false);
+        itemObject.transform.localPosition = Vector2.zero;
+        itemObject.name = item.Weapon.Title;
+        Destroy(itemObject.GetComponent<ItemData>());
+        Destroy(itemObject.GetComponentInChildren<ItemSlot>());
+        itemObject.AddComponent<CraftableItemData>();
+        itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
+        itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
+        itemObject.GetComponent<Text>().text = item.Weapon.Title;
         ResizeSlotPanel();
     }
 

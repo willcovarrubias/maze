@@ -55,6 +55,7 @@ public class VillageSceneController : MonoBehaviour
     }
     public void EnterLabyrinthConfirmation()
     {
+        GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingPopUp>().DestroyUI();
@@ -80,6 +81,17 @@ public class VillageSceneController : MonoBehaviour
     {
         currentMenu = Location.VillageMenu.mainMenu;
         //blacksmithMenu.SetActive(false);
+    }
+
+    public void WeaponsmithMenu()
+    {
+        currentMenu = Location.VillageMenu.weapons;
+        GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().OpenUI();
+    }
+
+    public void WeaponsmithMenuClose()
+    {
+        currentMenu = Location.VillageMenu.mainMenu;
     }
 
     public void BarracksMenu()//This'll pop up a menu that'll allow the player to upgrade the barracks but also select a character.
