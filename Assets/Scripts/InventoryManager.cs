@@ -34,7 +34,6 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items; // set this somewhere
         currentSize = 0;
         LoadInventory();
@@ -248,6 +247,9 @@ public class InventoryManager : MonoBehaviour
             AddItemToSlots(temp[i].Value);
         }
         sorting++;
+        ShowHatEquippedOnStartUp();
+        ShowBodyEquippedOnStartUp();
+        ShowWeaponEquippedOnStartUp();
         SaveInventory();
     }
 

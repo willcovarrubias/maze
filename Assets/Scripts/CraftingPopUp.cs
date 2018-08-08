@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +16,9 @@ public class CraftingPopUp : MonoBehaviour
         exit.onClick.AddListener(CloseUI);
         Button craft = craftButton.GetComponent<Button>();
         craft.onClick.AddListener(Craft);
+        popUp.transform.SetParent(GameMaster.gameMaster.transform.Find("Canvas").transform, true);
+        popUp.transform.SetSiblingIndex(1);
+
     }
 
     public void ShowItemPopUp(CraftableItem item)
@@ -33,12 +35,20 @@ public class CraftingPopUp : MonoBehaviour
                          "\nApp " + craftedArmor.Appendage + "\nWgt " + craftedArmor.Size;
         }
         statsOfItem.GetComponent<Text>().text = statsText;
-        materialsText += "Materials Needed:";
+        materialsText += "<b>Materials Needed:</b>";
         foreach (KeyValuePair<int, int> keyValue in craftableItem.Materials)
         {
             materialsText += "\n";
             materialsText += GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(keyValue.Key).Title;
             materialsText += " x" + keyValue.Value;
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems.ContainsKey(keyValue.Key))
+            {
+                materialsText += "<i> (Have x" + GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].Count + ")</i>";
+            }
+            else
+            {
+                materialsText += "<i> (Have 0)</i>";
+            }
         }
         materials.GetComponent<Text>().text = materialsText;
         popUp.SetActive(true);
@@ -81,10 +91,7 @@ public class CraftingPopUp : MonoBehaviour
                     GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Not enough materials");
                     return false;
                 }
-                else
-                {
-                    sizeOfAllMaterials += (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].Item.Size * keyValue.Value);
-                }
+                sizeOfAllMaterials += (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].Item.Size * keyValue.Value);
             }
             else
             {
@@ -98,5 +105,10 @@ public class CraftingPopUp : MonoBehaviour
     public void CloseUI()
     {
         popUp.SetActive(false);
+    }
+
+    public void DestroyUI()
+    {
+        Destroy(popUp);
     }
 }
