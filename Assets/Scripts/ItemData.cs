@@ -245,21 +245,13 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         sceneName = SceneManager.GetActiveScene().name;
         beingDragged = false;
         goingToLocation = Location.WhereAmI.notSet;
-
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp))
         {
-            if (currentLocation == Location.WhereAmI.village && VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor)
-            {
-                //TODO: Select crafting item
-            }
-            else
-            {
-                gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
-            }
+            gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
         }
         if (sceneName == "VillageScene")
         {
@@ -289,7 +281,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     CheckCount();
                 }
             }
-            if (eventData.position.x < Screen.width / 2)
+            if (eventData.position.x < Screen.width / 2 && beingDragged)
             {
                 goingToLocation = Location.WhereAmI.player;
                 if (currentLocation == Location.WhereAmI.village)
@@ -299,9 +291,12 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
             }
         }
-        else if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor)
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor || VillageSceneController.villageScene.currentMenu == Location.VillageMenu.pub)
         {
-            //TODO: Do anything here?
+            if (eventData.position.x < Screen.width / 2 && beingDragged)
+            {
+                goingToLocation = Location.WhereAmI.player;
+            }
         }
     }
 

@@ -34,7 +34,6 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items; // set this somewhere
         currentSize = 0;
         LoadInventory();
@@ -111,6 +110,28 @@ public class InventoryManager : MonoBehaviour
             ChangeDialogBox("Inventory full!");
         }
         return movedAll;
+    }
+
+    public void AddBoughtItem(Items item, int count)
+    {
+        if (IsWeapon(item.ID))
+        {
+            CreateNewItem(item, 1);
+        }
+        Inventory temp;
+        if (playerItems.TryGetValue(item.ID, out temp))
+        {
+            playerItems[item.ID].Count += count;
+            currentSize += item.Size * count;
+            SaveInventory();
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[item.ID].Count;
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[item.ID].Item.Title + " x" + playerItems[item.ID].Count;
+            UpdateInventoryText();
+        }
+        else
+        {
+            CreateNewItem(item, count);
+        }
     }
 
     public void RemoveItemsFromInventory(Inventory item, int count, int slotId)
@@ -226,6 +247,9 @@ public class InventoryManager : MonoBehaviour
             AddItemToSlots(temp[i].Value);
         }
         sorting++;
+        ShowHatEquippedOnStartUp();
+        ShowBodyEquippedOnStartUp();
+        ShowWeaponEquippedOnStartUp();
         SaveInventory();
     }
 
@@ -614,9 +638,18 @@ public class InventoryManager : MonoBehaviour
         MoveInventory();
         if (sceneName == "VillageScene")
         {
-            otherSortButton.SetActive(true);
-            sendToVillage.SetActive(true);
-            sendToPlayerButton.SetActive(false);
+            if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.inventory)
+            {
+                otherSortButton.SetActive(true);
+                sendToVillage.SetActive(true);
+                sendToPlayerButton.SetActive(false);
+            }
+            else
+            {
+                otherSortButton.SetActive(false);
+                sendToVillage.SetActive(false);
+                sendToPlayerButton.SetActive(false);
+            }
         }
         else if (sceneName == "LootScene")
         {
@@ -644,7 +677,18 @@ public class InventoryManager : MonoBehaviour
         }
         if (sceneName == "VillageScene")
         {
-            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
+            if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.inventory)
+            {
+                VillageSceneController.villageScene.GetComponent<VillageSceneController>().InventoryUIClose();
+            }
+            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.armor)
+            {
+                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().CloseUI();
+            }
+            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.pub)
+            {
+                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().CloseUI();
+            }
         }
     }
 

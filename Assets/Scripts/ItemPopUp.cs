@@ -115,10 +115,18 @@ public class ItemPopUp : MonoBehaviour
         }
         if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "VillageScene")
         {
-            move1.SetActive(true);
-            moveAll.SetActive(true);
-            move1.GetComponentInChildren<Text>().text = "Send to village";
-            moveAll.GetComponentInChildren<Text>().text = "Send all to village";
+            if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.inventory)
+            {
+                move1.SetActive(true);
+                moveAll.SetActive(true);
+                move1.GetComponentInChildren<Text>().text = "Send to village";
+                moveAll.GetComponentInChildren<Text>().text = "Send all to village";
+            }
+            else
+            {
+                move1.SetActive(false);
+                moveAll.SetActive(false); 
+            }
         }
         else if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "LootScene")
         {
