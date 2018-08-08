@@ -181,6 +181,7 @@ public class ActiveCharacterController : MonoBehaviour
         GameMaster.gameMaster.Save();
     }
 
+    //TODO: This gives me an out of bounds error if level 4 and going to level 5
     public void DetermineActiveCharacterCurrentLevel()
     {
         for (int i = 0; i < expLevels.Length; i++)
