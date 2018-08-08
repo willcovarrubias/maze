@@ -1,0 +1,46 @@
+
+[
+	{
+		"id": 0,
+		"title": "Warrior",
+		"tier": 1,
+		"numberOfAttacks": 1,
+		"hpMod": 1.00,
+		"mpMod": 1.00,
+		"attackMod": 1.5,
+		"specialMod": 1.00,
+		"defenseMod": 1.00,
+		"speedMod": 1.00,
+		"luckMod": 1.00,
+		"sizeMod": 3.00
+	},
+	{
+		"id": 1,
+		"title": "Thief",
+		"tier": 1,
+		"numberOfAttacks": 2,
+		"hpMod": 1.00,
+		"mpMod": 1.00,
+		"attackMod": 1.00,
+		"specialMod": 1.00,
+		"defenseMod": 1.00,
+		"speedMod": 1.00,
+		"luckMod": 1.00,
+		"sizeMod": 3.00
+	},
+	{
+		"id": 2,
+		"title": "Knight",
+		"tier": 2,
+		"numberOfAttacks": 1,
+		"hpMod": 1.00,
+		"mpMod": 1.00,
+		"attackMod": 1.00,
+		"specialMod": 1.00,
+		"defenseMod": 1.00,
+		"speedMod": 1.00,
+		"luckMod": 1.00,
+		"sizeMod": 3.00
+	}
+]
+	

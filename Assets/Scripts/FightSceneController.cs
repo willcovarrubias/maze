@@ -424,7 +424,7 @@ public class FightSceneController : MonoBehaviour
     public void GoToPathRoom()
     {
         GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().DestroyDynamicPanels();
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GiveExpForBattleToActiveCharacter();
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GiveExpToActiveCharacter(50);
         SceneManager.LoadScene("PathScene");
     }
 }
