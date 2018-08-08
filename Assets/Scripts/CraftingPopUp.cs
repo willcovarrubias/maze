@@ -58,6 +58,7 @@ public class CraftingPopUp : MonoBehaviour
     {
         if (CheckIfHaveMaterials())
         {
+            Debug.Log(sizeOfAllMaterials);
             if ((GameMaster.gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() - sizeOfAllMaterials) >= craftedItem.Size)
             {
                 foreach (KeyValuePair<int, int> keyValue in craftableItem.Materials)
