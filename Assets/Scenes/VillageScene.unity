@@ -7371,6 +7371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34cb864170ce47f2b8589bdc9c66cee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  armorMenu: {fileID: 513959420}
+  consumablesMenu: {fileID: 0}
 --- !u!1 &1978632683
 GameObject:
   m_ObjectHideFlags: 0
