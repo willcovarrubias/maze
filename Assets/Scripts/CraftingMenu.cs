@@ -10,7 +10,6 @@ public class CraftingMenu : MonoBehaviour
     List<GameObject> slots = new List<GameObject>();
     int slotAmount;
 
-    public GameObject craftingMenu;
     public GameObject slotPanel;
     public GameObject itemPrefab;
     public GameObject slotPrefab;
@@ -22,8 +21,8 @@ public class CraftingMenu : MonoBehaviour
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        craftingMenu.transform.SetParent(gameMaster.transform.Find("Canvas").transform, true);
-        craftingMenu.transform.SetSiblingIndex(1);
+        transform.SetParent(gameMaster.transform.Find("Canvas").transform, true);
+        transform.SetSiblingIndex(1);
     }
 
     public void CreateNewItem(CraftableItem item)
@@ -65,17 +64,17 @@ public class CraftingMenu : MonoBehaviour
 
     public void OpenUI()
     {
-        craftingMenu.SetActive(true);
+        gameObject.SetActive(true);
         GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
     }
 
     public void CloseUI()
     {
-        craftingMenu.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void DestroyMenu()
     {
-        Destroy(craftingMenu);
+        Destroy(gameObject);
     }
 }

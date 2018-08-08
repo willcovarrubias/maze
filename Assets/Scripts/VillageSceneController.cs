@@ -55,7 +55,8 @@ public class VillageSceneController : MonoBehaviour
     }
     public void EnterLabyrinthConfirmation()
     {
-        GetComponent<CraftingMenu>().DestroyMenu();
+        GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().DestroyMenu();
+        GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingPopUp>().DestroyUI();
         GetComponent<VillageInventoryManager>().DestroyPanel();
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
@@ -70,7 +71,7 @@ public class VillageSceneController : MonoBehaviour
     public void BlacksmithMenu()//This'll pop up a menu that'll allow the player to upgrade the smith but also purchase weapons.
     {
         currentMenu = Location.VillageMenu.armor;
-        GetComponent<CraftingMenu>().OpenUI();
+        GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().OpenUI();
         //gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
         //blacksmithMenu.SetActive(true);
     }
@@ -78,7 +79,7 @@ public class VillageSceneController : MonoBehaviour
     public void BlacksmithMenuClose()
     {
         currentMenu = Location.VillageMenu.mainMenu;
-        blacksmithMenu.SetActive(false);
+        //blacksmithMenu.SetActive(false);
     }
 
     public void BarracksMenu()//This'll pop up a menu that'll allow the player to upgrade the barracks but also select a character.
@@ -97,13 +98,15 @@ public class VillageSceneController : MonoBehaviour
 
     public void ItemShopMenu()//This'll pop up a menu that'll allow the player to upgrade the item shop but also purchase items.
     {
-        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-        itemShopMenu.SetActive(true);
+        currentMenu = Location.VillageMenu.pub;
+        GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().OpenUI();
+        //itemShopMenu.SetActive(true);
     }
 
     public void ItemShopMenuClose()
     {
-        itemShopMenu.SetActive(false);
+        currentMenu = Location.VillageMenu.mainMenu;
+        //itemShopMenu.SetActive(false);
     }
 
     public void RecruitmentUIOpen()

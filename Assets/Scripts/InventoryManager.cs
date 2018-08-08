@@ -683,7 +683,11 @@ public class InventoryManager : MonoBehaviour
             }
             else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.armor)
             {
-                VillageSceneController.villageScene.GetComponent<CraftingMenu>().CloseUI();
+                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().CloseUI();
+            }
+            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.pub)
+            {
+                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().CloseUI();
             }
         }
     }
