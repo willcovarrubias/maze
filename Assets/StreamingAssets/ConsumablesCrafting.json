@@ -1,0 +1,15 @@
+
+[
+	{
+		"item": 1002,
+		"materials" : 
+		[
+			{
+				"material" : 1000,
+				"amount" : 2
+			}
+		],
+		"level": 1
+	}
+]
+	

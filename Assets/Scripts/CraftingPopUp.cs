@@ -17,8 +17,7 @@ public class CraftingPopUp : MonoBehaviour
         Button craft = craftButton.GetComponent<Button>();
         craft.onClick.AddListener(Craft);
         popUp.transform.SetParent(GameMaster.gameMaster.transform.Find("Canvas").transform, true);
-        popUp.transform.SetSiblingIndex(1);
-
+        popUp.transform.SetSiblingIndex(2);
     }
 
     public void ShowItemPopUp(CraftableItem item)
@@ -31,8 +30,14 @@ public class CraftingPopUp : MonoBehaviour
         if (craftedItem.ID >= 4000 && craftedItem.ID < 5000)
         {
             Armor craftedArmor = (Armor)craftedItem;
-            statsText += "Armor\nDef " + craftedArmor.Defense + "\nspd " + craftedArmor.Speed +
+            statsText += "Armor\nDef " + craftedArmor.Defense + "\nspd " + craftedArmor.Speed + 
                          "\nApp " + craftedArmor.Appendage + "\nWgt " + craftedArmor.Size;
+        }
+        else if (craftedItem.ID >= 1000 && craftedItem.ID < 2000)
+        {
+            Consumable consumable = (Consumable)craftedItem;
+            statsText += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing + "\nWgt " + consumable.Size;
+
         }
         statsOfItem.GetComponent<Text>().text = statsText;
         materialsText += "<b>Materials Needed:</b>";
@@ -58,7 +63,6 @@ public class CraftingPopUp : MonoBehaviour
     {
         if (CheckIfHaveMaterials())
         {
-            Debug.Log(sizeOfAllMaterials);
             if ((GameMaster.gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() - sizeOfAllMaterials) >= craftedItem.Size)
             {
                 foreach (KeyValuePair<int, int> keyValue in craftableItem.Materials)

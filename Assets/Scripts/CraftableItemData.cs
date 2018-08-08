@@ -10,11 +10,6 @@ public class CraftableItemData : MonoBehaviour, IPointerUpHandler, IPointerDownH
     CraftableItem item;
     Location.VillageMenu currentLocation;
 
-    void Start()
-    {
-
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
 

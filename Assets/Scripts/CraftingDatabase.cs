@@ -7,16 +7,18 @@ using System.IO;
 public class CraftingDatabase : MonoBehaviour
 {
     JsonData armoryCraftingData;
+    JsonData consumableCraftingData;
     List<CraftableItem> craftableItems = new List<CraftableItem>();
+    List<CraftableItem> consumableItems = new List<CraftableItem>();
+    public GameObject armorMenu;
+    public GameObject consumablesMenu;
 
     void Start()
     {
         armoryCraftingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/ArmoryCrafting.json"));
+        consumableCraftingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/ConsumablesCrafting.json"));
         AddToArmoryDatabase();
-        for (int i = 0; i < craftableItems.Count; i++)
-        {
-            GetComponent<CraftingMenu>().CreateNewItem(craftableItems[i]);
-        }
+        AddToConsumableDatabase();
     }
 
     void AddToArmoryDatabase()
@@ -30,10 +32,32 @@ public class CraftingDatabase : MonoBehaviour
             item.Level = (int)armoryCraftingData[i]["level"];
             for (int j = 0; j < armoryCraftingData[i]["materials"].Count; j++)
             {
-                materials.Add((int)armoryCraftingData[i]["materials"][j]["material"], (int)armoryCraftingData[i]["materials"][j]["amount"]);
+                materials.Add((int)armoryCraftingData[i]["materials"][j]["material"],
+                              (int)armoryCraftingData[i]["materials"][j]["amount"]);
             }
             item.Materials = materials;
             craftableItems.Add(item);
+            armorMenu.GetComponent<CraftingMenu>().CreateNewItem(item);
+        }
+    }
+
+    void AddToConsumableDatabase()
+    {
+        for (int i = 0; i < consumableCraftingData.Count; i++)
+        {
+            CraftableItem item = new CraftableItem();
+            Dictionary<int, int> materials = new Dictionary<int, int>();
+            item.SlotNum = i;
+            item.CraftedItemID = (int)consumableCraftingData[i]["item"];
+            item.Level = (int)consumableCraftingData[i]["level"];
+            for (int j = 0; j < consumableCraftingData[i]["materials"].Count; j++)
+            {
+                materials.Add((int)consumableCraftingData[i]["materials"][j]["material"],
+                              (int)consumableCraftingData[i]["materials"][j]["amount"]);
+            }
+            item.Materials = materials;
+            consumableItems.Add(item);
+            consumablesMenu.GetComponent<CraftingMenu>().CreateNewItem(item);
         }
     }
 }
