@@ -13,7 +13,10 @@ public class CraftingDatabase : MonoBehaviour
     {
         armoryCraftingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/ArmoryCrafting.json"));
         AddToArmoryDatabase();
-        //Add to list
+        for (int i = 0; i < craftableItems.Count; i++)
+        {
+            GetComponent<CraftingMenu>().CreateNewItem(craftableItems[i]);
+        }
     }
 
     void AddToArmoryDatabase()
