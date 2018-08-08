@@ -117,6 +117,7 @@ public class InventoryManager : MonoBehaviour
         if (IsWeapon(item.ID))
         {
             CreateNewItem(item, 1);
+            return;
         }
         Inventory temp;
         if (playerItems.TryGetValue(item.ID, out temp))
@@ -286,7 +287,6 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Player Item Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt("Player Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Player Item Size" + i, weapon.Size);
-                PlayerPrefs.SetInt("Player Item Equipped" + i, weapon.Equipped);
             }
             i++;
         }
@@ -315,8 +315,7 @@ public class InventoryManager : MonoBehaviour
                 int speed = PlayerPrefs.GetInt("Player Item Speed" + i);
                 int durability = PlayerPrefs.GetInt("Player Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Player Item Size" + i);
-                int equipped = PlayerPrefs.GetInt("Player Item Equipped" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, durability, size, "", equipped);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, durability, size, "");
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -688,6 +687,10 @@ public class InventoryManager : MonoBehaviour
             else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.pub)
             {
                 VillageSceneController.villageScene.GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().CloseUI();
+            }
+            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.weapons)
+            {
+                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().CloseUI();
             }
         }
     }

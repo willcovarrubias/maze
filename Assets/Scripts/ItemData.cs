@@ -291,7 +291,9 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
             }
         }
-        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor || VillageSceneController.villageScene.currentMenu == Location.VillageMenu.pub)
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor || 
+            VillageSceneController.villageScene.currentMenu == Location.VillageMenu.pub || 
+            VillageSceneController.villageScene.currentMenu == Location.VillageMenu.weapons)
         {
             if (eventData.position.x < Screen.width / 2 && beingDragged)
             {
