@@ -614,9 +614,18 @@ public class InventoryManager : MonoBehaviour
         MoveInventory();
         if (sceneName == "VillageScene")
         {
-            otherSortButton.SetActive(true);
-            sendToVillage.SetActive(true);
-            sendToPlayerButton.SetActive(false);
+            if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.inventory)
+            {
+                otherSortButton.SetActive(true);
+                sendToVillage.SetActive(true);
+                sendToPlayerButton.SetActive(false);
+            }
+            else 
+            {
+                otherSortButton.SetActive(false);
+                sendToVillage.SetActive(false);
+                sendToPlayerButton.SetActive(false);
+            }
         }
         else if (sceneName == "LootScene")
         {
@@ -644,7 +653,14 @@ public class InventoryManager : MonoBehaviour
         }
         if (sceneName == "VillageScene")
         {
-            GameObject.Find("VillageManager").GetComponent<VillageSceneController>().InventoryUIClose();
+            if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.inventory)
+            {
+                VillageSceneController.villageScene.GetComponent<VillageSceneController>().InventoryUIClose();
+            }
+            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.armor)
+            {
+                VillageSceneController.villageScene.GetComponent<CraftingMenu>().CloseUI();
+            }
         }
     }
 

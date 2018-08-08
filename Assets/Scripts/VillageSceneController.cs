@@ -55,6 +55,7 @@ public class VillageSceneController : MonoBehaviour
     }
     public void EnterLabyrinthConfirmation()
     {
+        GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<VillageInventoryManager>().DestroyPanel();
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
         SceneManager.LoadScene("PathScene");
@@ -68,8 +69,9 @@ public class VillageSceneController : MonoBehaviour
     public void BlacksmithMenu()//This'll pop up a menu that'll allow the player to upgrade the smith but also purchase weapons.
     {
         currentMenu = Location.VillageMenu.armor;
-        gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-        blacksmithMenu.SetActive(true);
+        GetComponent<CraftingMenu>().OpenUI();
+        //gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+        //blacksmithMenu.SetActive(true);
     }
 
     public void BlacksmithMenuClose()
