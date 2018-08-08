@@ -43,7 +43,6 @@ public class CraftingMenu : MonoBehaviour
         itemObject.AddComponent<CraftableItemData>();
         itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
-        itemObject.GetComponentInChildren<CraftableItemData>().SetLocation(currentLocation);
         itemObject.GetComponent<Text>().text = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title;
         ResizeSlotPanel();
     }
@@ -60,6 +59,20 @@ public class CraftingMenu : MonoBehaviour
     {
         slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
         slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
+    }
+
+    public void ClearSlots()
+    {
+        int i = 0;
+        while (i < slotPanel.transform.childCount)
+        {
+            Destroy(slotPanel.transform.GetChild(i).gameObject);
+            i++;
+        }
+        slots.Clear();
+        items.Clear();
+        slotAmount = 0;
+        ResizeSlotPanel();
     }
 
     public void OpenUI()
