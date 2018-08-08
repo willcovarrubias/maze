@@ -81,19 +81,40 @@ public class ActiveCharacterController : MonoBehaviour
             attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
+
+
+            equippedWeaponSprite.enabled = true;
             equippedWeaponSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Title);
         }
+        else
+        {
+            equippedWeaponSprite.enabled = false;
+        }
+
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() > 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
+
+            equippedHatSprite.enabled = true;
             equippedHatSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Title);
         }
+        else
+        {
+            equippedHatSprite.enabled = false;
+        }
+
         if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
         {
             defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
+
+            equippedBodySprite.enabled = true;
             equippedBodySprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Title);
+        }
+        else
+        {
+            equippedBodySprite.enabled = false;
         }
 
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
