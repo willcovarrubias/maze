@@ -21,7 +21,7 @@ public class RosterManager : MonoBehaviour
     public RectTransform slotPanelRectTransform;
     public GameObject barracksPopUp;
 
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
     public Image characterPortrait;
 
     Character currentlyClickedCharacter;
@@ -93,6 +93,7 @@ public class RosterManager : MonoBehaviour
         jobText.text = character.job;
         hpText.text = "HP: " + character.currentHP + " / " + character.maxHP;
         mpText.text = "MP: " + character.currentMP + " / " + character.maxMP;
+        inventorySizeText.text = "Carry Amount: " + character.items;
         attackText.text = "Attack: " + character.attack.ToString();
         specialText.text = "Special: " + character.special.ToString();
         defenseText.text = "Defense: " + character.defense.ToString();

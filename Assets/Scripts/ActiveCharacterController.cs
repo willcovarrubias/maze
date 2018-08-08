@@ -11,21 +11,19 @@ public class ActiveCharacterController : MonoBehaviour
     public Text nameTextObject;
 
     //UI stuff for MoreInfo Panel
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
     public Image activeHeroPortrait, equippedWeaponSprite, equippedHatSprite, equippedBodySprite;
     public GameObject activeCharacterMoreInfoPanel;
     public GameObject expBarMoreInfo;
 
     Character activeCharacter;
     Weapons currentlyEquippedWeapon;
-    int activeCharacterLevel;
 
     int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
 
     void Start()
     {
 
-        DetermineActiveCharacterCurrentLevel();
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetActiveCharacter();
         UpdateActiveCharacterVisuals();
         //nameTextObject.text = ;
@@ -37,7 +35,7 @@ public class ActiveCharacterController : MonoBehaviour
         {
             Test();
 
-
+            GiveExpToActiveCharacter(100);
         }
 
     }
@@ -53,7 +51,7 @@ public class ActiveCharacterController : MonoBehaviour
 
     void UpdateEXPBar()
     {
-        float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) / (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
+        float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
 
         //float calc_level = (expLevels[activeCharacterLevel] - GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp)
 
@@ -119,22 +117,23 @@ public class ActiveCharacterController : MonoBehaviour
 
         nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
             "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
-            "\nLv. " + activeCharacterLevel +
+            "\nLv. " + GetActiveCharacterCurrentLevel() +
             "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP +
             "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
 
         nameText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name;
-        levelText.text = "Lv. " + activeCharacterLevel.ToString();
+        levelText.text = "Lv. " + GetActiveCharacterCurrentLevel().ToString();
         jobText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
         hpText.text = "HP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP;
         mpText.text = "MP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
+        inventorySizeText.text = "Carry Amount: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.items;
         attackText.text = "Attack: " + attack;
         defenseText.text = "Defense: " + defense;
         specialText.text = "Special: " + special;
         speedText.text = "Speed: " + speed;
         luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
-        expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
+        expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
         activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
         UpdateEXPBar();
     }
@@ -187,30 +186,86 @@ public class ActiveCharacterController : MonoBehaviour
         GameMaster.gameMaster.Save();
     }
 
-    public void GiveExpForRoomClearToActiveCharacter()
+    
+    public void GiveExpToActiveCharacter(int amount)
     {
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp += 10;
+        int currentLevel = GetActiveCharacterCurrentLevel();
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp += amount;
         UpdateActiveCharacterVisuals();
-        GameMaster.gameMaster.Save();
-    }
 
-    public void GiveExpForBattleToActiveCharacter()
-    {
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp += 50;
-        DetermineActiveCharacterCurrentLevel();
+        int newLevel = GetActiveCharacterCurrentLevel();
+
+        if (currentLevel != newLevel)
+        {
+            LevelUpLogic(GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter);
+        }
         UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
     }
 
     //TODO: This gives me an out of bounds error if level 4 and going to level 5
-    public void DetermineActiveCharacterCurrentLevel()
+    public int GetActiveCharacterCurrentLevel()
     {
+        int charactersLevel = 0;
+
         for (int i = 0; i < expLevels.Length; i++)
         {
             if (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp >= expLevels[i] && GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp <= expLevels[i + 1])
             {
-                activeCharacterLevel = i + 1;
+                charactersLevel = i + 1;
             }
         }
+        return charactersLevel;
+    }
+
+    public void LevelUpLogic(Character character)
+    {
+        string charactersJob = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
+
+
+        for (int i = 0; i < GameMaster.gameMaster.GetComponent<ProfessionDatabase>().GetCountOfProfessionsList(); i++)
+        {
+            if (GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).title == charactersJob)
+            {
+                Debug.Log("This is the correct job.");
+                //HP
+                int hpRandom = Random.Range(0, 4);
+                character.maxHP += Mathf.CeilToInt( 2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod + hpRandom);
+                character.currentHP += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod +  hpRandom);
+
+                //MP
+                int mpRandom = Random.Range(0, 4);
+                character.maxMP += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).mpMod + mpRandom);
+                character.currentMP += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).mpMod + mpRandom);
+
+                //Attack
+                int attackRandom = Random.Range(0, 4);
+                character.attack += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).attackMod + attackRandom);
+
+                //Special
+                int specialRandom = Random.Range(0, 4);
+                character.special += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).specialMod + specialRandom);
+
+                //Defense
+                int defenseRandom = Random.Range(0, 4);
+                character.defense += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).defenseMod + defenseRandom);
+
+                //Speed
+                int speedRandom = Random.Range(0, 4);
+                character.speed += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).speedMod + speedRandom);
+
+                //Luck
+                int luckRandom = Random.Range(0, 4);
+                character.luck += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).luckMod + luckRandom);
+
+                //Size
+                int sizeRandom = Random.Range(0, 4);
+                character.items += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).itemsMod + sizeRandom);
+
+
+            }
+        }
+        
+
     }
 }
