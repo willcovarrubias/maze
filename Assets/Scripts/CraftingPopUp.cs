@@ -19,6 +19,7 @@ public class CraftingPopUp : MonoBehaviour
         craft.onClick.AddListener(Craft);
         popUp.transform.SetParent(GameMaster.gameMaster.transform.Find("Canvas").transform, true);
         popUp.transform.SetSiblingIndex(1);
+
     }
 
     public void ShowItemPopUp(CraftableItem item)
