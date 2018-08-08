@@ -17,13 +17,12 @@ public class CraftableItemData : MonoBehaviour, IPointerUpHandler, IPointerDownH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        
+
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log(item.CraftedItemID);
-        // show pop up with item data
+        VillageSceneController.villageScene.GetComponent<CraftingPopUp>().ShowItemPopUp(item);
     }
 
     public void SetItem(CraftableItem itemToBeSet)

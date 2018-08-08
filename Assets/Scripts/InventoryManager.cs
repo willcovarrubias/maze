@@ -113,6 +113,28 @@ public class InventoryManager : MonoBehaviour
         return movedAll;
     }
 
+    public void AddBoughtItem(Items item, int count)
+    {
+        if (IsWeapon(item.ID))
+        {
+            CreateNewItem(item, 1);
+        }
+        Inventory temp;
+        if (playerItems.TryGetValue(item.ID, out temp))
+        {
+            playerItems[item.ID].Count += count;
+            currentSize += item.Size * count;
+            SaveInventory();
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[item.ID].Count;
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[item.ID].Item.Title + " x" + playerItems[item.ID].Count;
+            UpdateInventoryText();
+        }
+        else
+        {
+            CreateNewItem(item, count);
+        }
+    }
+
     public void RemoveItemsFromInventory(Inventory item, int count, int slotId)
     {
         if (item.Count >= count)
@@ -620,7 +642,7 @@ public class InventoryManager : MonoBehaviour
                 sendToVillage.SetActive(true);
                 sendToPlayerButton.SetActive(false);
             }
-            else 
+            else
             {
                 otherSortButton.SetActive(false);
                 sendToVillage.SetActive(false);
