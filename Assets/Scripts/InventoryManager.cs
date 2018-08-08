@@ -259,6 +259,7 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Player Item Rarity" + i, weapon.Rarity);
                 PlayerPrefs.SetInt("Player Item Attack" + i, weapon.Attack);
                 PlayerPrefs.SetInt("Player Item Special" + i, weapon.Special);
+                PlayerPrefs.SetInt("Player Item Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt("Player Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Player Item Size" + i, weapon.Size);
                 PlayerPrefs.SetInt("Player Item Equipped" + i, weapon.Equipped);
@@ -287,10 +288,11 @@ public class InventoryManager : MonoBehaviour
                 int rarity = PlayerPrefs.GetInt("Player Item Rarity" + i);
                 int attack = PlayerPrefs.GetInt("Player Item Attack" + i);
                 int special = PlayerPrefs.GetInt("Player Item Special" + i);
+                int speed = PlayerPrefs.GetInt("Player Item Speed" + i);
                 int durability = PlayerPrefs.GetInt("Player Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Player Item Size" + i);
                 int equipped = PlayerPrefs.GetInt("Player Item Equipped" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, durability, size, "", equipped);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, durability, size, "", equipped);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else

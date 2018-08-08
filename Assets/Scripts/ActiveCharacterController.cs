@@ -80,10 +80,11 @@ public class ActiveCharacterController : MonoBehaviour
         {
             attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
+
 
             equippedWeaponSprite.enabled = true;
             equippedWeaponSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Title);
-
         }
         else
         {
@@ -97,7 +98,6 @@ public class ActiveCharacterController : MonoBehaviour
 
             equippedHatSprite.enabled = true;
             equippedHatSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Title);
-
         }
         else
         {
@@ -111,7 +111,6 @@ public class ActiveCharacterController : MonoBehaviour
 
             equippedBodySprite.enabled = true;
             equippedBodySprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Title);
-
         }
         else
         {
@@ -203,6 +202,7 @@ public class ActiveCharacterController : MonoBehaviour
         GameMaster.gameMaster.Save();
     }
 
+    //TODO: This gives me an out of bounds error if level 4 and going to level 5
     public void DetermineActiveCharacterCurrentLevel()
     {
         for (int i = 0; i < expLevels.Length; i++)

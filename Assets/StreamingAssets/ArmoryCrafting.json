@@ -1,0 +1,34 @@
+
+[
+	{
+		"item": 4000,
+		"materials" : 
+		[
+			{
+				"material" : 1000,
+				"amount" : 1 
+			},
+			{
+				"material" : 1001,
+				"amount" : 1 
+			}
+		],
+		"level": 1
+	},
+	{
+		"item": 4001,
+		"materials" : 
+		[
+			{
+				"material" : 1000,
+				"amount" : 2 
+			},
+			{
+				"material" : 1001,
+				"amount" : 2 
+			}
+		],
+		"level": 1
+	}
+]
+	

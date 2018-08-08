@@ -17,7 +17,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Inventory item;
 
     GameObject gameMaster;
-    GameObject villageSceneController;
     GameObject currentSlot;
     GameObject currentPanel;
     public GameObject equippedCheckMarkForWeapon, equippedCheckMarkForHat, equippedCheckMarkForBody;
@@ -25,8 +24,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Scene currentScene;
     string sceneName;
 
-    private Vector2 offsetToReturnItem;
-    bool beingDragged = false;
+    Vector2 offsetToReturnItem;
+    bool beingDragged;
 
     Location.WhereAmI currentLocation;
     Location.WhereAmI goingToLocation;
@@ -38,10 +37,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
-        if (sceneName == "VillageScene")
-        {
-            villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
-        }
         currentPanel = transform.parent.parent.parent.parent.gameObject;
         //equippedCheckMark.SetActive(false);
     }
@@ -207,8 +202,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         else if (currentLocation == Location.WhereAmI.village && goingToLocation == Location.WhereAmI.village)
         {
-            this.transform.SetParent(villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform);
-            this.transform.position = villageSceneController.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
+            this.transform.SetParent(VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().slots[slotID].transform);
+            this.transform.position = VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
         else if (currentLocation == Location.WhereAmI.temp && goingToLocation == Location.WhereAmI.player)
@@ -257,7 +252,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp))
         {
-            gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
+            if (currentLocation == Location.WhereAmI.village && VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor)
+            {
+                //TODO: Select crafting item
+            }
+            else
+            {
+                gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
+            }
         }
         if (sceneName == "VillageScene")
         {
@@ -275,25 +277,31 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     void OnPointerUpVillage(PointerEventData eventData)
     {
-        if (eventData.position.x > Screen.width / 2 && beingDragged)
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.inventory)
         {
-            goingToLocation = Location.WhereAmI.village;
-            if (currentLocation == Location.WhereAmI.player)
+            if (eventData.position.x > Screen.width / 2 && beingDragged)
             {
-                villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
-                villageSceneController.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, slotID, 1);
-                villageSceneController.GetComponent<VillageInventoryManager>().SaveVillageInventory();
-                CheckCount();
+                goingToLocation = Location.WhereAmI.village;
+                if (currentLocation == Location.WhereAmI.player)
+                {
+                    VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, slotID, 1);
+                    VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().SaveVillageInventory();
+                    CheckCount();
+                }
+            }
+            if (eventData.position.x < Screen.width / 2)
+            {
+                goingToLocation = Location.WhereAmI.player;
+                if (currentLocation == Location.WhereAmI.village)
+                {
+                    gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1, true, null);
+                    CheckCount();
+                }
             }
         }
-        if (eventData.position.x < Screen.width / 2)
+        else if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor)
         {
-            goingToLocation = Location.WhereAmI.player;
-            if (currentLocation == Location.WhereAmI.village)
-            {
-                gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, slotID, 1, true, null);
-                CheckCount();
-            }
+            //TODO: Do anything here?
         }
     }
 
