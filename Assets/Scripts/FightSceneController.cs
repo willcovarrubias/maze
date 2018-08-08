@@ -112,7 +112,7 @@ public class FightSceneController : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > timeForNextEnemyAttack)
             {
-                float sizeOfStar = ((float)(playerSpdStat + playerSpdStat) /
+                float sizeOfStar = ((float)(playerSpdStat + playerSpdStat + 1) /
                                     (playerSpdStat + listOfEnemies[enemyIndex].EnemyData.speed)) * 400;
                 star.SetActive(true);
                 star.transform.localPosition = new Vector3(
@@ -160,30 +160,32 @@ public class FightSceneController : MonoBehaviour
 
     void PlayerAttack()
     {
+        string dialog = "";
         int playerAttack = CalculatePlayerAttack();
+        string weaponDestroyedString = DeductDuribiltyOfWeapon();
         activeEnemy.EnemyHP -= playerAttack;
         moveSlider = false;
         currentTime = 0;
         Debug.Log("Enemy HP: " + activeEnemy.EnemyHP);
+        dialog += "Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + activeEnemy.EnemyData.name + ". ";
         if (activeEnemy.EnemyHP <= 0)
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
-                "Delt " + Mathf.RoundToInt(playerAttack) + " damage. " + activeEnemy.EnemyData.name + " has fainted.");
+            dialog += activeEnemy.EnemyData.name + " has fainted. ";
             listOfEnemies.Remove(activeEnemy);
             activeEnemySprite.GetComponent<EnemyHolder>().Dead();
             activeEnemySprite.GetComponentInChildren<Text>().text = "Dead";
             if (listOfEnemies.Count == 0)
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("All enemies have fainted");
+                dialog += "All enemies have fainted. ";
                 isFighting = false;
                 inventoryButton.SetActive(true);
             }
         }
-        else
+        if (weaponDestroyedString != "")
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
-                "Delt " + Mathf.RoundToInt(playerAttack) + " damage to " + activeEnemy.EnemyData.name);
+            dialog += weaponDestroyedString + " has been destroyed.";
         }
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(dialog);
         enemyHighlightSprite.SetActive(false);
     }
 
@@ -244,7 +246,6 @@ public class FightSceneController : MonoBehaviour
     {
         float initialAttack = (float)(listOfEnemies[enemyIndex].EnemyData.attack * listOfEnemies[enemyIndex].EnemyData.attack) /
             (listOfEnemies[enemyIndex].EnemyData.attack + playerDefStat);
-        Debug.Log(initialAttack);
         float enemyAttack = initialAttack;
         star.SetActive(false);
         waitingForAttack = true;
@@ -369,6 +370,28 @@ public class FightSceneController : MonoBehaviour
             playerDefStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
             playerSpdStat += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
         }
+    }
+
+    string DeductDuribiltyOfWeapon()
+    {
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+        {
+            int id = GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID();
+            Inventory equippedWeaponInv = GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[id];
+            Weapons equippedWeapon = (Weapons)equippedWeaponInv.Item;
+            int slotNum = equippedWeaponInv.SlotNum;
+            string weaponName = equippedWeapon.Title;
+            equippedWeapon.Durability--;
+            Debug.Log(equippedWeapon.Durability);
+            if (equippedWeapon.Durability <= 0)
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(equippedWeaponInv, 1, slotNum);
+                UpdatePlayerStats();
+                return weaponName;
+            }
+            GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory();
+        }
+        return "";
     }
 
     void LoadEnemies()

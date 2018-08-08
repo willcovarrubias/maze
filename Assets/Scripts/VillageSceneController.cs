@@ -5,14 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class VillageSceneController : MonoBehaviour
 {
-
+    public static VillageSceneController villageScene;
     public GameObject mainMenu, labyrinthConfirmation, barracksMenu, blacksmithMenu, itemShopMenu, inventoryUI, villInventoryUI, recruitmentUI;
-
     GameObject gameMaster;
     public Canvas canvasForAllMenusInVillageScene;
+    public Location.VillageMenu currentMenu;
 
     private void Start()
     {
+        villageScene = this;
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         inventoryUI = gameMaster.transform.Find("Canvas/InventoryPanel").gameObject;
         mainMenu.SetActive(false);
@@ -20,6 +21,7 @@ public class VillageSceneController : MonoBehaviour
         barracksMenu.SetActive(false);
         blacksmithMenu.SetActive(false);
         itemShopMenu.SetActive(false);
+        currentMenu = Location.VillageMenu.mainMenu;
     }
 
     public void MainMenu()
@@ -56,8 +58,8 @@ public class VillageSceneController : MonoBehaviour
         GetComponent<VillageInventoryManager>().DestroyPanel();
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
         SceneManager.LoadScene("PathScene");
-
     }
+
     public void EnterLabyrinthCancel()
     {
         labyrinthConfirmation.SetActive(false);
@@ -65,12 +67,14 @@ public class VillageSceneController : MonoBehaviour
 
     public void BlacksmithMenu()//This'll pop up a menu that'll allow the player to upgrade the smith but also purchase weapons.
     {
+        currentMenu = Location.VillageMenu.armor;
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
         blacksmithMenu.SetActive(true);
     }
 
     public void BlacksmithMenuClose()
     {
+        currentMenu = Location.VillageMenu.mainMenu;
         blacksmithMenu.SetActive(false);
     }
 
@@ -111,12 +115,14 @@ public class VillageSceneController : MonoBehaviour
 
     public void InventoryUIOpen()
     {
+        currentMenu = Location.VillageMenu.inventory;
         GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
         villInventoryUI.SetActive(true);
     }
 
     public void InventoryUIClose()
     {
+        currentMenu = Location.VillageMenu.mainMenu;
         inventoryUI.SetActive(false);
         villInventoryUI.SetActive(false);
     }
