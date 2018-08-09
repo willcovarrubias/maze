@@ -61,7 +61,7 @@ public class ItemDatabase : MonoBehaviour
             }
             else
             {
-                chestItemID = GetComponent<ArmorDatabase>().GetRandomArmorID();
+                chestItemID = GetComponent<ArmorDatabase>().GetRandomArmorID(mazeRoomNumber);
                 AddToChestList(chestItems, chestItemID, 1);
             }
         }

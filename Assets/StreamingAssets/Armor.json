@@ -5,7 +5,7 @@
 		"title": "Leather Shirt",
 		"rarity" : 
 		[
-			0, 1
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 		],
 		"defense": 1,
 		"speed": -1,
@@ -18,12 +18,90 @@
 		"title": "Leather Hat",
 		"rarity" : 
 		[
-			0, 1
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 		],
 		"defense": 1,
 		"speed": 0,
 		"appendage": "head",
 		"size": 2,
+		"slug": "LeatherHat"
+	},
+	{
+		"id": 4002,
+		"title": "Clay Body Armor",
+		"rarity" : 
+		[
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"defense": 1,
+		"speed": -1,
+		"appendage": "chest",
+		"size": 4,
+		"slug": "LeatherHat"
+	},
+	{
+		"id": 4003,
+		"title": "Clay Helmet",
+		"rarity" : 
+		[
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"defense": 1,
+		"speed": 0,
+		"appendage": "head",
+		"size": 4,
+		"slug": "LeatherHat"
+	},
+	{
+		"id": 4004,
+		"title": "Wood Body Armor",
+		"rarity" : 
+		[
+			2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"defense": 2,
+		"speed": -1,
+		"appendage": "chest",
+		"size": 5,
+		"slug": "LeatherHat"
+	},
+	{
+		"id": 4005,
+		"title": "Wood Helmet",
+		"rarity" : 
+		[
+			2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"defense": 2,
+		"speed": 0,
+		"appendage": "head",
+		"size": 5,
+		"slug": "LeatherHat"
+	},
+	{
+		"id": 4006,
+		"title": "Stone Body Armor",
+		"rarity" : 
+		[
+			3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"defense": 4,
+		"speed": -2,
+		"appendage": "chest",
+		"size": 6,
+		"slug": "LeatherHat"
+	},
+	{
+		"id": 4007,
+		"title": "Stone Helmet",
+		"rarity" : 
+		[
+			3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"defense": 4,
+		"speed": -1,
+		"appendage": "head",
+		"size": 6,
 		"slug": "LeatherHat"
 	}
 ]
