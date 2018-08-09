@@ -137,7 +137,7 @@ public class RosterManager : MonoBehaviour
 
         for (int i = 0; i < expLevels.Length; i++)
         {
-            if (exp >= expLevels[i] && exp <= expLevels[i + 1])
+            if (exp >= expLevels[i] && exp <= GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetExpCap())
             {
                 charactersLevel = i + 1;
             }
