@@ -40,7 +40,7 @@ public class CreateDynamicInventory : MonoBehaviour
             panelList.Add(newPanel);
             newButton.SetActive(true);
             newButton.transform.localPosition = new Vector3((newButton.transform.localPosition.x + i * 155) - offSet, newButton.transform.localPosition.y, newButton.transform.localPosition.z);
-            List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest();
+            List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest(GameMaster.gameMaster.roomCount);
             newPanel.AddComponent<DynamicInventory>().Initialize(Location.WhereAmI.temp, inventory, slotPrefab, itemPrefab, newButton);
         }
         Destroy(invPanel);
@@ -59,7 +59,7 @@ public class CreateDynamicInventory : MonoBehaviour
             enemy.GetComponent<EnemyHolder>().SetEnemyData(enemyList[i]);
             enemy.GetComponentInChildren<Text>().text = enemyList[i].EnemyData.name + "\nAtt:" + enemyList[i].EnemyData.attack + "\nDef:" + enemyList[i].EnemyData.defense + "\nSpd:" + enemyList[i].EnemyData.speed;
             enemy.SetActive(true);
-            List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest();
+            List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest(GameMaster.gameMaster.roomCount);
             newPanel.AddComponent<DynamicInventory>().Initialize(Location.WhereAmI.temp, inventory, slotPrefab, itemPrefab, enemy);
         }
         Destroy(invPanel);

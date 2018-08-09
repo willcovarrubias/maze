@@ -16,9 +16,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public int slotID;
     Inventory item;
 
-    GameObject gameMaster;
-    GameObject currentSlot;
-    GameObject currentPanel;
+    GameObject gameMaster, currentSlot, currentPanel;
     public GameObject equippedCheckMark;
 
     Scene currentScene;
@@ -27,8 +25,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Vector2 offsetToReturnItem;
     bool beingDragged;
 
-    Location.WhereAmI currentLocation;
-    Location.WhereAmI goingToLocation;
+    Location.WhereAmI currentLocation, goingToLocation;
 
     GameObject temp;
 

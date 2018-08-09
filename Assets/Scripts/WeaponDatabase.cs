@@ -7,7 +7,7 @@ using System.IO;
 public class WeaponDatabase : MonoBehaviour
 {
     List<int> weaponIDs = new List<int>();
-    JsonData itemsData, weaponMaterialData, weaponTypeData;
+    JsonData weaponMaterialData, weaponTypeData;
     int weaponCount;
 
     void Start()
@@ -22,7 +22,6 @@ public class WeaponDatabase : MonoBehaviour
         Weapons weapon = new Weapons(
             weaponCount,
             weaponMaterialData[Random.Range(0, weaponMaterialData.Count)] + " " + weaponTypeData[Random.Range(0, weaponTypeData.Count)],
-            0,
             Random.Range(1, 10),
             Random.Range(1, 10),
             Random.Range(-2, 2),
@@ -52,11 +51,10 @@ public class Weapons : Items
     public int Speed { get; set; }
     public int Durability { get; set; }
 
-    public Weapons(int id, string title, int rarity, int attack, int special, int speed, int durability, int size, string slug)
+    public Weapons(int id, string title, int attack, int special, int speed, int durability, int size, string slug)
     {
         this.ID = id;
         this.Title = title;
-        this.Rarity = rarity;
         this.Attack = attack;
         this.Special = special;
         this.Speed = speed;

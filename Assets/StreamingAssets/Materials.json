@@ -3,15 +3,71 @@
 	{
 		"id": 3000,
 		"title": "Wood",
-		"rarity": 0,
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
 		"size": 1,
 		"slug": "00"
 	},
 	{
 		"id": 3001,
-		"title": "Iron",
-		"rarity": 0,
+		"title": "Leather",
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
 		"size": 1,
+		"slug": "01"
+	},
+	{
+		"id": 3002,
+		"title": "Clay",
+		"rarity" : 
+		[
+			0, 1
+		],
+		"size": 1,
+		"slug": "01"
+	},
+	{
+		"id": 3003,
+		"title": "Stone",
+		"rarity" : 
+		[
+			2, 3
+		],
+		"size": 2,
+		"slug": "01"
+	},
+	{
+		"id": 3004,
+		"title": "Iron",
+		"rarity" : 
+		[
+			4, 5
+		],
+		"size": 2,
+		"slug": "01"
+	},
+	{
+		"id": 3005,
+		"title": "Titanium",
+		"rarity" : 
+		[
+			6, 7
+		],
+		"size": 3,
+		"slug": "01"
+	},
+	{
+		"id": 3006,
+		"title": "Chromium",
+		"rarity" : 
+		[
+			8, 9
+		],
+		"size": 3,
 		"slug": "01"
 	}
 ]
