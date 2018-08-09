@@ -42,6 +42,7 @@ public class InventoryManager : MonoBehaviour
         Button discardButton = sendToPlayerButton.GetComponent<Button>();
         discardButton.onClick.AddListener(SendToPlayerAction);
         originalPosition = scrollView.transform.position;
+        ShowEquippedOnStartUp();
     }
 
     public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount, bool fromVillage, GameObject panel)
@@ -117,6 +118,7 @@ public class InventoryManager : MonoBehaviour
         if (IsWeapon(item.ID))
         {
             CreateNewItem(item, 1);
+            return;
         }
         Inventory temp;
         if (playerItems.TryGetValue(item.ID, out temp))
@@ -165,8 +167,8 @@ public class InventoryManager : MonoBehaviour
     public void RemoveWholeStackFromInventory(Inventory items, int slot)
     {
         currentSize -= items.Item.Size * items.Count;
-        playerItems.Remove(items.Item.ID);
         CheckItemToUnequip(items.Item);
+        playerItems.Remove(items.Item.ID);
         items.Count = 0;
         ReorganizeSlots(slot);
         SaveInventory();
@@ -247,9 +249,7 @@ public class InventoryManager : MonoBehaviour
             AddItemToSlots(temp[i].Value);
         }
         sorting++;
-        ShowHatEquippedOnStartUp();
-        ShowBodyEquippedOnStartUp();
-        ShowWeaponEquippedOnStartUp();
+        ShowEquippedOnStartUp();
         SaveInventory();
     }
 
@@ -286,7 +286,6 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Player Item Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt("Player Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Player Item Size" + i, weapon.Size);
-                PlayerPrefs.SetInt("Player Item Equipped" + i, weapon.Equipped);
             }
             i++;
         }
@@ -315,8 +314,7 @@ public class InventoryManager : MonoBehaviour
                 int speed = PlayerPrefs.GetInt("Player Item Speed" + i);
                 int durability = PlayerPrefs.GetInt("Player Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Player Item Size" + i);
-                int equipped = PlayerPrefs.GetInt("Player Item Equipped" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, durability, size, "", equipped);
+                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, durability, size, "");
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -332,7 +330,6 @@ public class InventoryManager : MonoBehaviour
             currentSize += tempList[i].Item.Size * tempList[i].Count;
             AddItemToSlots(tempList[i]);
         }
-        //ShowWeaponEquippedOnStartUp();
         UpdateInventoryText();
     }
 
@@ -349,7 +346,7 @@ public class InventoryManager : MonoBehaviour
     {
         Inventory newItem;
         newItem = new Inventory(items, count, slotAmount);
-        playerItems.Add(newItem.Item.ID, newItem);
+        playerItems.Add(items.ID, newItem);
         currentSize += items.Size * count;
         SaveInventory();
         AddItemToSlots(newItem);
@@ -360,15 +357,16 @@ public class InventoryManager : MonoBehaviour
     {
         if (IsWeapon(item.ID))
         {
-            Debug.Log("Equipped the " + item.Title);
+            int weaponID = GetEquippedWeaponID();
+            if (weaponID != 0)
+            {
+                slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
+            }
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
             PlayerPrefs.SetInt("Equipped Weapon", item.ID);
             PlayerPrefs.Save();
+            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         }
-    }
-
-    public int GetEquippedWeaponID()
-    {
-        return PlayerPrefs.GetInt("Equipped Weapon");
     }
 
     public Weapons GetEquippedWeapon()
@@ -380,32 +378,22 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-    public void DisplayWeaponEquippedSpriteOnChange(Items item)
+    public int GetEquippedWeaponID()
     {
-        int weaponID = GetEquippedWeaponID();
-        if (weaponID != 0)
-        {
-            slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().UnequipWeapon();
-        }
-        SetEquippedWeapon(item);
-        weaponID = GetEquippedWeaponID();
-        slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().UpdateTheEquippedWeapon();
-    }
-
-    void ShowWeaponEquippedOnStartUp()
-    {
-        int weaponID = GetEquippedWeaponID();
-        if (weaponID != 0)
-        {
-            slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().EquipWeapon();
-        }
+        return PlayerPrefs.GetInt("Equipped Weapon");
     }
 
     public void SetEquippedHat(Items item)
     {
-        Debug.Log("Equipped the " + item.Title);
+        int hatID = GetEquippedHatID();
+        if (hatID != 0)
+        {
+            slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
+        }
+        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
         PlayerPrefs.SetInt("Equipped Hat", item.ID);
         PlayerPrefs.Save();
+        GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public Armor GetEquippedHat()
@@ -417,6 +405,24 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
+    public int GetEquippedHatID()
+    {
+        return PlayerPrefs.GetInt("Equipped Hat");
+    }
+
+    public void SetEquippedBody(Items item)
+    {
+        int bodyID = GetEquippedBodyID();
+        if (bodyID != 0)
+        {
+            slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
+        }
+        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
+        PlayerPrefs.SetInt("Equipped Body", item.ID);
+        PlayerPrefs.Save();
+        GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+    }
+
     public Armor GetEquippedBody()
     {
         if (GetEquippedBodyID() != 0)
@@ -426,102 +432,57 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
+    public int GetEquippedBodyID()
+    {
+        return PlayerPrefs.GetInt("Equipped Body");
+    }
+
     public void UnequipHat(Items item)
     {
         PlayerPrefs.SetInt("Equipped Hat", 0);
         PlayerPrefs.Save();
-        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipHat();
+        if (slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>())
+        {
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
+        }
+        GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void UnequipBody(Items item)
     {
         PlayerPrefs.SetInt("Equipped Body", 0);
         PlayerPrefs.Save();
-        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipBody();
+        if (slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>())
+        {
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
+        }
+        GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void UnequipWeapon(Items item)
     {
         PlayerPrefs.SetInt("Equipped Weapon", 0);
         PlayerPrefs.Save();
-        slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipWeapon();
-    }
-
-    public int GetEquippedHatID()
-    {
-        return PlayerPrefs.GetInt("Equipped Hat");
-    }
-
-    public void DisplayHatEquippedSpriteOnChange(Items item)
-    {
-        int hatID = GetEquippedHatID();
-        if (hatID != 0)
+        if (slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>())
         {
-            slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().UnequipHat();
+            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
         }
-        SetEquippedHat(item);
-        hatID = GetEquippedHatID();
-        slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().UpdateTheEquippedHat();
-    }
-
-    void ShowHatEquippedOnStartUp()
-    {
-        int hatID = GetEquippedHatID();
-        if (hatID != 0)
-        {
-            slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().EquipHat();
-        }
-    }
-
-    public void SetEquippedBody(Items item)
-    {
-        Debug.Log("Equipped the " + item.Title);
-        PlayerPrefs.SetInt("Equipped Body", item.ID);
-        PlayerPrefs.Save();
-    }
-
-    public int GetEquippedBodyID()
-    {
-        return PlayerPrefs.GetInt("Equipped Body");
+        GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     void CheckItemToUnequip(Items item)
     {
         if (item.ID == GetEquippedWeaponID())
         {
-            PlayerPrefs.SetInt("Equipped Weapon", 0);
-            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+            UnequipWeapon(item);
         }
         else if (item.ID == GetEquippedHatID())
         {
-            PlayerPrefs.SetInt("Equipped Hat", 0);
-            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
+            UnequipHat(item);
         }
         else if (item.ID == GetEquippedBodyID())
         {
-            PlayerPrefs.SetInt("Equipped Body", 0);
-            GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-        }
-    }
-
-    public void DisplayBodyEquippedSpriteOnChange(Items item)
-    {
-        int bodyID = GetEquippedBodyID();
-        if (bodyID != 0)
-        {
-            slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().UnequipBody();
-        }
-        SetEquippedBody(item);
-        bodyID = GetEquippedBodyID();
-        slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().UpdateTheEquippedBody();
-    }
-
-    void ShowBodyEquippedOnStartUp()
-    {
-        int bodyID = GetEquippedBodyID();
-        if (bodyID != 0)
-        {
-            slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().EquipBody();
+            UnequipBody(item);
         }
     }
 
@@ -629,9 +590,6 @@ public class InventoryManager : MonoBehaviour
 
     public void OpenInventoryPanelUI()
     {
-        ShowWeaponEquippedOnStartUp();
-        ShowHatEquippedOnStartUp();
-        ShowBodyEquippedOnStartUp();
         inventoryPanel.SetActive(true);
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
@@ -689,6 +647,10 @@ public class InventoryManager : MonoBehaviour
             {
                 VillageSceneController.villageScene.GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().CloseUI();
             }
+            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.weapons)
+            {
+                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().CloseUI();
+            }
         }
     }
 
@@ -733,5 +695,24 @@ public class InventoryManager : MonoBehaviour
     {
         maxInventorySize = amount;
         UpdateInventoryText();
+    }
+
+    void ShowEquippedOnStartUp()
+    {
+        int bodyID = GetEquippedBodyID();
+        int hatID = GetEquippedHatID();
+        int weaponID = GetEquippedWeaponID();
+        if (GetEquippedBodyID() != 0)
+        {
+            slots[playerItems[bodyID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
+        }
+        if (GetEquippedHatID() != 0)
+        {
+            slots[playerItems[hatID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
+        }
+        if (GetEquippedWeaponID() != 0)
+        {
+            slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
+        }
     }
 }
