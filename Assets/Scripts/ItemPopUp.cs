@@ -55,7 +55,9 @@ public class ItemPopUp : MonoBehaviour
         {
             Consumable consumable = (Consumable)item.Item;
             UpdateCount();
-            stats += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing + "\nWgt " + item.Item.Size;
+            Debug.Log(consumable.MP);
+            stats += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing +
+                     "\nMP " + (consumable.MP > 0 ? "+" : "") + consumable.MP + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
             action.GetComponentInChildren<Text>().text = "Consume";
@@ -125,7 +127,7 @@ public class ItemPopUp : MonoBehaviour
             else
             {
                 move1.SetActive(false);
-                moveAll.SetActive(false); 
+                moveAll.SetActive(false);
             }
         }
         else if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "LootScene")
@@ -182,8 +184,27 @@ public class ItemPopUp : MonoBehaviour
     {
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
+            string dialog = "";
             Consumable consumable = (Consumable)item.Item;
             gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
+            gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.MP);
+            if (consumable.Healing > 0)
+            {
+                dialog += "Recovered " + consumable.Healing + " HP.";
+            }
+            else if (consumable.Healing < 0)
+            {
+                dialog += "Lost " + consumable.Healing + " HP. ";
+            }
+            if (consumable.MP > 0)
+            {
+                dialog += "Recovered " + consumable.MP + " MP.";
+            }
+            else if (consumable.MP < 0)
+            {
+                dialog += "Lost " + consumable.MP + " MP.";
+            }
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(dialog);
             ThrowAwayOne();
             CheckIfUsedItemDuringFight();
         }

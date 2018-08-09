@@ -7,7 +7,6 @@ using System.IO;
 public class ItemDatabase : MonoBehaviour
 {
     Dictionary<int, Items> database = new Dictionary<int, Items>();
-    private JsonData itemsData;
 
     public Items FetchItemByID(int id)
     {
@@ -32,7 +31,6 @@ public class ItemDatabase : MonoBehaviour
         }
     }
 
-    //TODO: Make sure to use mazeRoomNumber and rarity someway in the furture
     public List<Inventory> GetRandomItemsForChest(int mazeRoomNumber)
     {
         List<Inventory> chestItems = new List<Inventory>();
