@@ -194,7 +194,7 @@ public class ItemPopUp : MonoBehaviour
             {
                 if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
                 {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayHatEquippedSpriteOnChange(item.Item);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedHat(item.Item);
                 }
                 else
                 {
@@ -205,7 +205,7 @@ public class ItemPopUp : MonoBehaviour
             {
                 if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
                 {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayBodyEquippedSpriteOnChange(item.Item);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedBody(item.Item);
                 }
                 else
                 {
@@ -220,7 +220,7 @@ public class ItemPopUp : MonoBehaviour
         {
             if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().DisplayWeaponEquippedSpriteOnChange(item.Item);
+                GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
             }
             else
             {
