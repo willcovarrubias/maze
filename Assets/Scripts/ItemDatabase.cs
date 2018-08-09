@@ -40,31 +40,29 @@ public class ItemDatabase : MonoBehaviour
             float randomValue = Random.value;
             int chestItemID;
             int amount;
-            if (randomValue >= 0.6f)
+            if (randomValue >= 0.7f)
             {
                 KeyValuePair<int, int> amountAndID = GetComponent<ConsumableDatabase>().GetRandomConsumableID(mazeRoomNumber);
                 chestItemID = amountAndID.Key;
                 amount = amountAndID.Value;
                 AddToChestList(chestItems, chestItemID, amount);
             }
-            else if (randomValue >= 0.2f && randomValue < 0.6f)
+            else if (randomValue >= 0.1f && randomValue < 0.7f)
             {
                 KeyValuePair<int, int> amountAndID = GetComponent<MaterialDatabase>().GetRandomMaterialID(mazeRoomNumber);
                 chestItemID = amountAndID.Key;
                 amount = amountAndID.Value;
                 AddToChestList(chestItems, chestItemID, amount);
             }
-            else if (randomValue >= 0.1f && randomValue < 0.2f)
+            else if (randomValue >= 0.05f && randomValue < 0.1f)
             {
-                amount = 1;
-                Items weapon = GetComponent<WeaponDatabase>().CreateWeapon();
+                Items weapon = GetComponent<WeaponDatabase>().CreateWeapon(mazeRoomNumber);
                 chestItems.Add(new Inventory(weapon, 1, chestItems.Count));
             }
             else
             {
-                amount = 1;
                 chestItemID = GetComponent<ArmorDatabase>().GetRandomArmorID();
-                AddToChestList(chestItems, chestItemID, amount);
+                AddToChestList(chestItems, chestItemID, 1);
             }
         }
         return chestItems;
