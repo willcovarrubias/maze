@@ -211,6 +211,16 @@ public class ActiveCharacterController : MonoBehaviour
         GameMaster.gameMaster.Save();
     }
 
+    public void IncreaseMP(int amount)
+    {
+        GetComponent<CharacterDatabase>().activeCharacter.currentMP += amount;
+        if (GetComponent<CharacterDatabase>().activeCharacter.currentMP > GetComponent<CharacterDatabase>().activeCharacter.maxMP)
+        {
+            GetComponent<CharacterDatabase>().activeCharacter.currentMP = GetComponent<CharacterDatabase>().activeCharacter.maxMP;
+        }
+        UpdateActiveCharacterVisuals();
+        GameMaster.gameMaster.Save();
+    }
     
     public void GiveExpToActiveCharacter(int amount)
     {

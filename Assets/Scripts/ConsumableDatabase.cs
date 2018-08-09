@@ -31,6 +31,7 @@ public class ConsumableDatabase : MonoBehaviour
             item.Size = (int)itemsData[i]["size"];
             item.Slug = itemsData[i]["slug"].ToString();
             item.Healing = (int)itemsData[i]["healing"];
+            item.MP = (int)itemsData[i]["mp"];
             List<int> newList = new List<int>();
             for (int j = 0; j < itemsData[i]["rarity"].Count; j++)
             {
@@ -101,16 +102,18 @@ public class ConsumableDatabase : MonoBehaviour
 public class Consumable : Items
 {
     public int Healing { get; set; }
+    public int MP { get; set; }
 
-    public Consumable(int id, string title, int size, int healing, string slug)
+    public Consumable(int id, string title, int size, int healing, int mp, string slug)
     {
         this.ID = id;
         this.Title = title;
         this.Size = size;
         this.Healing = healing;
+        this.MP = mp;
         this.Slug = slug;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
     }
 
-    public Consumable() {}
+    public Consumable() { }
 }
