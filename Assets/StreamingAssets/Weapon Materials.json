@@ -1,13 +1,87 @@
-
 [
-	"Wooden",
-	"Rusty",
-	"Bronze",
-	"Iron",
-	"Silver",
-	"Steel",
-	"Titanium",
-	"Diamond",
-	"Mythic"
+	{
+		"material": "Wooden",
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 1,
+		"special": 1,
+		"speed": 0,
+		"duribility": 2,
+		"size": 1
+	},
+	{
+		"material": "Rusty",
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 2,
+		"special": 1,
+		"speed": 0,
+		"duribility": 4,
+		"size": 2
+	},
+	{
+		"material": "Clay",
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 3,
+		"special": 1,
+		"speed": 0,
+		"duribility": 6,
+		"size": 3
+	},
+	{
+		"material": "Stone",
+		"rarity" : 
+		[
+			2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 4,
+		"special": 1,
+		"speed": -1,
+		"duribility": 8,
+		"size": 4
+	},
+	{
+		"material": "Iron",
+		"rarity" : 
+		[
+			4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 5,
+		"special": 1,
+		"speed": -2,
+		"duribility": 10,
+		"size": 5
+	},
+	{
+		"material": "Titanium",
+		"rarity" : 
+		[
+			6, 7, 8, 9, 10, 11
+		],
+		"attack": 6,
+		"special": 1,
+		"speed": -2,
+		"duribility": 12,
+		"size": 6
+	},
+	{
+		"material": "Chromium",
+		"rarity" : 
+		[
+			8, 9, 10, 11
+		],
+		"attack": 7,
+		"special": 1,
+		"speed": -2,
+		"duribility": 14,
+		"size": 7
+	}
 ]
 	
