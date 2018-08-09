@@ -99,7 +99,6 @@ public class VillageSceneController : MonoBehaviour
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
         //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = 3;
         barracksMenu.SetActive(true);
-        Debug.Log("You have accessed the Barracks Menu.");
     }
 
     public void BarracksMenuClose()

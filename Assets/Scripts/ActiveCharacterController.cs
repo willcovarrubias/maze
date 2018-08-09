@@ -18,6 +18,8 @@ public class ActiveCharacterController : MonoBehaviour
 
     Character activeCharacter;
     Weapons currentlyEquippedWeapon;
+    public int expCap = 1600;
+    int levelCap = 5;
 
     int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
 
@@ -40,6 +42,11 @@ public class ActiveCharacterController : MonoBehaviour
 
     }
 
+    public int GetExpCap()
+    {
+        return expCap;
+    }
+
     public void SetXPBar(float exp)
     {
         expBarFront.transform.localScale = new Vector3(exp, expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
@@ -51,11 +58,19 @@ public class ActiveCharacterController : MonoBehaviour
 
     void UpdateEXPBar()
     {
-        float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+        if (GetActiveCharacterCurrentLevel() < levelCap)
+        {
+            float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+            SetXPBar(calc_Level);
+        }
+        else
+        {
+            SetXPBar(.95f);
+        }
 
         //float calc_level = (expLevels[activeCharacterLevel] - GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp)
 
-        SetXPBar(calc_Level);
+        
     }
 
     public void MoreInfoUIOpen()
@@ -133,7 +148,17 @@ public class ActiveCharacterController : MonoBehaviour
         specialText.text = "Special: " + special;
         speedText.text = "Speed: " + speed;
         luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
-        expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+
+        if (GetActiveCharacterCurrentLevel() < levelCap)
+        {
+            expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+
+        }
+        else
+        {
+            expText.text = "XP: MAX"; 
+
+        }
         activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
         UpdateEXPBar();
     }
@@ -189,30 +214,45 @@ public class ActiveCharacterController : MonoBehaviour
     
     public void GiveExpToActiveCharacter(int amount)
     {
-        int currentLevel = GetActiveCharacterCurrentLevel();
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp += amount;
-        UpdateActiveCharacterVisuals();
-
-        int newLevel = GetActiveCharacterCurrentLevel();
-
-        if (currentLevel != newLevel)
+        if (GetActiveCharacterCurrentLevel() == levelCap)
         {
-            LevelUpLogic(GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter);
+            //Don't give exp since character is capped.
+
+        }
+        else
+        {
+            int currentLevel = GetActiveCharacterCurrentLevel();
+            GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp += amount;
+
+            int newLevel = GetActiveCharacterCurrentLevel();
+
+            if (currentLevel != newLevel)
+            {
+                LevelUpLogic(GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter);
+            }
+
         }
         UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
+
+
     }
 
     //TODO: This gives me an out of bounds error if level 4 and going to level 5
     public int GetActiveCharacterCurrentLevel()
     {
         int charactersLevel = 0;
+        
 
         for (int i = 0; i < expLevels.Length; i++)
         {
-            if (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp >= expLevels[i] && GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp <= expLevels[i + 1])
+            if (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp >= expLevels[i] && GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp <= expCap)
             {
                 charactersLevel = i + 1;
+            }
+            else if (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp >= expCap)
+            {
+                charactersLevel = levelCap;
             }
         }
         return charactersLevel;
@@ -227,7 +267,6 @@ public class ActiveCharacterController : MonoBehaviour
         {
             if (GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).title == charactersJob)
             {
-                Debug.Log("This is the correct job.");
                 //HP
                 int hpRandom = Random.Range(0, 4);
                 character.maxHP += Mathf.CeilToInt( 2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod + hpRandom);
