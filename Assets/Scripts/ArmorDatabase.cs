@@ -6,12 +6,18 @@ using System.IO;
 
 public class ArmorDatabase : MonoBehaviour
 {
-    List<int> armorIDs = new List<int>();
-    private JsonData itemsData;
+    List<List<int>> armorID = new List<List<int>>();
+    JsonData itemsData;
+    static int maxAmountOfRooms = 12;
 
     void Start()
     {
         itemsData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armor.json"));
+        for (int i = 0; i < maxAmountOfRooms; i++)
+        {
+            List<int> newList = new List<int>();
+            armorID.Add(newList);
+        }
         AddToDatabase();
     }
 
@@ -19,23 +25,33 @@ public class ArmorDatabase : MonoBehaviour
     {
         for (int i = 0; i < itemsData.Count; i++)
         {
-            Armor armor = new Armor((int)itemsData[i]["id"],
-                itemsData[i]["title"].ToString(),
-                (int)itemsData[i]["rarity"],
-                (int)itemsData[i]["size"],
-                (int)itemsData[i]["defense"],
-                (int)itemsData[i]["speed"],
-                itemsData[i]["appendage"].ToString(),
-                itemsData[i]["slug"].ToString());
+            Armor armor = new Armor();
+            armor.ID = (int)itemsData[i]["id"];
+            armor.Title = itemsData[i]["title"].ToString();
+            armor.Size = (int)itemsData[i]["size"];
+            armor.Slug = itemsData[i]["slug"].ToString();
+            armor.Speed = (int)itemsData[i]["speed"];
+            armor.Appendage = itemsData[i]["appendage"].ToString();
+            armor.Defense = (int)itemsData[i]["defense"];
+            List<int> newList = new List<int>();
+            for (int j = 0; j < itemsData[i]["rarity"].Count; j++)
+            {
+                newList.Add((int)itemsData[i]["rarity"][j]);
+            }
+            armor.Rarity = newList;
             GetComponent<ItemDatabase>().AddToDatabase(armor);
-            armorIDs.Add(armor.ID);
+            for (int j = 0; j < itemsData[i]["rarity"].Count; j++)
+            {
+                armorID[(int)itemsData[i]["rarity"][j]].Add(armor.ID);
+            }
         }
     }
 
     //TODO: use mazeRoomNumber and rarity in the future
     public int GetRandomArmorID(/*int mazeRoomNumber*/)
     {
-        return armorIDs[Random.Range(0, armorIDs.Count)];
+        return 4000;
+        //return armorID[Random.Range(0, armorID.Count)];
     }
 }
 
@@ -45,11 +61,10 @@ public class Armor : Items
     public int Speed { get; set; }
     public string Appendage { get; set; }
 
-    public Armor(int id, string title, int rarity, int size, int defense, int speed, string appendage, string slug)
+    public Armor(int id, string title, int size, int defense, int speed, string appendage, string slug)
     {
         this.ID = id;
         this.Title = title;
-        this.Rarity = rarity;
         this.Size = size;
         this.Slug = slug;
         this.Defense = defense;
@@ -57,4 +72,6 @@ public class Armor : Items
         this.Appendage = appendage;
         this.Sprite = Resources.Load<Sprite>("Items/" + slug);
     }
+
+    public Armor() {}
 }

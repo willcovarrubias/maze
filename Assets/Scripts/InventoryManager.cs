@@ -280,7 +280,6 @@ public class InventoryManager : MonoBehaviour
             {
                 Weapons weapon = (Weapons)playerItems[key].Item;
                 PlayerPrefs.SetString("Player Item Name" + i, weapon.Title);
-                PlayerPrefs.SetInt("Player Item Rarity" + i, weapon.Rarity);
                 PlayerPrefs.SetInt("Player Item Attack" + i, weapon.Attack);
                 PlayerPrefs.SetInt("Player Item Special" + i, weapon.Special);
                 PlayerPrefs.SetInt("Player Item Speed" + i, weapon.Speed);
@@ -308,13 +307,12 @@ public class InventoryManager : MonoBehaviour
             if (IsWeapon(id))
             {
                 string title = PlayerPrefs.GetString("Player Item Name" + i);
-                int rarity = PlayerPrefs.GetInt("Player Item Rarity" + i);
                 int attack = PlayerPrefs.GetInt("Player Item Attack" + i);
                 int special = PlayerPrefs.GetInt("Player Item Special" + i);
                 int speed = PlayerPrefs.GetInt("Player Item Speed" + i);
                 int durability = PlayerPrefs.GetInt("Player Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Player Item Size" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, durability, size, "");
+                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, "");
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else

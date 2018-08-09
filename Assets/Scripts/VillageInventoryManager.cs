@@ -195,7 +195,6 @@ public class VillageInventoryManager : MonoBehaviour
             {
                 Weapons weapon = (Weapons)villageItems[key].Item;
                 PlayerPrefs.SetString("Village Item Name" + i, weapon.Title);
-                PlayerPrefs.SetInt("Village Item Rarity" + i, weapon.Rarity);
                 PlayerPrefs.SetInt("Village Item Attack" + i, weapon.Attack);
                 PlayerPrefs.SetInt("Village Item Special" + i, weapon.Special);
                 PlayerPrefs.SetInt("Village Item Speed" + i, weapon.Speed);
@@ -223,13 +222,12 @@ public class VillageInventoryManager : MonoBehaviour
             if (IsWeapon(id))
             {
                 string title = PlayerPrefs.GetString("Village Item Name" + i);
-                int rarity = PlayerPrefs.GetInt("Village Item Rarity" + i);
                 int attack = PlayerPrefs.GetInt("Village Item Attack" + i);
                 int special = PlayerPrefs.GetInt("Village Item Special" + i);
                 int speed = PlayerPrefs.GetInt("Village Item Speed" + i);
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Village Item Size" + i);
-                Weapons weapon = new Weapons(id, title, rarity, attack, special, speed, duribility, size, "");
+                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, "");
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else

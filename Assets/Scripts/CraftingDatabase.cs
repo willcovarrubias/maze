@@ -99,7 +99,6 @@ public class CraftingDatabase : MonoBehaviour
                 item.CraftedItemID = 0;
                 item.Weapon.Title = weaponsCraftingData[i]["title"].ToString();
                 item.Weapon.Attack = (int)weaponsCraftingData[i]["attack"];
-                item.Weapon.Rarity = (int)weaponsCraftingData[i]["rarity"];
                 item.Weapon.Durability = (int)weaponsCraftingData[i]["duribilty"];
                 item.Weapon.Special = (int)weaponsCraftingData[i]["special"];
                 item.Weapon.Speed = (int)weaponsCraftingData[i]["speed"];
