@@ -19,7 +19,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     GameObject gameMaster;
     GameObject currentSlot;
     GameObject currentPanel;
-    public GameObject equippedCheckMarkForWeapon, equippedCheckMarkForHat, equippedCheckMarkForBody;
+    public GameObject equippedCheckMark;
 
     Scene currentScene;
     string sceneName;
@@ -38,83 +38,17 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
         currentPanel = transform.parent.parent.parent.parent.gameObject;
-        //equippedCheckMark.SetActive(false);
     }
 
-    public void UpdateTheEquippedWeapon()
+    public void UnequipItem()
     {
-        if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID())
-        {
-            equippedCheckMarkForWeapon.SetActive(true);
-        }
-        else
-        {
-            equippedCheckMarkForWeapon.SetActive(false);
-        }
+        equippedCheckMark.SetActive(false);
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
-    public void UpdateTheEquippedHat()
+    public void EquipItem()
     {
-        if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID())
-        {
-            equippedCheckMarkForHat.SetActive(true);
-        }
-        else
-        {
-            equippedCheckMarkForHat.SetActive(false);
-        }
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void UpdateTheEquippedBody()
-    {
-        if (item.Item.ID == GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID())
-        {
-            Debug.Log("Is this ever true? ");
-            equippedCheckMarkForBody.SetActive(true);
-        }
-        else
-        {
-            Debug.Log("This is probably always true.");
-            equippedCheckMarkForBody.SetActive(false);
-        }
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void UnequipHat()
-    {
-        equippedCheckMarkForHat.SetActive(false);
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void UnequipBody()
-    {
-        equippedCheckMarkForBody.SetActive(false);
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void UnequipWeapon()
-    {
-        equippedCheckMarkForWeapon.SetActive(false);
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void EquipHat()
-    {
-        equippedCheckMarkForHat.SetActive(true);
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void EquipBody()
-    {
-        equippedCheckMarkForBody.SetActive(true);
-        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
-    }
-
-    public void EquipWeapon()
-    {
-        equippedCheckMarkForWeapon.SetActive(true);
+        equippedCheckMark.SetActive(true);
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
@@ -151,6 +85,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             if (item.Count > 1)
             {
                 temp = Instantiate(transform.gameObject, transform.parent, true);
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
                 if (item.Count > 3)
                 {
                     temp.GetComponent<Text>().text = item.Item.Title + " x" + (item.Count - 1);
@@ -186,6 +124,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             if (item.Count > 0)
             {
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
                 this.transform.SetParent(currentSlot.transform);
                 this.transform.position = currentSlot.transform.position;
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -291,8 +233,8 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
             }
         }
-        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor || 
-            VillageSceneController.villageScene.currentMenu == Location.VillageMenu.pub || 
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.armor ||
+            VillageSceneController.villageScene.currentMenu == Location.VillageMenu.pub ||
             VillageSceneController.villageScene.currentMenu == Location.VillageMenu.weapons)
         {
             if (eventData.position.x < Screen.width / 2 && beingDragged)
