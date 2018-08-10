@@ -396,7 +396,7 @@ public class FightSceneController : MonoBehaviour
 
     void LoadEnemies()
     {
-        listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetEnemiesForFightScene();
+        listOfEnemies = GameMaster.gameMaster.GetComponent<CharacterDatabase>().GetEnemiesForFightScene(GameMaster.gameMaster.roomCount);
         GameObject.Find("Manager").GetComponent<CreateDynamicInventory>().CreateForFightScene(listOfEnemies);
     }
 

@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 
 public class CharacterDatabase : MonoBehaviour
 {
+    List<List<int>> enemyID = new List<List<int>>();
     List<Character> enemyDatabase = new List<Character>();
     public List<Character> listOfWanderers = new List<Character>();
     public List<Character> listOfHeroes = new List<Character>();
@@ -21,47 +22,42 @@ public class CharacterDatabase : MonoBehaviour
     int amountOfSavedWanderers;
 
     GameObject villageManager;
+    static int maxAmountOfRooms = 12;
 
     void Start()
     {
         enemyData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Characters.json"));
+        for (int i = 0; i < maxAmountOfRooms; i++)
+        {
+            List<int> newList = new List<int>();
+            enemyID.Add(newList);
+        }
         AddToDatabase(enemyData, enemyDatabase);
         LoadHeroCharacters();
         LoadWandererCharacters();
-
         villageManager = GameObject.FindGameObjectWithTag("VillageSceneManager");
-
         PrintCreatedCharacters();
     }
 
-    /*
-    private void Update()
-    {
-        if (Input.GetKeyUp("c"))
-        {
-            //CreateRandomHero();
-        }
-        if (Input.GetKeyUp("p"))
-        {
-            PrintCreatedCharacters();
-        }
-        if (Input.GetKeyUp("d"))
-        {
-            //DeleteWanderer(listOfWanderers[UnityEngine.Random.Range(0, listOfWanderers.Count)]);
-        }
-        if (Input.GetKeyUp("e"))
-        {
-            PlayerPrefs.DeleteAll();
-        }
-    }
-    */
-
     public Character FetchHeroByID(int id)
     {
-        for (int i = 0; i < GetComponent<CharacterDatabase>().GetListOfHeroes().Count; i++)
+        for (int i = 0; i < GetListOfHeroes().Count; i++)
         {
-            if (GetComponent<CharacterDatabase>().GetListOfHeroes()[i].id == id)
-                return GetComponent<CharacterDatabase>().GetListOfHeroes()[i];
+            if (GetListOfHeroes()[i].id == id)
+                return GetListOfHeroes()[i];
+        }
+        return null;
+    }
+
+    public Enemy FetchEnemyByID(int id)
+    {
+        for (int i = 0; i < enemyDatabase.Count; i++)
+        {
+            if (enemyDatabase[i].id == id)
+            {
+                Enemy returnedEnemy = new Enemy(enemyDatabase[i]);
+                return returnedEnemy;
+            }
         }
         return null;
     }
@@ -80,21 +76,39 @@ public class CharacterDatabase : MonoBehaviour
     {
         for (int i = 0; i < json.Count; i++)
         {
-            characters.Add(new Character((int)json[i]["id"],
-                json[i]["name"].ToString(),
-                json[i]["job"].ToString(),
-                (int)json[i]["numberOfAttacks"],
-                (int)json[i]["hp"],
-                (int)json[i]["mp"],
-                (int)json[i]["attack"],
-                (int)json[i]["special"],
-                (int)json[i]["defense"],
-                (int)json[i]["speed"],
-                (int)json[i]["luck"],
-                (int)json[i]["items"],
-                (int)json[i]["exp"],
-                (int)json[i]["lives"],
-                json[i]["slug"].ToString()));
+            Character character = new Character();
+            character.id = (int)json[i]["id"];
+            character.name = json[i]["name"].ToString();
+            character.job = json[i]["job"].ToString();
+            character.numberOfAttacks = (int)json[i]["numberOfAttacks"];
+            character.maxHP = (int)json[i]["hp"];
+            character.maxMP = (int)json[i]["mp"];
+            character.attack = (int)json[i]["attack"];
+            character.special = (int)json[i]["special"];
+            character.defense = (int)json[i]["defense"];
+            character.speed = (int)json[i]["speed"];
+            character.luck = (int)json[i]["luck"];
+            character.items = (int)json[i]["items"];
+            character.exp = (int)json[i]["exp"];
+            character.lives = (int)json[i]["lives"];
+            character.slug = json[i]["slug"].ToString();
+            List<int> rarityList = new List<int>();
+            for (int j = 0; j < json[i]["rarity"].Count; j++)
+            {
+                rarityList.Add((int)json[i]["rarity"][j]);
+            }
+            List<int> itemIDs = new List<int>();
+            for (int j = 0; j < json[i]["itemsHolding"].Count; j++)
+            {
+                itemIDs.Add((int)json[i]["itemsHolding"][j]);
+            }
+            character.itemsHolding = itemIDs;
+            character.rarity = rarityList;
+            characters.Add(character);
+            for (int j = 0; j < json[i]["rarity"].Count; j++)
+            {
+                enemyID[(int)json[i]["rarity"][j]].Add(character.id);
+            }
         }
     }
 
@@ -166,7 +180,6 @@ public class CharacterDatabase : MonoBehaviour
         int newWandererID = listOfWanderers.Count + 1;
         return newWandererID;
     }
-
 
     int GenerateHeroID()
     {
@@ -263,16 +276,62 @@ public class CharacterDatabase : MonoBehaviour
         }
     }
 
-    public List<Enemy> GetEnemiesForFightScene(/*int mazeRoomNumber*/)
+    public List<Enemy> GetEnemiesForFightScene(int mazeRoomNumber)
     {
-        List<Enemy> enemies = new List<Enemy>();
-        int amountOfEnemies = UnityEngine.Random.Range(1, 4);
-        for (int i = 0; i < amountOfEnemies; i++)
+        List<Enemy> listOfEnemies = new List<Enemy>();
+        int mod = mazeRoomNumber % 20;
+        int max = (mod / 4) + 1;
+        int amountOfEnemiesForList = UnityEngine.Random.Range(1, max);
+        int rarity = Mathf.FloorToInt((float)mazeRoomNumber / 10);
+        for (int i = 0; i < amountOfEnemiesForList; i++)
         {
-            Enemy newEnemy = new Enemy(enemyDatabase[UnityEngine.Random.Range(0, enemyDatabase.Count)]);
-            enemies.Add(newEnemy);
+            listOfEnemies.Add(GetRandomEnemy(rarity));
         }
-        return enemies;
+        return listOfEnemies;
+    }
+
+    Enemy GetRandomEnemy(int rarity)
+    {
+        float randomValue = UnityEngine.Random.value;
+        if (randomValue >= 0.9f && randomValue < 0.95f)
+        {
+            rarity = IncreaseOrDecreaseRarity(rarity, 1);
+        }
+        else if (randomValue >= 0.95f && randomValue < 0.95f)
+        {
+            rarity = IncreaseOrDecreaseRarity(rarity, 2);
+        }
+        else if (randomValue >= 0.98f && randomValue < 0.99)
+        {
+            rarity = IncreaseOrDecreaseRarity(rarity, 3);
+        }
+        else if (randomValue >= 0.99f && randomValue < 1)
+        {
+            rarity = IncreaseOrDecreaseRarity(rarity, 4);
+        }
+        return FetchEnemyByID(enemyID[rarity][UnityEngine.Random.Range(0, enemyID[rarity].Count)]);
+    }
+
+    int IncreaseOrDecreaseRarity(int rarity, int amount)
+    {
+        if (UnityEngine.Random.value > 0.5f)
+        {
+            rarity += amount;
+            if (rarity > enemyID.Count - 1)
+            {
+                rarity = enemyID.Count - 1;
+            }
+            return rarity;
+        }
+        else
+        {
+            rarity += amount;
+            if (rarity < 0)
+            {
+                rarity = 0;
+            }
+            return rarity;
+        }
     }
 }
 
@@ -296,6 +355,8 @@ public class Character
     public int exp { get; set; }
     public int lives { get; set; }
     public string slug { get; set; }
+    public List<int> itemsHolding { get; set; }
+    public List<int> rarity { get; set; }
     //public Sprite sprite { get; set; }
 
     public Character(int id, string name, string job, int numberOfAttacks, int hp, int mp, int attack, int special,
