@@ -5,19 +5,19 @@
         "job":  "Warrior",
 		"numberOfAttacks": 1,
 		"name": "Bat",
-		"hp": 7,
+		"hp": 6,
 		"mp": 20,
-		"attack": 3,
-		"special": 1,
-		"defense": 3,
+		"attack": 2,
+		"special": 2,
+		"defense": 2,
 		"speed": 4,
 		"luck": 1,
-		"items": 20,
+		"items": 0,
 		"exp": 0,
 		"lives": 1,
 		"rarity" : 
 		[
-			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+			0, 1, 4, 5, 6, 7, 8, 9, 10, 11
 		],
 		"itemsHolding" : 
 		[
@@ -28,21 +28,121 @@
 	{
         "id": 5001,
         "job": "Knight", 
-		"numberOfAttacks": 2,
+		"numberOfAttacks": 1,
 		"name": "Giant Spider",
-		"hp": 8,
+		"hp": 5,
 		"mp": 20,
-		"attack": 2,
-		"special": 1,
+		"attack": 3,
+		"special": 3,
 		"defense": 2,
-		"speed": 6,
+		"speed": 3,
 		"luck": 2,
-		"items": 20,
+		"items": 0,
 		"exp": 0,
 		"lives": 1,
 		"rarity" : 
 		[
 			0, 1
+		],
+		"itemsHolding" : 
+		[
+			1000
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5002,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Snake",
+		"hp": 7,
+		"mp": 20,
+		"attack": 4,
+		"special": 3,
+		"defense": 3,
+		"speed": 4,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			0, 1
+		],
+		"itemsHolding" : 
+		[
+			1000
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5003,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Flying Scoprion",
+		"hp": 8,
+		"mp": 20,
+		"attack": 7,
+		"special": 4,
+		"defense": 4,
+		"speed": 6,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			2, 3
+		],
+		"itemsHolding" : 
+		[
+			1000
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5004,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Wolverine",
+		"hp": 10,
+		"mp": 20,
+		"attack": 6,
+		"special": 4,
+		"defense": 5,
+		"speed": 5,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			2, 3
+		],
+		"itemsHolding" : 
+		[
+			1000
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5005,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Giant Blind Mole Rat",
+		"hp": 9,
+		"mp": 20,
+		"attack": 5,
+		"special": 4,
+		"defense": 4,
+		"speed": 5,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			2, 3
 		],
 		"itemsHolding" : 
 		[

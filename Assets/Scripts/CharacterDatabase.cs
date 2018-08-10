@@ -279,7 +279,9 @@ public class CharacterDatabase : MonoBehaviour
     public List<Enemy> GetEnemiesForFightScene(int mazeRoomNumber)
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
-        int amountOfEnemiesForList = UnityEngine.Random.Range(1, 4);
+        int mod = mazeRoomNumber % 20;
+        int max = (mod / 4) + 1;
+        int amountOfEnemiesForList = UnityEngine.Random.Range(1, max);
         int rarity = Mathf.FloorToInt((float)mazeRoomNumber / 10);
         for (int i = 0; i < amountOfEnemiesForList; i++)
         {
