@@ -4,7 +4,7 @@
         "id": 5000,
         "job":  "Warrior",
 		"numberOfAttacks": 1,
-		"name": "Enemy 1",
+		"name": "Bat",
 		"hp": 7,
 		"mp": 20,
 		"attack": 3,
@@ -15,13 +15,21 @@
 		"items": 20,
 		"exp": 0,
 		"lives": 1,
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"itemsHolding" : 
+		[
+			1000
+		],
 		"slug": "02"
 	},
 	{
         "id": 5001,
         "job": "Knight", 
 		"numberOfAttacks": 2,
-		"name": "Enemy 2",
+		"name": "Giant Spider",
 		"hp": 8,
 		"mp": 20,
 		"attack": 2,
@@ -32,6 +40,14 @@
 		"items": 20,
 		"exp": 0,
 		"lives": 1,
+		"rarity" : 
+		[
+			0, 1
+		],
+		"itemsHolding" : 
+		[
+			1000
+		],
 		"slug": "02"
 	}
 ]
