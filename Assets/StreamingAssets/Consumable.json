@@ -35,6 +35,69 @@
 		"mp": 0,
 		"size": 1,
 		"slug": "01"
+	},
+	{
+		"id": 1003,
+		"title": "Bat Wing",
+		"rarity" : [],
+		"healing": 2,
+		"mp": 0,
+		"size": 1,
+		"slug": "01"
+	},
+	{
+		"id": 1004,
+		"title": "Spider Egg",
+		"rarity" : [],
+		"healing": 2,
+		"mp": 0,
+		"size": 1,
+		"slug": "01"
+	},
+	{
+		"id": 1005,
+		"title": "Snake Scales",
+		"rarity" : [],
+		"healing": 2,
+		"mp": 0,
+		"size": 1,
+		"slug": "01"
+	},
+	{
+		"id": 1006,
+		"title": "Scorpion Claw",
+		"rarity" : [],
+		"healing": 3,
+		"mp": 0,
+		"size": 2,
+		"slug": "01"
+	},
+	{
+		"id": 1007,
+		"title": "Scorpion Venom",
+		"rarity" : [],
+		"healing": 0,
+		"mp": 3,
+		"size": 2,
+		"slug": "01"
+	},
+	{
+		"id": 1008,
+		"title": "Wolverine Tail",
+		"rarity" : [],
+		"healing": 4,
+		"mp": 0,
+		"size": 2,
+		"slug": "01"
+	},
+		{
+		"id": 1009,
+		"title": "Mole Rat Guts",
+		"rarity" : [],
+		"healing": 3,
+		"mp": 0,
+		"size": 2,
+		"slug": "01"
 	}
 ]
 	
