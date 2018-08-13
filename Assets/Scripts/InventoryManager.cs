@@ -21,6 +21,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject otherSortButton, sendToPlayerButton, sendToVillage;
     public int slotAmount;
     public List<GameObject> slots = new List<GameObject>();
+    public GameObject equippedCheckMark;
     Scene currentScene;
     private string sceneName;
 
