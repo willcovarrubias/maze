@@ -17,7 +17,7 @@
 		"lives": 1,
 		"rarity" : 
 		[
-			0, 1, 6, 7, 8, 9, 10, 11
+			0, 1, 8, 9, 10, 11
 		],
 		"itemsHolding" : 
 		[
@@ -222,6 +222,81 @@
 		"itemsHolding" : 
 		[
 			1012
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5009,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Ghost of Maze Traveler",
+		"hp": 26,
+		"mp": 20,
+		"attack": 31,
+		"special": 30,
+		"defense": 35,
+		"speed": 32,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			6, 7
+		],
+		"itemsHolding" : 
+		[
+			1013
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5010,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Delusional Knight",
+		"hp": 35,
+		"mp": 20,
+		"attack": 39,
+		"special": 30,
+		"defense": 39,
+		"speed": 25,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			6, 7
+		],
+		"itemsHolding" : 
+		[
+			1010
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5011,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Minotaur",
+		"hp": 38,
+		"mp": 20,
+		"attack": 36,
+		"special": 30,
+		"defense": 34,
+		"speed": 35,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			6, 7
+		],
+		"itemsHolding" : 
+		[
+			1014	
 		],
 		"slug": "02"
 	}
