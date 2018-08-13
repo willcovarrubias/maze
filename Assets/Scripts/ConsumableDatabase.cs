@@ -50,16 +50,16 @@ public class ConsumableDatabase : MonoBehaviour
     {
         KeyValuePair<int, int> amountAndID = new KeyValuePair<int, int>();
         int rarity = Mathf.FloorToInt((float)mazeRoomNumber / 10);
-        int amount = Random.Range(1, 6);
+        int amount = Random.Range(1, 4);
         float randomValue = Random.value;
         if (randomValue >= 0.9f && randomValue < 0.95f)
         {
-            amount = Random.Range(1, 5);
+            amount = Random.Range(1, 4);
             rarity = IncreaseOrDecreaseRarity(rarity, 1);
         }
         else if (randomValue >= 0.95f && randomValue < 0.95f)
         {
-            amount = Random.Range(1, 4);
+            amount = Random.Range(1, 3);
             rarity = IncreaseOrDecreaseRarity(rarity, 2);
         }
         else if (randomValue >= 0.98f && randomValue < 0.99)
@@ -89,7 +89,7 @@ public class ConsumableDatabase : MonoBehaviour
         }
         else
         {
-            rarity += amount;
+            rarity -= amount;
             if (rarity < 0)
             {
                 rarity = 0;
