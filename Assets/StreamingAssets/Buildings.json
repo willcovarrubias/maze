@@ -1,0 +1,56 @@
+
+[
+	{
+		"id": 0,
+		"title": "Barracks",
+		"materialsForLevelOne": 
+		[
+			{
+				"material" : 1000,
+				"amount" : 1 
+			},
+			{
+				"material" : 1001,
+				"amount" : 1 
+			}
+		],
+		"materialsForLevelTwo": 
+		[
+			{
+				"material" : 1000,
+				"amount" : 1 
+			},
+			{
+				"material" : 1001,
+				"amount" : 1 
+			}
+		],
+	},
+	{
+		"id": 1,
+		"title": "Wanderer Caravan"
+		"materialsForLevelOne" : 
+		[
+			{
+				"material" : 1000,
+				"amount" : 2 
+			},
+			{
+				"material" : 1001,
+				"amount" : 2 
+			}
+		],
+		"materialsForLevelTwo": 
+		[
+			{
+				"material" : 1000,
+				"amount" : 1 
+			},
+			{
+				"material" : 1001,
+				"amount" : 1 
+			}
+		]
+	}
+]
+	
