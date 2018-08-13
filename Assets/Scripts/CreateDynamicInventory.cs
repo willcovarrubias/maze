@@ -59,7 +59,7 @@ public class CreateDynamicInventory : MonoBehaviour
             enemy.GetComponent<EnemyHolder>().SetEnemyData(enemyList[i]);
             enemy.GetComponentInChildren<Text>().text = enemyList[i].EnemyData.name + "\nAtt:" + enemyList[i].EnemyData.attack + "\nDef:" + enemyList[i].EnemyData.defense + "\nSpd:" + enemyList[i].EnemyData.speed;
             enemy.SetActive(true);
-            List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForChest(GameMaster.gameMaster.roomCount);
+            List<Inventory> inventory = GameMaster.gameMaster.GetComponent<ItemDatabase>().GetRandomItemsForEnemy(GameMaster.gameMaster.roomCount, enemyList[i].EnemyData.id);
             newPanel.AddComponent<DynamicInventory>().Initialize(Location.WhereAmI.temp, inventory, slotPrefab, itemPrefab, enemy);
         }
         Destroy(invPanel);
