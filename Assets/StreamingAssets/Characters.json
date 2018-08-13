@@ -17,7 +17,7 @@
 		"lives": 1,
 		"rarity" : 
 		[
-			0, 1, 4, 5, 6, 7, 8, 9, 10, 11
+			0, 1, 6, 7, 8, 9, 10, 11
 		],
 		"itemsHolding" : 
 		[
@@ -82,10 +82,10 @@
 		"name": "Flying Scoprion",
 		"hp": 8,
 		"mp": 20,
-		"attack": 7,
-		"special": 4,
-		"defense": 4,
-		"speed": 6,
+		"attack": 14,
+		"special": 11,
+		"defense": 9,
+		"speed": 15,
 		"luck": 2,
 		"items": 0,
 		"exp": 0,
@@ -105,12 +105,12 @@
         "job": "Knight", 
 		"numberOfAttacks": 1,
 		"name": "Wolverine",
-		"hp": 10,
+		"hp": 13,
 		"mp": 20,
-		"attack": 6,
-		"special": 4,
-		"defense": 5,
-		"speed": 5,
+		"attack": 12,
+		"special": 11,
+		"defense": 13,
+		"speed": 12,
 		"luck": 2,
 		"items": 0,
 		"exp": 0,
@@ -130,12 +130,12 @@
         "job": "Knight", 
 		"numberOfAttacks": 1,
 		"name": "Giant Blind Mole Rat",
-		"hp": 9,
+		"hp": 15,
 		"mp": 20,
-		"attack": 5,
-		"special": 4,
-		"defense": 4,
-		"speed": 5,
+		"attack": 10,
+		"special": 11,
+		"defense": 11,
+		"speed": 9,
 		"luck": 2,
 		"items": 0,
 		"exp": 0,
@@ -147,6 +147,81 @@
 		"itemsHolding" : 
 		[
 			1009
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5006,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Skeleton of Maze Traveler",
+		"hp": 25,
+		"mp": 20,
+		"attack": 26,
+		"special": 20,
+		"defense": 24,
+		"speed": 25,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			4, 5
+		],
+		"itemsHolding" : 
+		[
+			1010
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5007,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Maze Sludge",
+		"hp": 29,
+		"mp": 20,
+		"attack": 20,
+		"special": 20,
+		"defense": 22,
+		"speed": 20,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			4, 5
+		],
+		"itemsHolding" : 
+		[
+			1011
+		],
+		"slug": "02"
+	},
+	{
+        "id": 5008,
+        "job": "Knight", 
+		"numberOfAttacks": 1,
+		"name": "Mud Squid",
+		"hp": 21,
+		"mp": 20,
+		"attack": 23,
+		"special": 20,
+		"defense": 21,
+		"speed": 22,
+		"luck": 2,
+		"items": 0,
+		"exp": 0,
+		"lives": 1,
+		"rarity" : 
+		[
+			4, 5
+		],
+		"itemsHolding" : 
+		[
+			1012
 		],
 		"slug": "02"
 	}
