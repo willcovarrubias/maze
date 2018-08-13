@@ -17,7 +17,6 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     Inventory item;
 
     GameObject gameMaster, currentSlot, currentPanel;
-    public GameObject equippedCheckMark;
 
     Scene currentScene;
     string sceneName;
@@ -39,13 +38,20 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void UnequipItem()
     {
-        equippedCheckMark.SetActive(false);
+        if (transform.childCount > 0)
+        {
+            Destroy(transform.GetChild(0).gameObject);
+        }
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void EquipItem()
     {
-        equippedCheckMark.SetActive(true);
+        if (transform.childCount == 0)
+        {
+            GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, transform, false);
+            equippedSprite.transform.localPosition = new Vector3(200, 0, 0);
+        }
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
@@ -84,7 +90,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 temp = Instantiate(transform.gameObject, transform.parent, true);
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    transform.GetChild(i).gameObject.SetActive(false);
+                    Destroy(transform.GetChild(i).gameObject);
                 }
                 if (item.Count > 3)
                 {
@@ -123,7 +129,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             {
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    transform.GetChild(i).gameObject.SetActive(false);
+                    Destroy(transform.GetChild(i).gameObject);
                 }
                 this.transform.SetParent(currentSlot.transform);
                 this.transform.position = currentSlot.transform.position;
