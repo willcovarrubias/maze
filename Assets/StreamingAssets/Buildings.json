@@ -1,0 +1,20 @@
+
+[
+	{
+		"id": 0,
+		"title": "Barracks",
+		"currentLevel": 0,
+		"wood": 0,
+		"leather": 0,
+		"differentStone": 0
+	},
+	{
+		"id": 1,
+		"title": "Caravan",
+		"currentLevel": 0,
+		"wood": 0,
+		"leather": 0,
+		"differentStone": 0
+	}
+]
+	
