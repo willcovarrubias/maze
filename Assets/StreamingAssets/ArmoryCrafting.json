@@ -5,8 +5,8 @@
 		"materials" : 
 		[
 			{
-				"material" : 1000,
-				"amount" : 1 
+				"material" : 3001,
+				"amount" : 5 
 			},
 			{
 				"material" : 1001,
@@ -20,7 +20,7 @@
 		"materials" : 
 		[
 			{
-				"material" : 1000,
+				"material" : 3001,
 				"amount" : 2 
 			},
 			{

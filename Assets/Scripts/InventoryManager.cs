@@ -153,6 +153,7 @@ public class InventoryManager : MonoBehaviour
             {
                 CheckItemToUnequip(item.Item);
                 playerItems[item.Item.ID].Count -= count;
+                UpdateSlotText(slotId, item);
                 if (playerItems[item.Item.ID].Count <= 0)
                 {
                     playerItems.Remove(item.Item.ID);
@@ -584,6 +585,18 @@ public class InventoryManager : MonoBehaviour
         {
             int key = keyValue.Key;
             Debug.Log(playerItems[key].Item.Title + ".....Slot Num: " + playerItems[key].SlotNum);
+        }
+    }
+
+    public void UpdateSlotText(int slotID, Inventory item)
+    {
+        if (item.Count > 1)
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
+        }
+        else
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = item.Item.Title;
         }
     }
 

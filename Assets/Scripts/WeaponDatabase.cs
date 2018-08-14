@@ -115,7 +115,7 @@ public class WeaponDatabase : MonoBehaviour
         }
         else
         {
-            rarity += amount;
+            rarity -= amount;
             if (rarity < 0)
             {
                 rarity = 0;

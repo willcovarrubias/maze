@@ -94,7 +94,7 @@ public class ItemDatabase : MonoBehaviour
             else
             {
                 int itemID = GetComponent<CharacterDatabase>().FetchEnemyByID(enemyID).EnemyData.itemsHolding[Random.Range(0, GetComponent<CharacterDatabase>().FetchEnemyByID(enemyID).EnemyData.itemsHolding.Count)];
-                amount = Random.Range(1, 6);
+                amount = Random.Range(1, 3);
                 AddToList(enemyItems, itemID, amount);
 
             }
