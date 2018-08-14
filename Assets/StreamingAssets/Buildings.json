@@ -1,20 +1,40 @@
 
 [
 	{
-		"id": 0,
+		"id" : 1,
 		"title": "Barracks",
-		"currentLevel": 0,
-		"wood": 0,
-		"leather": 0,
-		"differentStone": 0
+		"level 1 materials" : 
+		[
+			{
+				"material" : 3000,
+				"amount" : 10
+			}
+		],
+		"level 2 materials" : 
+		[
+			{
+				"material" : 3001,
+				"amount" : 10
+			}
+		]
 	},
 	{
-		"id": 1,
-		"title": "Caravan",
-		"currentLevel": 0,
-		"wood": 0,
-		"leather": 0,
-		"differentStone": 0
+		"id" : 2,
+		"title" : "Caravan",
+		"level 1 materials" : 
+		[
+			{
+				"material" : 3000,
+				"amount" : 10
+			}
+		],
+		"level 2 materials" : 
+		[
+			{
+				"material" : 3001,
+				"amount" : 10
+			}
+		]
 	}
 ]
 	

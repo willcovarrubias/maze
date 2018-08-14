@@ -8727,6 +8727,7 @@ GameObject:
   - component: {fileID: 1967842530}
   - component: {fileID: 1967842531}
   - component: {fileID: 1967842533}
+  - component: {fileID: 1967842532}
   m_Layer: 0
   m_Name: VillageManager
   m_TagString: VillageSceneManager
@@ -8876,6 +8877,17 @@ MonoBehaviour:
   armorMenu: {fileID: 513959420}
   consumablesMenu: {fileID: 828785948}
   weaponsMenu: {fileID: 1307066742}
+--- !u!114 &1967842532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1967842525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3523058f8b90aa144a065dd3b9d6886b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1967842533
 MonoBehaviour:
   m_ObjectHideFlags: 0
