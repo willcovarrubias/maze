@@ -3,54 +3,18 @@
 	{
 		"id": 0,
 		"title": "Barracks",
-		"materialsForLevelOne": 
-		[
-			{
-				"material" : 1000,
-				"amount" : 1 
-			},
-			{
-				"material" : 1001,
-				"amount" : 1 
-			}
-		],
-		"materialsForLevelTwo": 
-		[
-			{
-				"material" : 1000,
-				"amount" : 1 
-			},
-			{
-				"material" : 1001,
-				"amount" : 1 
-			}
-		],
+		"currentLevel": 0,
+		"wood": 0,
+		"leather": 0,
+		"differentStone": 0
 	},
 	{
 		"id": 1,
-		"title": "Wanderer Caravan"
-		"materialsForLevelOne" : 
-		[
-			{
-				"material" : 1000,
-				"amount" : 2 
-			},
-			{
-				"material" : 1001,
-				"amount" : 2 
-			}
-		],
-		"materialsForLevelTwo": 
-		[
-			{
-				"material" : 1000,
-				"amount" : 1 
-			},
-			{
-				"material" : 1001,
-				"amount" : 1 
-			}
-		]
+		"title": "Caravan",
+		"currentLevel": 0,
+		"wood": 0,
+		"leather": 0,
+		"differentStone": 0
 	}
 ]
 	
