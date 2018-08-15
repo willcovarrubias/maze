@@ -55,7 +55,6 @@ public class ItemPopUp : MonoBehaviour
         {
             Consumable consumable = (Consumable)item.Item;
             UpdateCount();
-            Debug.Log(consumable.MP);
             stats += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing +
                      "\nMP " + (consumable.MP > 0 ? "+" : "") + consumable.MP + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
