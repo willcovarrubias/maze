@@ -22,25 +22,29 @@ public class RecruitmentManager : MonoBehaviour
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
     public Image wandererPortrait;
     public GameObject caravanPopUPObject;
+    public GameObject refreshTimeText;
 
+    public int previousTime;
+    public int refreshTime;
 
-    // Use this for initialization
     void Start()
     {
+        refreshTime = 14400; //4 hours in seconds
+        if (PlayerPrefs.GetInt("Previous Time") == 0)
+        {
+            PlayerPrefs.SetInt("Previous Time", GetTimeInSeconds());
+        }
+        previousTime = PlayerPrefs.GetInt("Previous Time");
+        PlayerPrefs.Save();
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-
         maxAmountOfHeroesToRecruit = 5; //Set this somewhere, possibly from a village upgrade milestone. Goes up with game progress.
-
         AddUIStuffFirst();
         DisplayCurrentListOfWanderers();
-
-
     }
 
-    private void Update()
+    /*
+    void Update()
     {
-
-
         if (Input.GetKeyDown(KeyCode.G))
         {
             //AddHeroSlot();
@@ -49,12 +53,31 @@ public class RecruitmentManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-
             RemoveWanderers();
         }
+    }
+    */
 
+    public void RefreshIfEnoughTimeHasPassed()
+    {
+        int currTime = GetTimeInSeconds();
+        if (currTime > previousTime + refreshTime)
+        {
+            int timePassed = currTime - previousTime;
+            int remainder = timePassed % refreshTime;
+            previousTime = currTime - remainder;
+            PlayerPrefs.SetInt("Previous Time", previousTime);
+            PlayerPrefs.Save();
+            UpdateListOfHeroes();
+            DisplayCurrentListOfWanderers();
+        }
     }
 
+    int GetTimeInSeconds()
+    {
+        System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+        return (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
+    }
 
     void UpdateListOfHeroes()//TODO: Add some logic here that updates the list after a certain amount of time.
     {
@@ -63,11 +86,6 @@ public class RecruitmentManager : MonoBehaviour
 
         for (int i = 0; i < maxAmountOfHeroesToRecruit; i++)
         {
-
-
-            /*
-            
-            */
             //characterSlots.RemoveAt(i);
             //Destroy(characterSlots[i]);
             Character newWanderer = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
@@ -101,7 +119,6 @@ public class RecruitmentManager : MonoBehaviour
             characterObj.transform.localPosition = Vector2.zero;
             characterObject.Add(characterObj);
         }
-
     }
     void DisplayCurrentListOfWanderers()
     {
@@ -129,11 +146,8 @@ public class RecruitmentManager : MonoBehaviour
             characterObject[i].GetComponent<CharacterData>().thisObjectsID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
             characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].slug);
 
-
             //Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
             //          "\nID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
-
-
         }
     }
 
@@ -151,7 +165,6 @@ public class RecruitmentManager : MonoBehaviour
         luckText.text = "Luck: " + character.luck.ToString();
         wandererPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
-
     }
 
     public void FinalizeRecruitment()
@@ -183,18 +196,14 @@ public class RecruitmentManager : MonoBehaviour
     {
         for (int i = 0; i < characterSlots.Count; i++)
         {
-
             Destroy(characterSlots[i].gameObject);
-
         }
 
         for (int i = 0; i < characterObject.Count; i++)
         {
-
             Destroy(characterObject[i].gameObject);
         }
         characterSlots.Clear();
         characterObject.Clear();
     }
-
 }

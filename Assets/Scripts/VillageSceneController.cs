@@ -122,11 +122,19 @@ public class VillageSceneController : MonoBehaviour
 
     public void RecruitmentUIOpen()
     {
+        if (!gameObject.GetComponent<WanderersRefreshTime>())
+        {
+            gameObject.AddComponent<WanderersRefreshTime>();
+        }
         recruitmentUI.SetActive(true);
     }
 
     public void RecruitmentUIClose()
     {
+        if (gameObject.GetComponent<WanderersRefreshTime>())
+        {
+            Destroy(gameObject.GetComponent<WanderersRefreshTime>());
+        }
         recruitmentUI.SetActive(false);
     }
 
