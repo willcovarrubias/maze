@@ -56,7 +56,7 @@ public class WeaponDatabase : MonoBehaviour
         material = weaponMaterialIndexNumber[materialRarity][Random.Range(0, weaponMaterialIndexNumber[materialRarity].Count)];
         type = weaponTypeIndexNumber[typeRarity][Random.Range(0, weaponTypeIndexNumber[typeRarity].Count)];
         Weapons weapon = new Weapons(
-            weaponCount,
+            GetNewWeaponsCount(),
             weaponMaterialData[material]["material"] + " " + weaponTypeData[type]["type"],
             (int)weaponMaterialData[material]["attack"] + (int)weaponTypeData[type]["attack"],
             (int)weaponMaterialData[material]["special"] + (int)weaponTypeData[type]["special"],
@@ -64,9 +64,6 @@ public class WeaponDatabase : MonoBehaviour
             (int)weaponMaterialData[material]["duribility"] + (int)weaponTypeData[type]["duribility"],
             (int)weaponMaterialData[material]["size"] + (int)weaponTypeData[type]["size"],
             "");
-        weaponCount++;
-        PlayerPrefs.SetInt("Weapon Count", weaponCount);
-        PlayerPrefs.Save();
         return weapon;
     }
 

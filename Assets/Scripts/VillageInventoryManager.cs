@@ -77,6 +77,29 @@ public class VillageInventoryManager : MonoBehaviour
         return movedAll;
     }
 
+    public void AddBoughtItem(Inventory item)
+    {
+        if (IsWeapon(item.Item.ID))
+        {
+            CreateNewItem(item.Item, 1);
+            return;
+        }
+        Inventory temp;
+        if (villageItems.TryGetValue(item.Item.ID, out temp))
+        {
+            villageItems[item.Item.ID].Count += item.Count;
+            currentSize += item.Item.Size * item.Count;
+            SaveVillageInventory();
+            slots[villageItems[item.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = villageItems[item.Item.ID].Count;
+            slots[villageItems[item.Item.ID].SlotNum].GetComponentInChildren<Text>().text = villageItems[item.Item.ID].Item.Title + " x" + villageItems[item.Item.ID].Count;
+            UpdateInventoryText();
+        }
+        else
+        {
+            CreateNewItem(item.Item, item.Count);
+        }
+    }
+
     public void RemoveItemsFromVillageInventory(Inventory item, int count, int slotId)
     {
         if (item.Count >= count)
@@ -96,6 +119,10 @@ public class VillageInventoryManager : MonoBehaviour
                     villageItems.Remove(item.Item.ID);
                     item.Count = 0;
                     ReorganizeSlots(slotId);
+                }
+                else
+                {
+                    UpdateSlotText(slotId, item);
                 }
             }
             SaveVillageInventory();
@@ -336,6 +363,18 @@ public class VillageInventoryManager : MonoBehaviour
     public int GetFreeSpaceCount()
     {
         return maxVillageInventorySize - currentSize;
+    }
+
+    public void UpdateSlotText(int slotID, Inventory item)
+    {
+        if (item.Count > 1)
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
+        }
+        else
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = item.Item.Title;
+        }
     }
 
     public void PrintInventory()

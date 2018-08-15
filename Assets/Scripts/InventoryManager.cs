@@ -35,6 +35,7 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
+        //PlayerPrefs.DeleteAll();
         maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items; // set this somewhere
         currentSize = 0;
         LoadInventory();
@@ -114,26 +115,26 @@ public class InventoryManager : MonoBehaviour
         return movedAll;
     }
 
-    public void AddBoughtItem(Items item, int count)
+    public void AddBoughtItem(Inventory item)
     {
-        if (IsWeapon(item.ID))
+        if (IsWeapon(item.Item.ID))
         {
-            CreateNewItem(item, 1);
+            CreateNewItem(item.Item, 1);
             return;
         }
         Inventory temp;
-        if (playerItems.TryGetValue(item.ID, out temp))
+        if (playerItems.TryGetValue(item.Item.ID, out temp))
         {
-            playerItems[item.ID].Count += count;
-            currentSize += item.Size * count;
+            playerItems[item.Item.ID].Count += item.Count;
+            currentSize += item.Item.Size * item.Count;
             SaveInventory();
-            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[item.ID].Count;
-            slots[playerItems[item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[item.ID].Item.Title + " x" + playerItems[item.ID].Count;
+            slots[playerItems[item.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[item.Item.ID].Count;
+            slots[playerItems[item.Item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[item.Item.ID].Item.Title + " x" + playerItems[item.Item.ID].Count;
             UpdateInventoryText();
         }
         else
         {
-            CreateNewItem(item, count);
+            CreateNewItem(item.Item, item.Count);
         }
     }
 
@@ -153,12 +154,15 @@ public class InventoryManager : MonoBehaviour
             {
                 CheckItemToUnequip(item.Item);
                 playerItems[item.Item.ID].Count -= count;
-                UpdateSlotText(slotId, item);
                 if (playerItems[item.Item.ID].Count <= 0)
                 {
                     playerItems.Remove(item.Item.ID);
                     item.Count = 0;
                     ReorganizeSlots(slotId);
+                }
+                else
+                {
+                    UpdateSlotText(slotId, item);
                 }
             }
             SaveInventory();
@@ -348,8 +352,8 @@ public class InventoryManager : MonoBehaviour
         newItem = new Inventory(items, count, slotAmount);
         playerItems.Add(items.ID, newItem);
         currentSize += items.Size * count;
-        SaveInventory();
         AddItemToSlots(newItem);
+        SaveInventory();
         UpdateInventoryText();
     }
 
@@ -522,7 +526,7 @@ public class InventoryManager : MonoBehaviour
         GameObject currentSlot = slots[slotID];
         slotAmount--;
         slots.RemoveAt(slotID);
-        for (int i = 0; i < slotAmount; i++)
+        for (int i = 0; i < slots.Count; i++)
         {
             slots[i].GetComponent<ItemSlot>().id = i;
             slots[i].GetComponentInChildren<ItemData>().slotID = i;
