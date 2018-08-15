@@ -8,7 +8,6 @@ public class CraftingPopUp : MonoBehaviour
     public GameObject popUp, imageOfItem, nameOfItem, statsOfItem, materials;
     public GameObject craftButton, exitButton;
     Items craftedItem;
-    int sizeOfAllMaterials;
 
     void Start()
     {
@@ -47,7 +46,7 @@ public class CraftingPopUp : MonoBehaviour
         if (craftedItem.ID >= 4000 && craftedItem.ID < 5000)
         {
             Armor craftedArmor = (Armor)craftedItem;
-            statsText += "Armor\nDef " + craftedArmor.Defense + "\nspd " + craftedArmor.Speed + 
+            statsText += "Armor\nDef " + craftedArmor.Defense + "\nspd " + craftedArmor.Speed +
                          "\nApp " + craftedArmor.Appendage + "\nWgt " + craftedArmor.Size;
         }
         else if (craftedItem.ID >= 1000 && craftedItem.ID < 2000)
@@ -57,7 +56,7 @@ public class CraftingPopUp : MonoBehaviour
         }
         else
         {
-            statsText += "Weapon\nAtk " + item.Weapon.Attack + "\nSpec " + item.Weapon.Special + "\nSpd " + item.Weapon.Speed + 
+            statsText += "Weapon\nAtk " + item.Weapon.Attack + "\nSpec " + item.Weapon.Special + "\nSpd " + item.Weapon.Speed +
                          "\nDu " + item.Weapon.Durability + "\nWgt " + item.Weapon.Size;
         }
         statsOfItem.GetComponent<Text>().text = statsText;
@@ -67,13 +66,13 @@ public class CraftingPopUp : MonoBehaviour
             materialsText += "\n";
             materialsText += GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(keyValue.Key).Title;
             materialsText += " x" + keyValue.Value;
-            if (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems.ContainsKey(keyValue.Key))
+            if (VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems.ContainsKey(keyValue.Key))
             {
-                materialsText += "<i> (Have x" + GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].Count + ")</i>";
+                materialsText += "<i> (Village has " + VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].Count + ")</i>";
             }
             else
             {
-                materialsText += "<i> (Have 0)</i>";
+                materialsText += "<i> (Village has none)</i>";
             }
         }
         materials.GetComponent<Text>().text = materialsText;
@@ -84,14 +83,14 @@ public class CraftingPopUp : MonoBehaviour
     {
         if (CheckIfHaveMaterials())
         {
-            if ((GameMaster.gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() + sizeOfAllMaterials) >= craftedItem.Size)
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() >= craftedItem.Size)
             {
                 foreach (KeyValuePair<int, int> keyValue in craftableItem.Materials)
                 {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(
-                        GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key],
+                    VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(
+                        VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key],
                         keyValue.Value,
-                        GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].SlotNum);
+                        VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].SlotNum);
                 }
                 if (craftedItem.ID >= 10000)
                 {
@@ -118,17 +117,15 @@ public class CraftingPopUp : MonoBehaviour
 
     bool CheckIfHaveMaterials()
     {
-        sizeOfAllMaterials = 0;
         foreach (KeyValuePair<int, int> keyValue in craftableItem.Materials)
         {
-            if (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems.ContainsKey(keyValue.Key))
+            if (VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems.ContainsKey(keyValue.Key))
             {
-                if (!(GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].Count >= keyValue.Value))
+                if (!(VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].Count >= keyValue.Value))
                 {
                     GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Not enough materials");
                     return false;
                 }
-                sizeOfAllMaterials += (GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].Item.Size * keyValue.Value);
             }
             else
             {

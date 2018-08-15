@@ -382,7 +382,6 @@ public class FightSceneController : MonoBehaviour
             int slotNum = equippedWeaponInv.SlotNum;
             string weaponName = equippedWeapon.Title;
             equippedWeapon.Durability--;
-            Debug.Log(equippedWeapon.Durability);
             if (equippedWeapon.Durability <= 0)
             {
                 GameMaster.gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(equippedWeaponInv, 1, slotNum);
