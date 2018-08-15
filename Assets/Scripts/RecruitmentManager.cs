@@ -22,13 +22,14 @@ public class RecruitmentManager : MonoBehaviour
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
     public Image wandererPortrait;
     public GameObject caravanPopUPObject;
+    public GameObject refreshTimeText;
 
     public int previousTime;
     public int refreshTime;
 
     void Start()
     {
-        refreshTime = 3600; //1 hour in seconds
+        refreshTime = 14400; //4 hours in seconds
         if (PlayerPrefs.GetInt("Previous Time") == 0)
         {
             PlayerPrefs.SetInt("Previous Time", GetTimeInSeconds());
@@ -145,7 +146,6 @@ public class RecruitmentManager : MonoBehaviour
             characterObject[i].GetComponent<CharacterData>().thisObjectsID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
             characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].slug);
 
-
             //Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
             //          "\nID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
         }
@@ -196,14 +196,11 @@ public class RecruitmentManager : MonoBehaviour
     {
         for (int i = 0; i < characterSlots.Count; i++)
         {
-
             Destroy(characterSlots[i].gameObject);
-
         }
 
         for (int i = 0; i < characterObject.Count; i++)
         {
-
             Destroy(characterObject[i].gameObject);
         }
         characterSlots.Clear();

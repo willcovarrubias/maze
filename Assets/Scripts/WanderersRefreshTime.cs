@@ -11,7 +11,7 @@ public class WanderersRefreshTime : MonoBehaviour
     int previousTime;
     void Start()
     {
-        //refreshText = GameObject.Find("");
+        refreshText = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().refreshTimeText;
         refreshTime = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().refreshTime;
         previousTime = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().previousTime;
     }
@@ -32,8 +32,7 @@ public class WanderersRefreshTime : MonoBehaviour
                 int hours = timeLeft / 3600;
                 int minutes = ((timeLeft - (hours * 3600)) / 60);
                 int seconds = timeLeft % 60;
-                //Debug.Log(hours + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2"));
-                //refreshText.GetComponent<Text>().text = hours + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
+                refreshText.GetComponent<Text>().text = "Time until refresh: " + hours + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
             }
         }
     }
