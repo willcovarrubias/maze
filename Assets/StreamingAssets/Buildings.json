@@ -1,25 +1,33 @@
 
 [
 	{
-		"id" : 1,
+		"id" : 0,
 		"title": "Barracks",
 		"level 1 materials" : 
 		[
 			{
 				"material" : 3000,
 				"amount" : 10
+			},
+			{
+				"material" : 3001,
+				"amount" : 10
 			}
 		],
 		"level 2 materials" : 
 		[
 			{
+				"material" : 3000,
+				"amount" : 20
+			},
+			{
 				"material" : 3001,
-				"amount" : 10
+				"amount" : 20
 			}
 		]
 	},
 	{
-		"id" : 2,
+		"id" : 1,
 		"title" : "Caravan",
 		"level 1 materials" : 
 		[

@@ -9,11 +9,13 @@ public class BuildingDatabase : MonoBehaviour
     private List<Buildings> buildings = new List<Buildings>();
     private JsonData buildingData;
 
+    public List<int> buildingLevels = new List<int>();
+
     void Start()
     {
         buildingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Buildings.json"));
         ConstructBuildingDatabase();
-        //PrintBuildings();
+        PrintBuildings();
     }
 
     void ConstructBuildingDatabase()
@@ -48,6 +50,20 @@ public class BuildingDatabase : MonoBehaviour
         return materials;
     }
 
+    public int GetBuildingLevel()
+    {
+
+        return 0;
+        
+    }
+
+    public void LevelUpBuilding(int id)
+    {
+        //Look into CraftingPopUp for reference
+        Debug.Log("You leveled up the: " + buildings[id].title);
+        buildingLevels[id] += 1;
+    }
+
     void PrintBuildings()
     {
         for (int i = 0; i < buildings.Count; i++)
@@ -62,6 +78,7 @@ public class BuildingDatabase : MonoBehaviour
                 }
             }
         }
+
     }
 }
 

@@ -24,6 +24,10 @@ public class RosterManager : MonoBehaviour
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
     public Image characterPortrait;
 
+    //Building UI Stuff
+    public Text buildingLevel, buildingLevelUpRequirements;
+
+
     Character currentlyClickedCharacter;
 
     int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
