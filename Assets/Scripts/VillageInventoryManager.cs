@@ -97,6 +97,10 @@ public class VillageInventoryManager : MonoBehaviour
                     item.Count = 0;
                     ReorganizeSlots(slotId);
                 }
+                else
+                {
+                    UpdateSlotText(slotId, item);
+                }
             }
             SaveVillageInventory();
             UpdateInventoryText();
@@ -336,6 +340,18 @@ public class VillageInventoryManager : MonoBehaviour
     public int GetFreeSpaceCount()
     {
         return maxVillageInventorySize - currentSize;
+    }
+
+    public void UpdateSlotText(int slotID, Inventory item)
+    {
+        if (item.Count > 1)
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
+        }
+        else
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = item.Item.Title;
+        }
     }
 
     public void PrintInventory()

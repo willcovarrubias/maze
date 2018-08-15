@@ -32,7 +32,14 @@ public class CraftingPopUp : MonoBehaviour
         else
         {
             Weapons weapon = new Weapons();
-            weapon = item.Weapon;
+            weapon.Attack = item.Weapon.Attack;
+            weapon.Durability = item.Weapon.Durability;
+            weapon.Size = item.Weapon.Size;
+            weapon.Slug = item.Weapon.Slug;
+            weapon.Special = item.Weapon.Special;
+            weapon.Speed = item.Weapon.Speed;
+            weapon.Sprite = item.Weapon.Sprite;
+            weapon.Title = item.Weapon.Title;
             weapon.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
             craftedItem = weapon;
         }
@@ -86,7 +93,19 @@ public class CraftingPopUp : MonoBehaviour
                         keyValue.Value,
                         GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[keyValue.Key].SlotNum);
                 }
-                GameMaster.gameMaster.GetComponent<InventoryManager>().AddBoughtItem(craftedItem, 1);
+                if (craftedItem.ID >= 10000)
+                {
+                    Weapons item = new Weapons();
+                    item = (Weapons)craftedItem;
+                    item.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
+                    Inventory newItem = new Inventory(item, 1, 0);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().AddBoughtItem(newItem);
+                }
+                else
+                {
+                    Inventory newItem = new Inventory(craftedItem, 1, 0);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().AddBoughtItem(newItem);
+                }
                 GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Crafted " + craftedItem.Title);
                 CloseUI();
             }

@@ -7,13 +7,12 @@ using UnityEngine.UI;
 
 public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-
     //This script will contain the data of each individual item so that when we drag and drop, the system will know what this item containts.
     //It will be included in the prefrab of the blank, generic item that we'll use to interface items from the DB into the actual game. It'll make more
     //sense once the inventory  drag and drop functionalitiy is implemented.
 
-    public int amount;
     public int slotID;
+    //int id;
     Inventory item;
 
     GameObject gameMaster, currentSlot, currentPanel;
@@ -36,6 +35,16 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         currentPanel = transform.parent.parent.parent.parent.gameObject;
     }
 
+    /*
+    void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            Debug.Log(id + " " + item.Item.ID);
+        }
+    }
+    */
+
     public void UnequipItem()
     {
         if (transform.childCount > 0)
@@ -57,6 +66,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void SetItem(Inventory itemToBeSet)
     {
+        //id = itemToBeSet.Item.ID;
         item = itemToBeSet;
     }
 
