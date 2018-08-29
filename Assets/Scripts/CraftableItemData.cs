@@ -12,6 +12,7 @@ public class CraftableItemData : MonoBehaviour, IPointerUpHandler, IPointerDownH
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        VillageSceneController.villageScene.GetComponent<GemsInventory>().InitalizeSlots();
         VillageSceneController.villageScene.GetComponent<CraftingPopUp>().ShowItemPopUp(item);
     }
 

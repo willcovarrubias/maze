@@ -3,6 +3,7 @@
 	{
 		"id": 2000,
 		"title": "Attack Gem 1",
+		"addedTitle" : "Attack 1",
 		"rarity" : 
 		[
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
@@ -17,6 +18,7 @@
 	{
 		"id": 2001,
 		"title": "Attack Gem 2",
+		"addedTitle" : "Attack 2",
 		"rarity" : 
 		[
 			4, 5, 6, 7, 8, 9, 10, 11
@@ -31,6 +33,7 @@
 	{
 		"id": 2002,
 		"title": "Attack Gem 3",
+		"addedTitle" : "Attack 3",
 		"rarity" : 
 		[
 			8, 9, 10, 11

@@ -92,7 +92,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (gameMaster != null)
+        if (gameMaster != null && currentLocation != Location.WhereAmI.gems)
         {
             currentSlot = transform.parent.gameObject;
             if (item.Count > 1)
@@ -121,8 +121,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-        this.transform.position = eventData.position - offsetToReturnItem;
-        beingDragged = true;
+        if (currentLocation != Location.WhereAmI.gems)
+        {
+            this.transform.position = eventData.position - offsetToReturnItem;
+            beingDragged = true;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -185,7 +188,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             this.transform.position = currentPanel.GetComponent<DynamicInventory>().slots[slotID].transform.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
-        else if (goingToLocation == Location.WhereAmI.notSet)
+        else if (goingToLocation == Location.WhereAmI.notSet && currentLocation != Location.WhereAmI.gems)
         {
             this.transform.SetParent(currentSlot.transform);
             this.transform.position = currentSlot.transform.position;
@@ -207,6 +210,10 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (!beingDragged && (currentLocation == Location.WhereAmI.player || currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp))
         {
             gameMaster.GetComponent<ItemPopUp>().ShowItemPopUp(item, slotID, gameObject, currentLocation);
+        }
+        if (!beingDragged && currentLocation == Location.WhereAmI.gems)
+        {
+            VillageSceneController.villageScene.GetComponent<GemsInventory>().SelectGem(slotID, item.Item);
         }
         if (sceneName == "VillageScene")
         {
