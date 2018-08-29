@@ -23,7 +23,7 @@ public class WanderersRefreshTime : MonoBehaviour
         refreshText = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().refreshTimeText;
         refreshTime = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().refreshTime;
         previousTime = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().previousTime;
-        GetTime();
+        //GetTime();
     }
 
     void Update()
