@@ -14,9 +14,13 @@ public class GemsInventory : MonoBehaviour
     public GameObject inventoryPane;
     public RectTransform slotPanelRectTransform;
     public ScrollRect scrollView;
+    int selectedGem;
+    Gem gem;
 
     public void InitalizeSlots()
     {
+        selectedGem = -1;
+        gem = null;
         ClearSlots();
         Dictionary<int, Inventory> list = VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems;
         foreach (KeyValuePair<int, Inventory> keyValue in list)
@@ -81,5 +85,26 @@ public class GemsInventory : MonoBehaviour
         items.Clear();
         slotAmount = 0;
         ResizeSlotPanel();
+    }
+
+    public void SelectGem(int slotId, Items item)
+    {
+        if (slotId == selectedGem)
+        {
+            selectedGem = -1;
+            gem = null;
+            if (slots[slotId].transform.GetChild(0).transform.childCount > 0)
+            {
+                Destroy(slots[slotId].transform.GetChild(0).transform.GetChild(0).gameObject);
+            }
+        }
+        else
+        {
+            selectedGem = slotId;
+            gem = (Gem)item;
+            GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, slots[slotId].transform.GetChild(0).transform, false);
+            equippedSprite.transform.localPosition = new Vector3(200, 0, 0);
+        }
+        GetComponent<CraftingPopUp>().ChangeGem(gem);
     }
 }

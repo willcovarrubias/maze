@@ -213,7 +213,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
         if (!beingDragged && currentLocation == Location.WhereAmI.gems)
         {
-            Debug.Log("Put gem check mark");
+            VillageSceneController.villageScene.GetComponent<GemsInventory>().SelectGem(slotID, item.Item);
         }
         if (sceneName == "VillageScene")
         {

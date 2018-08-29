@@ -5,10 +5,12 @@ using UnityEngine.UI;
 public class CraftingPopUp : MonoBehaviour
 {
     CraftableItem craftableItem;
-    public GameObject popUp, imageOfItem, nameOfItem, statsOfItem, materials, gemsList, gemImage;
+    public GameObject popUp, imageOfItem, nameOfItem, statsOfItem, materials, gemsList, gemImage, statsAdditive;
     public GameObject craftButton, exitButton, gemButton;
     Items craftedItem;
-    Items gem;
+    string tempItemName;
+    int tempAttack, tempSpecial, tempSpeed, tempDuribility;
+    Gem gem;
 
     void Start()
     {
@@ -27,6 +29,14 @@ public class CraftingPopUp : MonoBehaviour
         craftableItem = item;
         string statsText = "";
         string materialsText = "";
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.weapons)
+        {
+            gemButton.SetActive(true);
+        }
+        else
+        {
+            gemButton.SetActive(false);
+        }
         if (item.CraftedItemID != 0)
         {
             craftedItem = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID);
@@ -44,6 +54,11 @@ public class CraftingPopUp : MonoBehaviour
             weapon.Title = item.Weapon.Title;
             weapon.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
             craftedItem = weapon;
+            tempItemName = craftedItem.Title;
+            tempAttack = weapon.Attack;
+            tempSpeed = weapon.Speed;
+            tempSpecial = weapon.Special;
+            tempDuribility = weapon.Durability;
         }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
         if (craftedItem.ID >= 4000 && craftedItem.ID < 5000)
@@ -139,18 +154,41 @@ public class CraftingPopUp : MonoBehaviour
         return true;
     }
 
-    void ChangeGem(Gem newGem)
+    public void ChangeGem(Gem newGem)
     {
         gem = newGem;
         if (gem != null)
         {
-            
+            statsAdditive.GetComponent<Text>().text = "\n" + (gem.Attack > 0 ? "+" + gem.Attack : "") +
+                "\n" + (gem.Special > 0 ? "+" + gem.Special : "") + "\n" + (gem.Speed > 0 ? "+" + gem.Speed : "") +
+                "\n" + (gem.Durability > 0 ? "+" + gem.Durability : "") + "\n";
+            nameOfItem.GetComponent<Text>().text = tempItemName + " " + gem.AddedTitle;
+            Weapons weapon = (Weapons)craftedItem;
+            weapon.Title = tempItemName + " " + gem.AddedTitle;
+            weapon.Attack = tempAttack + gem.Attack;
+            weapon.Speed = tempSpeed + gem.Speed;
+            weapon.Durability = tempDuribility + gem.Durability;
+            weapon.Special = tempSpecial + gem.Special;
+            craftedItem = weapon;
+            gemImage.SetActive(true);
+        }
+        else
+        {
+            statsAdditive.GetComponent<Text>().text = "";
+            nameOfItem.GetComponent<Text>().text = tempItemName;
+            Weapons weapon = (Weapons)craftedItem;
+            weapon.Title = tempItemName;
+            weapon.Attack = tempAttack;
+            weapon.Speed = tempSpeed;
+            weapon.Durability = tempDuribility;
+            weapon.Special = tempSpecial;
+            craftedItem = weapon;
+            gemImage.SetActive(false);
         }
     }
 
     public void OpenGemList()
     {
-        VillageSceneController.villageScene.GetComponent<GemsInventory>().InitalizeSlots();
         gemsList.gameObject.SetActive(true);
     }
 
@@ -161,6 +199,7 @@ public class CraftingPopUp : MonoBehaviour
 
     public void CloseUI()
     {
+        ChangeGem(null);
         popUp.SetActive(false);
     }
 

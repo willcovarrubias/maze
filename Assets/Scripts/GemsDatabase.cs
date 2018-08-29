@@ -34,6 +34,7 @@ public class GemsDatabase : MonoBehaviour
             gem.Size = (int)gemsData[i]["size"];
             gem.Title = gemsData[i]["title"].ToString();
             gem.Slug = gemsData[i]["slug"].ToString();
+            gem.AddedTitle = gemsData[i]["addedTitle"].ToString();
             List<int> newList = new List<int>();
             for (int j = 0; j < gemsData[i]["rarity"].Count; j++)
             {
@@ -107,4 +108,5 @@ public class Gem : Items
     public int Special { get; set; }
     public int Speed { get; set; }
     public int Durability { get; set; }
+    public string AddedTitle { get; set; }
 }
