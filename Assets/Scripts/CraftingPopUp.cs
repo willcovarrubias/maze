@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class CraftingPopUp : MonoBehaviour
 {
     CraftableItem craftableItem;
-    public GameObject popUp, imageOfItem, nameOfItem, statsOfItem, materials;
-    public GameObject craftButton, exitButton;
+    public GameObject popUp, imageOfItem, nameOfItem, statsOfItem, materials, gemsList, gemImage;
+    public GameObject craftButton, exitButton, gemButton;
     Items craftedItem;
+    Items gem;
 
     void Start()
     {
@@ -15,6 +16,8 @@ public class CraftingPopUp : MonoBehaviour
         exit.onClick.AddListener(CloseUI);
         Button craft = craftButton.GetComponent<Button>();
         craft.onClick.AddListener(Craft);
+        Button gems = gemButton.GetComponent<Button>();
+        gems.onClick.AddListener(OpenGemList);
         popUp.transform.SetParent(GameMaster.gameMaster.transform.Find("Canvas").transform, true);
         popUp.transform.SetSiblingIndex(2);
     }
@@ -134,6 +137,26 @@ public class CraftingPopUp : MonoBehaviour
             }
         }
         return true;
+    }
+
+    void ChangeGem(Gem newGem)
+    {
+        gem = newGem;
+        if (gem != null)
+        {
+            
+        }
+    }
+
+    public void OpenGemList()
+    {
+        VillageSceneController.villageScene.GetComponent<GemsInventory>().InitalizeSlots();
+        gemsList.gameObject.SetActive(true);
+    }
+
+    public void CloseGemsList()
+    {
+        gemsList.gameObject.SetActive(false);
     }
 
     public void CloseUI()
