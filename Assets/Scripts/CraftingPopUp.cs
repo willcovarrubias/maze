@@ -110,10 +110,26 @@ public class CraftingPopUp : MonoBehaviour
                         keyValue.Value,
                         VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].SlotNum);
                 }
+                if (gem != null)
+                {
+                    VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(
+                        VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[gem.ID],
+                        1,
+                        VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[gem.ID].Count);
+                }
                 if (craftedItem.ID >= 10000)
                 {
+                    Weapons craftedItemTemp = (Weapons)craftedItem;
                     Weapons item = new Weapons();
-                    item = (Weapons)craftedItem;
+                    item.Attack = craftedItemTemp.Attack;
+                    item.Durability = craftedItemTemp.Durability;
+                    item.Size = craftedItemTemp.Size;
+                    item.Special = craftedItemTemp.Special;
+                    item.Speed = craftedItemTemp.Speed;
+                    item.Rarity = craftedItemTemp.Rarity;
+                    item.Slug = craftedItemTemp.Slug;
+                    item.Sprite = craftedItemTemp.Sprite;
+                    item.Title = craftedItemTemp.Title;
                     item.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
                     Inventory newItem = new Inventory(item, 1, 0);
                     GameMaster.gameMaster.GetComponent<InventoryManager>().AddBoughtItem(newItem);

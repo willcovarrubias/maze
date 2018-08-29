@@ -91,12 +91,12 @@ public class GemsInventory : MonoBehaviour
     {
         if (slotId == selectedGem)
         {
-            selectedGem = -1;
             gem = null;
-            if (slots[slotId].transform.GetChild(0).transform.childCount > 0)
+            if (slots[selectedGem].transform.GetChild(0).transform.childCount > 0 && selectedGem >= 0)
             {
-                Destroy(slots[slotId].transform.GetChild(0).transform.GetChild(0).gameObject);
+                Destroy(slots[selectedGem].transform.GetChild(0).transform.GetChild(0).gameObject);
             }
+            selectedGem = -1;
         }
         else
         {
