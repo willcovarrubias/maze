@@ -61,6 +61,16 @@ public class ItemPopUp : MonoBehaviour
             action.SetActive(true);
             action.GetComponentInChildren<Text>().text = "Consume";
         }
+        else if (item.Item.ID >= 2000 && item.Item.ID < 3000)
+        {
+            Gem gem = (Gem)item.Item;
+            UpdateCount();
+            stats += "Gem\nAtk " + (gem.Attack > 0 ? "+" : "") + gem.Attack + "\nSpec " + (gem.Special > 0 ? "+" : "") + gem.Special +
+                     "\nSpd " + (gem.Speed > 0 ? "+" : "") + gem.Speed + "\nDu " + (gem.Durability > 0 ? "+" : "") + gem.Durability +
+                     "\nWgt " + item.Item.Size;
+            statsOfItem.GetComponent<Text>().text = stats;
+            action.SetActive(false);
+        }
         else if (item.Item.ID >= 3000 && item.Item.ID < 4000)
         {
             UpdateCount();
@@ -94,7 +104,7 @@ public class ItemPopUp : MonoBehaviour
                 }
             }
             UpdateCount();
-            stats += "Armor\nDef " + armor.Defense + "\nspd " + armor.Speed + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
+            stats += "Armor\nDef " + armor.Defense + "\nSpd " + armor.Speed + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
         }
@@ -110,7 +120,7 @@ public class ItemPopUp : MonoBehaviour
                 action.GetComponentInChildren<Text>().text = "Unequip";
             }
             UpdateCount();
-            stats += "Weapon\nAtk " + weap.Attack + "\nSpec " + weap.Special + "\nSpd " + weap.Speed + "\nDu " + weap.Durability + "\nWgt " + item.Item.Size;
+            stats += "Weapon\nAt " + weap.Attack + "\nSpec " + weap.Special + "\nSpd " + weap.Speed + "\nDu " + weap.Durability + "\nWgt " + item.Item.Size;
             statsOfItem.GetComponent<Text>().text = stats;
             action.SetActive(true);
         }

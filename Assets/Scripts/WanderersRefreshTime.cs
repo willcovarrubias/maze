@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class WanderersRefreshTime : MonoBehaviour
 {
@@ -9,11 +13,17 @@ public class WanderersRefreshTime : MonoBehaviour
     GameObject refreshText;
     int refreshTime;
     int previousTime;
+    int tempPreviousTime;
+    int currentSeconds;
+
+    private string url = "time.nist.gov";
+
     void Start()
     {
         refreshText = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().refreshTimeText;
         refreshTime = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().refreshTime;
         previousTime = VillageSceneController.villageScene.GetComponent<RecruitmentManager>().previousTime;
+        //GetTime();
     }
 
     void Update()
@@ -39,7 +49,30 @@ public class WanderersRefreshTime : MonoBehaviour
 
     int GetTimeInSeconds()
     {
-        System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-        return (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
+        tempPreviousTime = currentSeconds;
+        DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        currentSeconds = (int)(DateTime.UtcNow - epochStart).TotalSeconds;
+        return currentSeconds;
+    }
+
+    void GetTime()
+    {
+        var client = new TcpClient(url, 13);
+        if (client.Connected)
+        {
+            using (var streamReader = new StreamReader(client.GetStream()))
+            {
+                var response = streamReader.ReadToEnd();
+                var utcDateTimeString = response.Substring(7, 17);
+                DateTime localDateTime = DateTime.ParseExact(utcDateTimeString, "yy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                TimeSpan span = localDateTime.Subtract(new DateTime(1970, 1, 1, 0, 0, 0));
+                Debug.Log(GetTimeInSeconds());
+                Debug.Log("Online Time: " + span.TotalSeconds);
+            }
+        }
+        else
+        {
+            
+        }
     }
 }
