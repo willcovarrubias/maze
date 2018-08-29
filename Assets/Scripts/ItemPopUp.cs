@@ -8,7 +8,7 @@ public class ItemPopUp : MonoBehaviour
 {
     Inventory item;
     Weapons weapon;
-    GameObject gameMaster, villageInventory;
+    GameObject gameMaster;
     GameObject itemHolder;
     int currentSlot;
     GameObject imageOfItem, nameOfItem, statsOfItem;
@@ -49,69 +49,66 @@ public class ItemPopUp : MonoBehaviour
         currentSlot = slot;
         itemHolder = holder;
         currentLocation = location;
-        discard1.GetComponentInChildren<Text>().text = "Discard";
-        discardAll.GetComponentInChildren<Text>().text = "Discard All";
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
-            Consumable consumable = (Consumable)item.Item;
-            UpdateCount();
-            stats += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing +
-                     "\nMP " + (consumable.MP > 0 ? "+" : "") + consumable.MP + "\nWgt " + item.Item.Size;
-            statsOfItem.GetComponent<Text>().text = stats;
-            action.SetActive(true);
-            action.GetComponentInChildren<Text>().text = "Consume";
+            ConsumableText(stats);
         }
         else if (item.Item.ID >= 2000 && item.Item.ID < 3000)
         {
-            Gem gem = (Gem)item.Item;
-            UpdateCount();
-            stats += "Gem\nAtk " + (gem.Attack > 0 ? "+" : "") + gem.Attack + "\nSpec " + (gem.Special > 0 ? "+" : "") + gem.Special +
-                     "\nSpd " + (gem.Speed > 0 ? "+" : "") + gem.Speed + "\nDu " + (gem.Durability > 0 ? "+" : "") + gem.Durability +
-                     "\nWgt " + item.Item.Size;
-            statsOfItem.GetComponent<Text>().text = stats;
-            action.SetActive(false);
+            GemText(stats);
         }
         else if (item.Item.ID >= 3000 && item.Item.ID < 4000)
         {
-            UpdateCount();
-            stats += "Material" + "\nWgt " + item.Item.Size;
-            statsOfItem.GetComponent<Text>().text = stats;
-            action.SetActive(false);
+            MaterialText(stats);
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
-            Armor armor = (Armor)item.Item;
-            if (armor.Appendage == "head")
-            {
-                if (GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
-                {
-                    action.GetComponentInChildren<Text>().text = "Equip";
-                }
-                else
-                {
-                    action.GetComponentInChildren<Text>().text = "Unequip";
-                }
-            }
-            else
-            {
-                if (GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
-                {
-                    action.GetComponentInChildren<Text>().text = "Equip";
-                }
-                else
-                {
-                    action.GetComponentInChildren<Text>().text = "Unequip";
-                }
-            }
-            UpdateCount();
-            stats += "Armor\nDef " + armor.Defense + "\nSpd " + armor.Speed + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
-            statsOfItem.GetComponent<Text>().text = stats;
-            action.SetActive(true);
+            ArmorText(stats);
         }
         else if (item.Item.ID >= 10000)
         {
-            Weapons weap = (Weapons)item.Item;
-            if (GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+            WeaponText(stats);
+        }
+        UpdateButtons(i);
+        popUp.SetActive(true);
+    }
+
+    void ConsumableText(string stats)
+    {
+        Consumable consumable = (Consumable)item.Item;
+        UpdateCount();
+        stats += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing +
+                 "\nMP " + (consumable.MP > 0 ? "+" : "") + consumable.MP + "\nWgt " + item.Item.Size;
+        statsOfItem.GetComponent<Text>().text = stats;
+        action.SetActive(true);
+        action.GetComponentInChildren<Text>().text = "Consume";
+    }
+
+    void GemText(string stats)
+    {
+        Gem gem = (Gem)item.Item;
+        UpdateCount();
+        stats += "Gem\nAtk " + (gem.Attack > 0 ? "+" : "") + gem.Attack + "\nSpec " + (gem.Special > 0 ? "+" : "") + gem.Special +
+                 "\nSpd " + (gem.Speed > 0 ? "+" : "") + gem.Speed + "\nDu " + (gem.Durability > 0 ? "+" : "") + gem.Durability +
+                 "\nWgt " + item.Item.Size;
+        statsOfItem.GetComponent<Text>().text = stats;
+        action.SetActive(false);
+    }
+
+    void MaterialText(string stats)
+    {
+        UpdateCount();
+        stats += "Material" + "\nWgt " + item.Item.Size;
+        statsOfItem.GetComponent<Text>().text = stats;
+        action.SetActive(false);
+    }
+
+    void ArmorText(string stats)
+    {
+        Armor armor = (Armor)item.Item;
+        if (armor.Appendage == "head")
+        {
+            if (GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
             {
                 action.GetComponentInChildren<Text>().text = "Equip";
             }
@@ -119,10 +116,53 @@ public class ItemPopUp : MonoBehaviour
             {
                 action.GetComponentInChildren<Text>().text = "Unequip";
             }
-            UpdateCount();
-            stats += "Weapon\nAt " + weap.Attack + "\nSpec " + weap.Special + "\nSpd " + weap.Speed + "\nDu " + weap.Durability + "\nWgt " + item.Item.Size;
-            statsOfItem.GetComponent<Text>().text = stats;
-            action.SetActive(true);
+        }
+        else
+        {
+            if (GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
+            {
+                action.GetComponentInChildren<Text>().text = "Equip";
+            }
+            else
+            {
+                action.GetComponentInChildren<Text>().text = "Unequip";
+            }
+        }
+        UpdateCount();
+        stats += "Armor\nDef " + armor.Defense + "\nSpd " + armor.Speed + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
+        statsOfItem.GetComponent<Text>().text = stats;
+        action.SetActive(true);
+    }
+
+    void WeaponText(string stats)
+    {
+        Weapons weap = (Weapons)item.Item;
+        if (GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+        {
+            action.GetComponentInChildren<Text>().text = "Equip";
+        }
+        else
+        {
+            action.GetComponentInChildren<Text>().text = "Unequip";
+        }
+        UpdateCount();
+        stats += "Weapon\nAt " + weap.Attack + "\nSpec " + weap.Special + "\nSpd " + weap.Speed + "\nDu " + weap.Durability +
+                  "\nWgt " + item.Item.Size;
+        statsOfItem.GetComponent<Text>().text = stats;
+        action.SetActive(true);
+    }
+
+    void UpdateButtons(Inventory inventory)
+    {
+        discard1.GetComponentInChildren<Text>().text = "Discard";
+        discardAll.GetComponentInChildren<Text>().text = "Discard All";
+        if (inventory.Count > 1)
+        {
+            discardAll.SetActive(true);
+        }
+        else
+        {
+            discardAll.SetActive(false);
         }
         if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "VillageScene")
         {
@@ -153,21 +193,12 @@ public class ItemPopUp : MonoBehaviour
             moveAll.SetActive(true);
             move1.GetComponentInChildren<Text>().text = "Send to inventory";
             moveAll.GetComponentInChildren<Text>().text = "Send all to inventory";
-            if (currentLocation == Location.WhereAmI.village)
-            {
-                villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
-            }
         }
         else
         {
             move1.SetActive(false);
             moveAll.SetActive(false);
         }
-        if (SceneManager.GetActiveScene().name == "VillageScene" && villageInventory == null)
-        {
-            villageInventory = GameObject.FindGameObjectWithTag("VillageSceneManager");
-        }
-        popUp.SetActive(true);
     }
 
     void UpdateCount()
@@ -193,72 +224,86 @@ public class ItemPopUp : MonoBehaviour
     {
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
-            string dialog = "";
-            Consumable consumable = (Consumable)item.Item;
-            gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
-            gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.MP);
-            if (consumable.Healing > 0)
-            {
-                dialog += "Recovered " + consumable.Healing + " HP.";
-            }
-            else if (consumable.Healing < 0)
-            {
-                dialog += "Lost " + consumable.Healing + " HP. ";
-            }
-            if (consumable.MP > 0)
-            {
-                dialog += "Recovered " + consumable.MP + " MP.";
-            }
-            else if (consumable.MP < 0)
-            {
-                dialog += "Lost " + consumable.MP + " MP.";
-            }
-            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(dialog);
-            ThrowAwayOne();
-            CheckIfUsedItemDuringFight();
+            ConsumableAction();
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
-            Armor piece = (Armor)item.Item;
-            if (piece.Appendage == "head")
-            {
-                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
-                {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedHat(item.Item);
-                }
-                else
-                {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipHat(item.Item);
-                }
-            }
-            else if (piece.Appendage == "chest")
-            {
-                if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
-                {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedBody(item.Item);
-                }
-                else
-                {
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipBody(item.Item);
-                }
-            }
-            CheckIfUsedItemDuringFight();
-            Close();
-
+            ArmorAction();
         }
         else if (item.Item.ID >= 10000)
         {
-            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+            WeaponAction();
+        }
+    }
+
+    void ConsumableAction()
+    {
+        string dialog = "";
+        Consumable consumable = (Consumable)item.Item;
+        gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
+        gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.MP);
+        if (consumable.Healing > 0)
+        {
+            dialog += "Recovered " + consumable.Healing + " HP.";
+        }
+        else if (consumable.Healing < 0)
+        {
+            dialog += "Lost " + consumable.Healing + " HP. ";
+        }
+        if (consumable.MP > 0)
+        {
+            dialog += "Recovered " + consumable.MP + " MP.";
+        }
+        else if (consumable.MP < 0)
+        {
+            dialog += "Lost " + consumable.MP + " MP.";
+        }
+        gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(dialog);
+        ThrowAwayOne();
+        CheckIfUsedItemDuringFight();
+    }
+
+    void ArmorAction()
+    {
+        Armor piece = (Armor)item.Item;
+        if (piece.Appendage == "head")
+        {
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
+                GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedHat(item.Item);
             }
             else
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipWeapon(item.Item);
+                GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipHat(item.Item);
             }
-            CheckIfUsedItemDuringFight();
-            Close();
         }
+        else if (piece.Appendage == "chest")
+        {
+            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedBody(item.Item);
+            }
+            else
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipBody(item.Item);
+            }
+        }
+        CheckIfUsedItemDuringFight();
+        Close();
+    }
+
+    void WeaponAction()
+    {
+        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipWeapon(item.Item);
+        }
+        CheckIfUsedItemDuringFight();
+        Close();
     }
 
     public void ThrowAwayOne()
@@ -278,7 +323,7 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            villageInventory.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(item, 1, currentSlot);
+            VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(item, 1, currentSlot);
             if (item.Count > 0)
             {
                 UpdateCount();
@@ -314,7 +359,7 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            villageInventory.GetComponent<VillageInventoryManager>().RemoveWholeStackFromInventory(item, currentSlot);
+            VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().RemoveWholeStackFromInventory(item, currentSlot);
             Destroy(itemHolder);
             Close();
         }
@@ -333,8 +378,8 @@ public class ItemPopUp : MonoBehaviour
         {
             if (SceneManager.GetActiveScene().name == "VillageScene")
             {
-                bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, 1);
-                villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
+                bool movedAll = VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, 1);
+                VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().SaveVillageInventory();
                 CloseOrUpdate(movedAll);
             }
             else if (SceneManager.GetActiveScene().name == "LootScene")
@@ -368,8 +413,8 @@ public class ItemPopUp : MonoBehaviour
         {
             if (SceneManager.GetActiveScene().name == "VillageScene")
             {
-                bool movedAll = villageInventory.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, item.Count);
-                villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
+                bool movedAll = VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().MoveItemsToVillageInventory(item, currentSlot, item.Count);
+                VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().SaveVillageInventory();
                 CloseOrUpdate(movedAll);
             }
             else if (SceneManager.GetActiveScene().name == "LootScene")

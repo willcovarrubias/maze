@@ -215,7 +215,10 @@ public class CraftingPopUp : MonoBehaviour
 
     public void CloseUI()
     {
-        ChangeGem(null);
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.weapons)
+        {
+            ChangeGem(null);
+        }
         popUp.SetActive(false);
     }
 
