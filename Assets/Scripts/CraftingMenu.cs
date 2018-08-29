@@ -30,43 +30,27 @@ public class CraftingMenu : MonoBehaviour
         items.Add(item);
         if (isWeapon)
         {
-            AddWeaponToSlots(item);
+            AddItemToSlots(item, item.Weapon.Title);
         }
         else
         {
-            AddItemToSlots(item);
+            AddItemToSlots(item, GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title);
         }
     }
 
-    void AddItemToSlots(CraftableItem item)
+    void AddItemToSlots(CraftableItem item, string itemName)
     {
         GameObject itemObject = Instantiate(itemPrefab);
         AddDynamicSlot();
         itemObject.transform.SetParent(slots[slotAmount - 1].transform, false);
         itemObject.transform.localPosition = Vector2.zero;
-        itemObject.name = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title;
+        itemObject.name = itemName;
         Destroy(itemObject.GetComponent<ItemData>());
         Destroy(itemObject.GetComponentInChildren<ItemSlot>());
         itemObject.AddComponent<CraftableItemData>();
         itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
-        itemObject.GetComponent<Text>().text = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title;
-        ResizeSlotPanel();
-    }
-
-    void AddWeaponToSlots(CraftableItem item)
-    {
-        GameObject itemObject = Instantiate(itemPrefab);
-        AddDynamicSlot();
-        itemObject.transform.SetParent(slots[slotAmount - 1].transform, false);
-        itemObject.transform.localPosition = Vector2.zero;
-        itemObject.name = item.Weapon.Title;
-        Destroy(itemObject.GetComponent<ItemData>());
-        Destroy(itemObject.GetComponentInChildren<ItemSlot>());
-        itemObject.AddComponent<CraftableItemData>();
-        itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
-        itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
-        itemObject.GetComponent<Text>().text = item.Weapon.Title;
+        itemObject.GetComponent<Text>().text = itemName;
         ResizeSlotPanel();
     }
 

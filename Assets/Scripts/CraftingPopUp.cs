@@ -43,15 +43,7 @@ public class CraftingPopUp : MonoBehaviour
         }
         else
         {
-            Weapons weapon = new Weapons();
-            weapon.Attack = item.Weapon.Attack;
-            weapon.Durability = item.Weapon.Durability;
-            weapon.Size = item.Weapon.Size;
-            weapon.Slug = item.Weapon.Slug;
-            weapon.Special = item.Weapon.Special;
-            weapon.Speed = item.Weapon.Speed;
-            weapon.Sprite = item.Weapon.Sprite;
-            weapon.Title = item.Weapon.Title;
+            Weapons weapon = CreateWeaponFromItem(item.Weapon);
             weapon.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
             craftedItem = weapon;
             tempItemName = craftedItem.Title;
@@ -90,7 +82,7 @@ public class CraftingPopUp : MonoBehaviour
             }
             else
             {
-                materialsText += "<i> (Village has none)</i>";
+                materialsText += "<i> (Village has 0)</i>";
             }
         }
         materials.GetComponent<Text>().text = materialsText;
@@ -119,17 +111,7 @@ public class CraftingPopUp : MonoBehaviour
                 }
                 if (craftedItem.ID >= 10000)
                 {
-                    Weapons craftedItemTemp = (Weapons)craftedItem;
-                    Weapons item = new Weapons();
-                    item.Attack = craftedItemTemp.Attack;
-                    item.Durability = craftedItemTemp.Durability;
-                    item.Size = craftedItemTemp.Size;
-                    item.Special = craftedItemTemp.Special;
-                    item.Speed = craftedItemTemp.Speed;
-                    item.Rarity = craftedItemTemp.Rarity;
-                    item.Slug = craftedItemTemp.Slug;
-                    item.Sprite = craftedItemTemp.Sprite;
-                    item.Title = craftedItemTemp.Title;
+                    Weapons item = CreateWeaponFromItem(craftedItem);
                     item.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
                     Inventory newItem = new Inventory(item, 1, 0);
                     GameMaster.gameMaster.GetComponent<InventoryManager>().AddBoughtItem(newItem);
@@ -203,6 +185,23 @@ public class CraftingPopUp : MonoBehaviour
         }
     }
 
+    Weapons CreateWeaponFromItem(Items item)
+    {
+        Weapons tempItem = (Weapons)item;
+        Weapons weapon = new Weapons();
+        weapon.Attack = tempItem.Attack;
+        weapon.Durability = tempItem.Durability;
+        weapon.Size = tempItem.Size;
+        weapon.Special = tempItem.Special;
+        weapon.Speed = tempItem.Speed;
+        weapon.Rarity = tempItem.Rarity;
+        weapon.Slug = tempItem.Slug;
+        weapon.Sprite = tempItem.Sprite;
+        weapon.Title = tempItem.Title;
+        weapon.ID = item.ID;
+        return weapon;
+    }
+
     public void OpenGemList()
     {
         gemsList.gameObject.SetActive(true);
@@ -215,7 +214,10 @@ public class CraftingPopUp : MonoBehaviour
 
     public void CloseUI()
     {
-        ChangeGem(null);
+        if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.weapons)
+        {
+            ChangeGem(null);
+        }
         popUp.SetActive(false);
     }
 
