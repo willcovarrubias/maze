@@ -24,6 +24,14 @@
 				"material" : 3001,
 				"amount" : 20
 			}
+		],
+		"levels text" :
+		[
+			"Will allow the barracks to occupy 3 heroes",
+			"Will allow the barracks to occupy 4 heroes",
+			"Will allow the barracks to occupy 5 heroes",
+			"Will allow the barracks to occupy 6 heroes",
+			"Will allow the barracks to occupy 7 heroes"
 		]
 	},
 	{
@@ -42,6 +50,118 @@
 				"material" : 3001,
 				"amount" : 10
 			}
+		],
+		"levels text" :
+		[
+			"Will allow the caravan to occupy 3 wanderers",
+			"Will allow the caravan to occupy 4 wanderers",
+			"Will allow the caravan to occupy 5 wanderers",
+			"Will allow the caravan to occupy 6 wanderers",
+			"Will allow the caravan to occupy 7 wanderers"
+		]
+	},
+	{
+		"id" : 2,
+		"title" : "Armor Smith",
+		"level 1 materials" : 
+		[
+			{
+				"material" : 3000,
+				"amount" : 10
+			}
+		],
+		"level 2 materials" : 
+		[
+			{
+				"material" : 3001,
+				"amount" : 10
+			}
+		],
+		"levels text" :
+		[
+			"Will allow the Armor Smith to increase quality of work",
+			"Will allow the Armor Smith to increase quality of work",
+			"Will allow the Armor Smith to increase quality of work",
+			"Will allow the Armor Smith to increase quality of work",
+			"Will allow the Armor Smith to increase quality of work"
+		]
+	},
+	{
+		"id" : 3,
+		"title" : "Weapon Smith",
+		"level 1 materials" : 
+		[
+			{
+				"material" : 3000,
+				"amount" : 10
+			}
+		],
+		"level 2 materials" : 
+		[
+			{
+				"material" : 3001,
+				"amount" : 10
+			}
+		],
+		"levels text" :
+		[
+			"Will allow the Weapon Smith to increase quality of work",
+			"Will allow the Weapon Smith to increase quality of work",
+			"Will allow the Weapon Smith to increase quality of work",
+			"Will allow the Weapon Smith to increase quality of work",
+			"Will allow the Weapon Smith to increase quality of work"
+		]
+	},
+	{
+		"id" : 4,
+		"title" : "Item Shop",
+		"level 1 materials" : 
+		[
+			{
+				"material" : 3000,
+				"amount" : 10
+			}
+		],
+		"level 2 materials" : 
+		[
+			{
+				"material" : 3001,
+				"amount" : 10
+			}
+		],
+		"levels text" :
+		[
+			"Will allow the Item Shop to increase quality of work",
+			"Will allow the Item Shop to increase quality of work",
+			"Will allow the Item Shop to increase quality of work",
+			"Will allow the Item Shop to increase quality of work",
+			"Will allow the Item Shop to increase quality of work"
+		]
+	},
+	{
+		"id" : 5,
+		"title" : "Village Inventory",
+		"level 1 materials" : 
+		[
+			{
+				"material" : 3000,
+				"amount" : 10
+			}
+		],
+		"level 2 materials" : 
+		[
+			{
+				"material" : 3001,
+				"amount" : 10
+			}
+		],
+		"levels text" :
+		[
+			"Will allow the Village Inventory to increase size to 200",
+			"Will allow the Village Inventory to increase size to 500",
+			"Will allow the Village Inventory to increase size to 1000",
+			"Will allow the Village Inventory to increase size to 2000",
+			"Will allow the Village Inventory to increase size to 5000"
 		]
 	}
 ]

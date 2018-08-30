@@ -9,13 +9,10 @@ public class BuildingDatabase : MonoBehaviour
     private List<Buildings> buildings = new List<Buildings>();
     private JsonData buildingData;
 
-    public List<int> buildingLevels = new List<int>();
-
     void Start()
     {
         buildingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Buildings.json"));
         ConstructBuildingDatabase();
-        PrintBuildings();
     }
 
     void ConstructBuildingDatabase()
@@ -39,6 +36,10 @@ public class BuildingDatabase : MonoBehaviour
             }
             building.materials.Add(level1materials);
             building.materials.Add(level2materials);
+            for (int j = 0; j < buildingData[i]["levels text"].Count; j++)
+            {
+                building.levelsDescription.Add(buildingData[i]["levels text"][j].ToString());
+            }
             buildings.Add(building);
         }
     }
@@ -46,22 +47,7 @@ public class BuildingDatabase : MonoBehaviour
     Dictionary<int, int> GetMaterialsNeededForBuilding(int level, int building)
     {
         Dictionary<int, int> materials = new Dictionary<int, int>();
-
         return materials;
-    }
-
-    public int GetBuildingLevel()
-    {
-
-        return 0;
-        
-    }
-
-    public void LevelUpBuilding(int id)
-    {
-        //Look into CraftingPopUp for reference
-        Debug.Log("You leveled up the: " + buildings[id].title);
-        buildingLevels[id] += 1;
     }
 
     void PrintBuildings()
@@ -78,7 +64,11 @@ public class BuildingDatabase : MonoBehaviour
                 }
             }
         }
+    }
 
+    public List<Buildings> GetBuildingsData()
+    {
+        return buildings;
     }
 }
 
@@ -87,6 +77,11 @@ public class Buildings
     public int id { get; set; }
     public string title { get; set; }
     public List<Dictionary<int, int>> materials { get; set; }
+    public List<string> levelsDescription { get; set; }
 
-    public Buildings() { materials = new List<Dictionary<int, int>>(); }
+    public Buildings() 
+    { 
+        materials = new List<Dictionary<int, int>>();
+        levelsDescription = new List<string>();   
+    }
 }

@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class VillageSceneController : MonoBehaviour
 {
     public static VillageSceneController villageScene;
-    public GameObject mainMenu, labyrinthConfirmation, barracksMenu, blacksmithMenu, itemShopMenu, inventoryUI, villInventoryUI, recruitmentUI;
+    public GameObject mainMenu, labyrinthConfirmation, barracksMenu;
+    public GameObject inventoryUI, villInventoryUI, recruitmentUI, upgradeMenu;
     GameObject gameMaster;
     public Canvas canvasForAllMenusInVillageScene;
     public Location.VillageMenu currentMenu;
@@ -19,15 +20,12 @@ public class VillageSceneController : MonoBehaviour
         mainMenu.SetActive(false);
         labyrinthConfirmation.SetActive(false);
         barracksMenu.SetActive(false);
-        blacksmithMenu.SetActive(false);
-        itemShopMenu.SetActive(false);
         currentMenu = Location.VillageMenu.mainMenu;
     }
 
     public void MainMenu()
     {
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-
         mainMenu.SetActive(true);
     }
 
@@ -150,5 +148,17 @@ public class VillageSceneController : MonoBehaviour
         currentMenu = Location.VillageMenu.mainMenu;
         inventoryUI.SetActive(false);
         villInventoryUI.SetActive(false);
+    }
+
+    public void UpgradeUIOpen()
+    {
+        currentMenu = Location.VillageMenu.upgrade;
+        upgradeMenu.SetActive(true);
+    }
+
+    public void UpgradeUIClose()
+    {
+        currentMenu = Location.VillageMenu.mainMenu;
+        upgradeMenu.SetActive(false);
     }
 }
