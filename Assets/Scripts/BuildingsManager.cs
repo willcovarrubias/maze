@@ -94,6 +94,7 @@ public class BuildingsManager : MonoBehaviour
         caravanLevel = PlayerPrefs.GetInt("caravan");
         PlayerPrefs.Save();
         SetBuildingsText();
+        GetComponent<RecruitmentManager>().SetMaxAmountOfWanderers();
     }
 
     void LevelUpArmorSmith()
