@@ -38,7 +38,6 @@ public class RecruitmentManager : MonoBehaviour
         PlayerPrefs.Save();
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         SetMaxAmountOfWanderers();
-        AddUIStuffFirst();
         DisplayCurrentListOfWanderers();
     }
 
@@ -148,6 +147,7 @@ public class RecruitmentManager : MonoBehaviour
     }
     void DisplayCurrentListOfWanderers()
     {
+        RemoveWanderers();
         AddUIStuffFirst();
         for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
         {

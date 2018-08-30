@@ -190,7 +190,8 @@ public class CharacterDatabase : MonoBehaviour
     string GetRandomName()
     {
         JsonData namesData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Names.json"));
-        return namesData[UnityEngine.Random.Range(0, namesData.Count)].ToString();
+        int gender = UnityEngine.Random.Range(0, namesData.Count);
+        return namesData[gender][UnityEngine.Random.Range(0, namesData[gender].Count)].ToString();
     }
 
     string GetRandomJob()
