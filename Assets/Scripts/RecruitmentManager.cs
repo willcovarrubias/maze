@@ -5,9 +5,8 @@ using UnityEngine.UI;
 
 public class RecruitmentManager : MonoBehaviour
 {
-
     GameObject gameMaster;
-    private int maxAmountOfHeroesToRecruit;
+    int maxAmountOfHeroesToRecruit;
     Character currentlyClickedCharacter;
     GameObject objectsToDestroyWhenWandererIsRecruited;
 
@@ -195,11 +194,18 @@ public class RecruitmentManager : MonoBehaviour
 
     public void FinalizeRecruitment()
     {
-        characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
-        characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
-        Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
-        CaravanAdvancedUIClose();
+        if (GetComponent<RosterManager>().GetMaxRosterSize() > GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count)
+        {
+            characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
+            characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+            Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+            GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
+            CaravanAdvancedUIClose();
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Barracks Full");
+        }
     }
 
     public void SetCurrentlyClickedCharacter(Character characterClicked, GameObject objectToDestroy)

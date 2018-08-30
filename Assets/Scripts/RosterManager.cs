@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class RosterManager : MonoBehaviour
 {
-
-    private int maxRosterSize;
+    int rosterSize;
 
     //UI Stuff.
     public GameObject rosterPanel;
@@ -30,15 +29,37 @@ public class RosterManager : MonoBehaviour
 
     Character currentlyClickedCharacter;
 
-    int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
+    int[] expLevels = { 0, 200, 400, 800, 1600 };
 
     void Start()
     {
-        maxRosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
+        rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
 
         GenerateHeroSlotsBasedOnStartupRosterSize();
         ResizeSlotPanelUI();
         PopulateCurrentRoster();
+    }
+
+    public int GetMaxRosterSize()
+    {
+        int caravanLevel = GetComponent<BuildingsManager>().GetBarracksLevel();
+        switch (caravanLevel)
+        {
+            case 0:
+                return 2;
+            case 1:
+                return 3;
+            case 2:
+                return 4;
+            case 3:
+                return 5;
+            case 4:
+                return 6;
+            case 5:
+                return 7;
+            default:
+                return 0;
+        }
     }
 
     private void Update()
@@ -52,7 +73,7 @@ public class RosterManager : MonoBehaviour
     public void PopulateCurrentRoster()
     {
         //This should update every time the roster is populated so that the newest size of the roster is reflected.
-        maxRosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
+        rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
 
         //DetermineActiveCharacterCurrentLevel();
 
@@ -110,7 +131,7 @@ public class RosterManager : MonoBehaviour
 
     private void GenerateHeroSlotsBasedOnStartupRosterSize()
     {
-        for (int i = 0; i < maxRosterSize; i++)
+        for (int i = 0; i < rosterSize; i++)
         {
             GameObject slot = Instantiate(characterSlot);
             slot.transform.SetParent(characterSlotPanel.transform);

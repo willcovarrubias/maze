@@ -16,7 +16,6 @@ public class CharacterDatabase : MonoBehaviour
 
     private JsonData enemyData;
     public Character activeCharacter;
-    static int maxAmountOfHeroes = 4;
     int currentAmountOfHeroes;
     int amountOfSavedHeroes;
     int amountOfSavedWanderers;
