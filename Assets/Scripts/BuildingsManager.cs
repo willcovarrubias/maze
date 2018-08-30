@@ -11,6 +11,7 @@ public class BuildingsManager : MonoBehaviour
     public GameObject barracksButton, caravanButton, armorSmithButton, weaponSmithButton;
     public GameObject itemShopButton, villageInventoryButton;
     public GameObject upgradePopUpTitle, upgradePopUpText;
+    public GameObject armorSmithMenuButton, weaponSmithMenuButton, itemShopMenuButton;
     Dictionary<int, int> materials;
     int currentID;
 
@@ -22,6 +23,18 @@ public class BuildingsManager : MonoBehaviour
         weaponSmithLevel = PlayerPrefs.GetInt("weaponSmith", 0);
         itemShopLevel = PlayerPrefs.GetInt("itemShop", 0);
         villageInventoryLevel = PlayerPrefs.GetInt("villageInvetory", 0);
+        if (armorSmithLevel > 0)
+        {
+            armorSmithMenuButton.SetActive(true);
+        }
+        if (weaponSmithLevel > 0)
+        {
+            weaponSmithMenuButton.SetActive(true);
+        }
+        if (itemShopLevel > 0)
+        {
+            itemShopMenuButton.SetActive(true);
+        }
         SetBuildingsText();
     }
 
@@ -52,7 +65,7 @@ public class BuildingsManager : MonoBehaviour
 
     public int GetWeaponSmithLevel()
     {
-        return armorSmithLevel;
+        return weaponSmithLevel;
     }
 
     public int GetItemShopLevel()
@@ -91,6 +104,7 @@ public class BuildingsManager : MonoBehaviour
         PlayerPrefs.Save();
         SetBuildingsText();
         GetComponent<CraftingDatabase>().UpdateArmory();
+        armorSmithMenuButton.SetActive(true);
     }
 
     void LevelUpWeaponSmith()
@@ -101,6 +115,7 @@ public class BuildingsManager : MonoBehaviour
         PlayerPrefs.Save();
         SetBuildingsText();
         GetComponent<CraftingDatabase>().UpdateWeapons();
+        weaponSmithMenuButton.SetActive(true);
     }
 
     void LevelUpItemShop()
@@ -111,6 +126,7 @@ public class BuildingsManager : MonoBehaviour
         PlayerPrefs.Save();
         SetBuildingsText();
         GetComponent<CraftingDatabase>().UpdateConsumables();
+        itemShopMenuButton.SetActive(true);
     }
 
     void LevelUpVillageInventory()
