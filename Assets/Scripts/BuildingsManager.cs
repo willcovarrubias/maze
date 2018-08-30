@@ -11,6 +11,8 @@ public class BuildingsManager : MonoBehaviour
     public GameObject barracksButton, caravanButton, armorSmithButton, weaponSmithButton;
     public GameObject itemShopButton, villageInventoryButton;
     public GameObject upgradePopUpTitle, upgradePopUpText;
+    Dictionary<int, int> materials;
+    int currentID;
 
     void Awake()
     {
@@ -65,6 +67,7 @@ public class BuildingsManager : MonoBehaviour
 
     void LevelUpBarracks()
     {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Barracks");
         PlayerPrefs.SetInt("barracks", barracksLevel + 1);
         barracksLevel = PlayerPrefs.GetInt("barracks");
         PlayerPrefs.Save();
@@ -73,6 +76,7 @@ public class BuildingsManager : MonoBehaviour
 
     void LevelUpCaravan()
     {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Wanderers Caravan");
         PlayerPrefs.SetInt("caravan", caravanLevel + 1);
         caravanLevel = PlayerPrefs.GetInt("caravan");
         PlayerPrefs.Save();
@@ -81,6 +85,7 @@ public class BuildingsManager : MonoBehaviour
 
     void LevelUpArmorSmith()
     {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Armor Smith");
         PlayerPrefs.SetInt("armorSmith", armorSmithLevel + 1);
         armorSmithLevel = PlayerPrefs.GetInt("armorSmith");
         PlayerPrefs.Save();
@@ -89,6 +94,7 @@ public class BuildingsManager : MonoBehaviour
 
     void LevelUpWeaponSmith()
     {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Weapon Smith");
         PlayerPrefs.SetInt("weaponSmith", weaponSmithLevel + 1);
         weaponSmithLevel = PlayerPrefs.GetInt("weaponSmith");
         PlayerPrefs.Save();
@@ -97,6 +103,7 @@ public class BuildingsManager : MonoBehaviour
 
     void LevelUpItemShop()
     {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Item Shop");
         PlayerPrefs.SetInt("itemShop", itemShopLevel + 1);
         itemShopLevel = PlayerPrefs.GetInt("itemShop");
         PlayerPrefs.Save();
@@ -105,6 +112,7 @@ public class BuildingsManager : MonoBehaviour
 
     void LevelUpVillageInventory()
     {
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Village Inventory");
         PlayerPrefs.SetInt("villageInvetory", villageInventoryLevel + 1);
         villageInventoryLevel = PlayerPrefs.GetInt("villageInvetory");
         PlayerPrefs.Save();
@@ -141,29 +149,58 @@ public class BuildingsManager : MonoBehaviour
         UpgradePopUp(5, "villageInvetory");
     }
 
+    void UpgradeBasedOnID()
+    {
+        switch (currentID)
+        {
+            case 0:
+                LevelUpBarracks();
+                break;
+            case 1:
+                LevelUpCaravan();
+                break;
+            case 2:
+                LevelUpArmorSmith();
+                break;
+            case 3:
+                LevelUpWeaponSmith();
+                break;
+            case 4:
+                LevelUpItemShop();
+                break;
+            case 5:
+                LevelUpVillageInventory();
+                break;
+        }
+    }
+
     void UpgradePopUp(int id, string buildingName)
     {
-        string text = "";
-        Dictionary<int, int> materials = GetComponent<BuildingDatabase>().GetBuildingsData()[id].materials[PlayerPrefs.GetInt(buildingName)];
-        upgradePopUpTitle.GetComponent<Text>().text = "Upgrade " + GetComponent<BuildingDatabase>().GetBuildingsData()[id].title + "?";
-        text += "<b>" + GetComponent<BuildingDatabase>().GetBuildingsData()[id].levelsDescription[PlayerPrefs.GetInt(buildingName)] + "</b>\n\n";
-        text += "<b>Materials Needed</b>";
-        foreach (KeyValuePair<int, int> keyValue in materials)
+        if (GetComponent<BuildingDatabase>().GetBuildingsData()[id].materials.Count > PlayerPrefs.GetInt(buildingName))
         {
-            text += "\n";
-            text += GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(keyValue.Key).Title;
-            text += " x" + keyValue.Value;
-            if (VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems.ContainsKey(keyValue.Key))
+            string text = "";
+            currentID = id;
+            materials = GetComponent<BuildingDatabase>().GetBuildingsData()[id].materials[PlayerPrefs.GetInt(buildingName)];
+            upgradePopUpTitle.GetComponent<Text>().text = "Upgrade " + GetComponent<BuildingDatabase>().GetBuildingsData()[id].title + "?";
+            text += "<b>" + GetComponent<BuildingDatabase>().GetBuildingsData()[id].levelsDescription[PlayerPrefs.GetInt(buildingName)] + "</b>\n\n";
+            text += "<b>Materials Needed</b>";
+            foreach (KeyValuePair<int, int> keyValue in materials)
             {
-                text += "<i> (Village has " + VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].Count + ")</i>";
+                text += "\n";
+                text += GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(keyValue.Key).Title;
+                text += " x" + keyValue.Value;
+                if (VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems.ContainsKey(keyValue.Key))
+                {
+                    text += "<i> (Village has " + VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].Count + ")</i>";
+                }
+                else
+                {
+                    text += "<i> (Village has 0)</i>";
+                }
             }
-            else
-            {
-                text += "<i> (Village has 0)</i>";
-            }
+            upgradePopUpText.GetComponent<Text>().text = text;
+            upgradePopUp.SetActive(true);
         }
-        upgradePopUpText.GetComponent<Text>().text = text;
-        upgradePopUp.SetActive(true);
     }
 
     public void CloseUpgradePopUp()
@@ -173,6 +210,38 @@ public class BuildingsManager : MonoBehaviour
 
     public void UpgradeButton()
     {
+        if (CheckIfHaveMaterials())
+        {
+            foreach (KeyValuePair<int, int> keyValue in materials)
+            {
+                VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(
+                    VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key],
+                    keyValue.Value,
+                    VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].SlotNum);
+            }
+            UpgradeBasedOnID();
+            CloseUpgradePopUp();
+        }
+    }
 
+    bool CheckIfHaveMaterials()
+    {
+        foreach (KeyValuePair<int, int> keyValue in materials)
+        {
+            if (VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems.ContainsKey(keyValue.Key))
+            {
+                if (!(VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[keyValue.Key].Count >= keyValue.Value))
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Not enough materials");
+                    return false;
+                }
+            }
+            else
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Not enough materials");
+                return false;
+            }
+        }
+        return true;
     }
 }
