@@ -16,7 +16,6 @@ public class CharacterDatabase : MonoBehaviour
 
     private JsonData enemyData;
     public Character activeCharacter;
-    static int maxAmountOfHeroes = 4;
     int currentAmountOfHeroes;
     int amountOfSavedHeroes;
     int amountOfSavedWanderers;
@@ -190,7 +189,8 @@ public class CharacterDatabase : MonoBehaviour
     string GetRandomName()
     {
         JsonData namesData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Names.json"));
-        return namesData[UnityEngine.Random.Range(0, namesData.Count)].ToString();
+        int gender = UnityEngine.Random.Range(0, namesData.Count);
+        return namesData[gender][UnityEngine.Random.Range(0, namesData[gender].Count)].ToString();
     }
 
     string GetRandomJob()

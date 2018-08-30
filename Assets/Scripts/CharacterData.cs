@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler {
-
+public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
+{
     public bool characterIsAlreadyRecruited;
     public int thisObjectsID;
     public Character character;
@@ -20,8 +20,6 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         villageManager = GameObject.FindGameObjectWithTag("VillageSceneManager");
     }
 
-
-     
     public void OnPointerDown(PointerEventData eventData)
     {
         beingDragged = false;
@@ -36,7 +34,7 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         else
         {
         }
-        
+
     }
 
     public void DestroyExWandererObjects()
@@ -69,11 +67,7 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         villageManager.GetComponent<RecruitmentManager>().CaravanAdvancedUIOpen();
         villageManager.GetComponent<RecruitmentManager>().PopulateCaravanPopUp(character);
         villageManager.GetComponent<RecruitmentManager>().SetCurrentlyClickedCharacter(character, this.gameObject);
-
-
     }
-
-
 
     public void OnBeginDrag(PointerEventData eventData)
     {

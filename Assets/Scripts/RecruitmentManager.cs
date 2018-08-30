@@ -5,9 +5,8 @@ using UnityEngine.UI;
 
 public class RecruitmentManager : MonoBehaviour
 {
-
     GameObject gameMaster;
-    private int maxAmountOfHeroesToRecruit;
+    int maxAmountOfHeroesToRecruit;
     Character currentlyClickedCharacter;
     GameObject objectsToDestroyWhenWandererIsRecruited;
 
@@ -37,9 +36,34 @@ public class RecruitmentManager : MonoBehaviour
         previousTime = PlayerPrefs.GetInt("Previous Time");
         PlayerPrefs.Save();
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        maxAmountOfHeroesToRecruit = 5; //Set this somewhere, possibly from a village upgrade milestone. Goes up with game progress.
-        AddUIStuffFirst();
+        SetMaxAmountOfWanderers();
         DisplayCurrentListOfWanderers();
+    }
+
+    public void SetMaxAmountOfWanderers()
+    {
+        int caravanLevel = GetComponent<BuildingsManager>().GetCaravanLevel();
+        switch (caravanLevel)
+        {
+            case 0:
+                maxAmountOfHeroesToRecruit = 2;
+                break;
+            case 1:
+                maxAmountOfHeroesToRecruit = 3;
+                break;
+            case 2:
+                maxAmountOfHeroesToRecruit = 4;
+                break;
+            case 3:
+                maxAmountOfHeroesToRecruit = 5;
+                break;
+            case 4:
+                maxAmountOfHeroesToRecruit = 6;
+                break;
+            case 5:
+                maxAmountOfHeroesToRecruit = 7;
+                break;
+        }
     }
 
     /*
@@ -79,7 +103,7 @@ public class RecruitmentManager : MonoBehaviour
         return (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
     }
 
-    void UpdateListOfHeroes()//TODO: Add some logic here that updates the list after a certain amount of time.
+    void UpdateListOfHeroes()
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
         RemoveWanderers();
@@ -122,6 +146,7 @@ public class RecruitmentManager : MonoBehaviour
     }
     void DisplayCurrentListOfWanderers()
     {
+        RemoveWanderers();
         AddUIStuffFirst();
         for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
         {
@@ -169,11 +194,18 @@ public class RecruitmentManager : MonoBehaviour
 
     public void FinalizeRecruitment()
     {
-        characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
-        characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
-        Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
-        CaravanAdvancedUIClose();
+        if (GetComponent<RosterManager>().GetMaxRosterSize() > GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count)
+        {
+            characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
+            characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+            Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+            GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
+            CaravanAdvancedUIClose();
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Barracks Full");
+        }
     }
 
     public void SetCurrentlyClickedCharacter(Character characterClicked, GameObject objectToDestroy)
