@@ -4801,7 +4801,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &935148066
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8176,7 +8176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1480970994
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9083,7 +9083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1680396456
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11473,6 +11473,9 @@ MonoBehaviour:
   villageInventoryButton: {fileID: 1796833325}
   upgradePopUpTitle: {fileID: 301773882}
   upgradePopUpText: {fileID: 1709871714}
+  armorSmithMenuButton: {fileID: 1680396455}
+  weaponSmithMenuButton: {fileID: 935148065}
+  itemShopMenuButton: {fileID: 1480970993}
 --- !u!1 &1973050955
 GameObject:
   m_ObjectHideFlags: 0
