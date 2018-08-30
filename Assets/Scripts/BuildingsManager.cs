@@ -35,32 +35,32 @@ public class BuildingsManager : MonoBehaviour
         villageInventoryButton.GetComponentInChildren<Text>().text = "<b>Upgrade</b>\nVillage Inventory\nLevel " + GetVillageInventoryLevel();
     }
 
-    int GetBarracksLevel()
+    public int GetBarracksLevel()
     {
         return barracksLevel;
     }
 
-    int GetCaravanLevel()
+    public int GetCaravanLevel()
     {
         return caravanLevel;
     }
 
-    int GetArmorSmithLevel()
+    public int GetArmorSmithLevel()
     {
         return armorSmithLevel;
     }
 
-    int GetWeaponSmithLevel()
+    public int GetWeaponSmithLevel()
     {
         return armorSmithLevel;
     }
 
-    int GetItemShopLevel()
+    public int GetItemShopLevel()
     {
         return itemShopLevel;
     }
 
-    int GetVillageInventoryLevel()
+    public int GetVillageInventoryLevel()
     {
         return villageInventoryLevel;
     }
@@ -117,6 +117,7 @@ public class BuildingsManager : MonoBehaviour
         villageInventoryLevel = PlayerPrefs.GetInt("villageInvetory");
         PlayerPrefs.Save();
         SetBuildingsText();
+        GetComponent<VillageInventoryManager>().UpdateInventorySize();
     }
 
     public void BarracksUpgradePopUp()
