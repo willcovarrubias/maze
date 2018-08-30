@@ -90,6 +90,7 @@ public class BuildingsManager : MonoBehaviour
         armorSmithLevel = PlayerPrefs.GetInt("armorSmith");
         PlayerPrefs.Save();
         SetBuildingsText();
+        GetComponent<CraftingDatabase>().UpdateArmory();
     }
 
     void LevelUpWeaponSmith()
@@ -99,6 +100,7 @@ public class BuildingsManager : MonoBehaviour
         weaponSmithLevel = PlayerPrefs.GetInt("weaponSmith");
         PlayerPrefs.Save();
         SetBuildingsText();
+        GetComponent<CraftingDatabase>().UpdateWeapons();
     }
 
     void LevelUpItemShop()
@@ -108,6 +110,7 @@ public class BuildingsManager : MonoBehaviour
         itemShopLevel = PlayerPrefs.GetInt("itemShop");
         PlayerPrefs.Save();
         SetBuildingsText();
+        GetComponent<CraftingDatabase>().UpdateConsumables();
     }
 
     void LevelUpVillageInventory()
