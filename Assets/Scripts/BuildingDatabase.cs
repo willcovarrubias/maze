@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class BuildingDatabase : MonoBehaviour
 {
-    private List<Buildings> buildings = new List<Buildings>();
-    private JsonData buildingData;
+    List<Buildings> buildings = new List<Buildings>();
+    JsonData buildingData;
 
     void Start()
     {
@@ -22,26 +22,28 @@ public class BuildingDatabase : MonoBehaviour
             Buildings building = new Buildings();
             building.id = (int)buildingData[i]["id"];
             building.title = buildingData[i]["title"].ToString();
-            Dictionary<int, int> level1materials = new Dictionary<int, int>();
-            for (int j = 0; j < buildingData[i]["level 1 materials"].Count; j++)
-            {
-                level1materials.Add((int)buildingData[i]["level 1 materials"][j]["material"],
-                                    (int)buildingData[i]["level 1 materials"][j]["amount"]);
-            }
-            Dictionary<int, int> level2materials = new Dictionary<int, int>();
-            for (int j = 0; j < buildingData[i]["level 2 materials"].Count; j++)
-            {
-                level2materials.Add((int)buildingData[i]["level 2 materials"][j]["material"],
-                                    (int)buildingData[i]["level 2 materials"][j]["amount"]);
-            }
-            building.materials.Add(level1materials);
-            building.materials.Add(level2materials);
+            building.materials.Add(GetMaterials("level 1 materials", i));
+            building.materials.Add(GetMaterials("level 2 materials", i));
+            building.materials.Add(GetMaterials("level 3 materials", i));
+            building.materials.Add(GetMaterials("level 4 materials", i));
+            building.materials.Add(GetMaterials("level 5 materials", i));
             for (int j = 0; j < buildingData[i]["levels text"].Count; j++)
             {
                 building.levelsDescription.Add(buildingData[i]["levels text"][j].ToString());
             }
             buildings.Add(building);
         }
+    }
+
+    Dictionary<int, int> GetMaterials(string jsonText, int i)
+    {
+        Dictionary<int, int> levelMaterials = new Dictionary<int, int>();
+        for (int j = 0; j < buildingData[i][jsonText].Count; j++)
+        {
+            levelMaterials.Add((int)buildingData[i][jsonText][j]["material"],
+                                (int)buildingData[i][jsonText][j]["amount"]);
+        }
+        return levelMaterials;
     }
 
     Dictionary<int, int> GetMaterialsNeededForBuilding(int level, int building)
@@ -79,9 +81,9 @@ public class Buildings
     public List<Dictionary<int, int>> materials { get; set; }
     public List<string> levelsDescription { get; set; }
 
-    public Buildings() 
-    { 
+    public Buildings()
+    {
         materials = new List<Dictionary<int, int>>();
-        levelsDescription = new List<string>();   
+        levelsDescription = new List<string>();
     }
 }
