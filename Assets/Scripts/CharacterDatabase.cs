@@ -230,17 +230,11 @@ public class CharacterDatabase : MonoBehaviour
     {
         listOfWanderers.Remove(character);
         Debug.Log("Deleted " + character.name);
-        //PlayerPrefs.Save();
     }
 
     public void DeleteAllWanderers()
     {
-        for (int i = 0; i < listOfWanderers.Count; i++)
-        {
-            DeleteWanderer(listOfWanderers[i]);
-            //PlayerPrefs.SetInt("Character Count", 0);
-            listOfWanderers.Clear();
-        }
+        listOfWanderers.Clear();
     }
 
     public void ChangeActiveCharacter(int id)
