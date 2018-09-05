@@ -25,7 +25,7 @@ public class RosterManager : MonoBehaviour
 
     //Building UI Stuff
     public Text buildingLevel, buildingLevelUpRequirements;
-
+    int currentSlotId;
 
     Character currentlyClickedCharacter;
 
@@ -62,6 +62,7 @@ public class RosterManager : MonoBehaviour
         }
     }
 
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -69,6 +70,7 @@ public class RosterManager : MonoBehaviour
             Debug.Log("List of heros count: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count);
         }
     }
+    */
 
     public void PopulateCurrentRoster()
     {
@@ -76,7 +78,6 @@ public class RosterManager : MonoBehaviour
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
 
         //DetermineActiveCharacterCurrentLevel();
-
         for (int i = 0; i < GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count; i++)
         {
             characterObject[i].GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
@@ -106,13 +107,21 @@ public class RosterManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().ChangeActiveCharacter(currentlyClickedCharacter.id);
     }
 
+    public void DismissCharacter()
+    {
+        RemoveACharacterSlotInBarracksUIByID(currentSlotId);
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteHero(currentlyClickedCharacter);
+        RosterAdvancedUIClose();
+    }
+
     public void SetCurrentlyClickedCharacter(Character characterClicked)
     {
         currentlyClickedCharacter = characterClicked;
     }
 
-    public void PopulateBarracksPopUp(Character character)
+    public void PopulateBarracksPopUp(Character character, int slotID)
     {
+        currentSlotId = slotID;
         nameText.text = character.name;
         levelText.text = "Lv. " + DetermineActiveCharacterCurrentLevel(character.exp);
         jobText.text = character.job;
@@ -126,7 +135,6 @@ public class RosterManager : MonoBehaviour
         luckText.text = "Luck: " + character.luck.ToString();
         characterPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
-
     }
 
     private void GenerateHeroSlotsBasedOnStartupRosterSize()
@@ -134,7 +142,8 @@ public class RosterManager : MonoBehaviour
         for (int i = 0; i < rosterSize; i++)
         {
             GameObject slot = Instantiate(characterSlot);
-            slot.transform.SetParent(characterSlotPanel.transform);
+            slot.transform.SetParent(characterSlotPanel.transform, false);
+            slot.GetComponent<ItemSlot>().id = i;
             characterSlots.Add(slot);
             //Adds an ID to each slot when it generates the slots. Used for drag/drop.
             //characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
@@ -142,24 +151,18 @@ public class RosterManager : MonoBehaviour
             //characterSlots[i].transform.SetParent(characterSlotPanel.transform);
 
             GameObject characterObj = Instantiate(characterObjectPrefab);
-            characterObj.transform.SetParent(slot.transform);
+            characterObj.transform.SetParent(slot.transform, false);
             characterObj.transform.localPosition = Vector2.zero;
             characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
             characterObj.GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
-
-
             characterObject.Add(characterObj);
-
             characterSlotAmount++;
-
         }
-
     }
 
     private int DetermineActiveCharacterCurrentLevel(int exp)
     {
         int charactersLevel = 0;
-
         for (int i = 0; i < expLevels.Length; i++)
         {
             if (exp >= expLevels[i] && exp <= GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetExpCap())
@@ -167,7 +170,6 @@ public class RosterManager : MonoBehaviour
                 charactersLevel = i + 1;
             }
         }
-
         return charactersLevel;
     }
 
@@ -175,19 +177,34 @@ public class RosterManager : MonoBehaviour
     {
         characterSlotAmount--;
         Destroy(characterSlots[characterSlotAmount]);
-
         ResizeSlotPanelUI();
+    }
+
+    public void RemoveACharacterSlotInBarracksUIByID(int slot)
+    {
+        //GameObject charObject = characterObject[slot];
+        characterSlotAmount--;
+        Destroy(characterSlots[slot]);
+        characterSlots.RemoveAt(slot);
+        Destroy(characterObject[slot]);
+        characterObject.RemoveAt(slot);
+        ResizeSlotPanelUI();
+        for (int i = 0; i < characterSlots.Count; i++)
+        {
+            characterSlots[i].GetComponent<ItemSlot>().id = i;
+        }
     }
 
     public void AddACharacterSlotInBarracksUI()
     {
         GameObject slot = Instantiate(characterSlot);
-        slot.transform.transform.SetParent(characterSlotPanel.transform);
+        slot.transform.transform.SetParent(characterSlotPanel.transform, false);
+        slot.GetComponent<ItemSlot>().id = characterSlotAmount;
         characterSlots.Add(slot);
         characterSlotAmount++;
 
         GameObject characterObj = Instantiate(characterObjectPrefab);
-        characterObj.transform.SetParent(slot.transform);
+        characterObj.transform.SetParent(slot.transform, false);
         characterObj.transform.localPosition = Vector2.zero;
         characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
         characterObject.Add(characterObj);

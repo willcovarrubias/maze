@@ -36,7 +36,7 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         //PlayerPrefs.DeleteAll();
-        maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items; // set this somewhere
+        maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items;
         currentSize = 0;
         LoadInventory();
         Button actionButton = otherSortButton.GetComponent<Button>();

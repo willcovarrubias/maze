@@ -56,7 +56,7 @@ public class CharacterData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     void BarracksPopUpOpen()
     {
         villageManager.GetComponent<RosterManager>().RosterAdvancedUIOpen();
-        villageManager.GetComponent<RosterManager>().PopulateBarracksPopUp(character);
+        villageManager.GetComponent<RosterManager>().PopulateBarracksPopUp(character, GetComponentInParent<ItemSlot>().id);
         //currentlyClickedCharacter = character;
         villageManager.GetComponent<RosterManager>().SetCurrentlyClickedCharacter(character);
     }
