@@ -20,11 +20,11 @@ public class RosterManager : MonoBehaviour
     public RectTransform slotPanelRectTransform;
     public GameObject barracksPopUp;
 
+    public GameObject message;
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
     public Image characterPortrait;
 
     //Building UI Stuff
-    public Text buildingLevel, buildingLevelUpRequirements;
     int currentSlotId;
 
     Character currentlyClickedCharacter;
@@ -34,7 +34,6 @@ public class RosterManager : MonoBehaviour
     void Start()
     {
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
-
         GenerateHeroSlotsBasedOnStartupRosterSize();
         ResizeSlotPanelUI();
         PopulateCurrentRoster();
@@ -76,7 +75,14 @@ public class RosterManager : MonoBehaviour
     {
         //This should update every time the roster is populated so that the newest size of the roster is reflected.
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
-
+        if (rosterSize == 0)
+        {
+            message.GetComponent<Text>().text = "Barracks empty. Recruit wanderers from Caravan.";
+        }
+        else
+        {
+            message.GetComponent<Text>().text = "";
+        }
         //DetermineActiveCharacterCurrentLevel();
         for (int i = 0; i < GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count; i++)
         {
@@ -105,6 +111,7 @@ public class RosterManager : MonoBehaviour
     public void SetActiveCharacter()
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().ChangeActiveCharacter(currentlyClickedCharacter.id);
+        RosterAdvancedUIClose();
     }
 
     public void DismissCharacter()
@@ -192,6 +199,14 @@ public class RosterManager : MonoBehaviour
         for (int i = 0; i < characterSlots.Count; i++)
         {
             characterSlots[i].GetComponent<ItemSlot>().id = i;
+        }
+        if (characterSlots.Count == 0)
+        {
+            message.GetComponent<Text>().text = "Barracks empty. Recruit wanderers from Caravan.";
+        }
+        else
+        {
+            message.GetComponent<Text>().text = "";
         }
     }
 
