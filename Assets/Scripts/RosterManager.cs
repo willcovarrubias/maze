@@ -20,12 +20,12 @@ public class RosterManager : MonoBehaviour
     public RectTransform slotPanelRectTransform;
     public GameObject barracksPopUp;
 
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
+    public GameObject message;
+    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText, livesText;
     public Image characterPortrait;
 
     //Building UI Stuff
-    public Text buildingLevel, buildingLevelUpRequirements;
-
+    int currentSlotId;
 
     Character currentlyClickedCharacter;
 
@@ -34,7 +34,6 @@ public class RosterManager : MonoBehaviour
     void Start()
     {
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
-
         GenerateHeroSlotsBasedOnStartupRosterSize();
         ResizeSlotPanelUI();
         PopulateCurrentRoster();
@@ -62,6 +61,7 @@ public class RosterManager : MonoBehaviour
         }
     }
 
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -69,14 +69,21 @@ public class RosterManager : MonoBehaviour
             Debug.Log("List of heros count: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count);
         }
     }
+    */
 
     public void PopulateCurrentRoster()
     {
         //This should update every time the roster is populated so that the newest size of the roster is reflected.
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
-
+        if (rosterSize == 0)
+        {
+            message.GetComponent<Text>().text = "Barracks empty. Recruit wanderers from Caravan.";
+        }
+        else
+        {
+            message.GetComponent<Text>().text = "";
+        }
         //DetermineActiveCharacterCurrentLevel();
-
         for (int i = 0; i < GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count; i++)
         {
             characterObject[i].GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
@@ -86,7 +93,7 @@ public class RosterManager : MonoBehaviour
             characterObject[i].GetComponentInChildren<Text>().text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name +
                                                             "\nLv. " + DetermineActiveCharacterCurrentLevel(GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].exp) +
                                                             "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].job +
-                                                            "\nLives: 1/3 (use sprites)";
+                                                            "\nLives: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].lives + " (use sprites)";
             characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].slug);
         }
     }
@@ -104,6 +111,14 @@ public class RosterManager : MonoBehaviour
     public void SetActiveCharacter()
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().ChangeActiveCharacter(currentlyClickedCharacter.id);
+        RosterAdvancedUIClose();
+    }
+
+    public void DismissCharacter()
+    {
+        RemoveACharacterSlotInBarracksUIByID(currentSlotId);
+        GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteHero(currentlyClickedCharacter);
+        RosterAdvancedUIClose();
     }
 
     public void SetCurrentlyClickedCharacter(Character characterClicked)
@@ -111,8 +126,9 @@ public class RosterManager : MonoBehaviour
         currentlyClickedCharacter = characterClicked;
     }
 
-    public void PopulateBarracksPopUp(Character character)
+    public void PopulateBarracksPopUp(Character character, int slotID)
     {
+        currentSlotId = slotID;
         nameText.text = character.name;
         levelText.text = "Lv. " + DetermineActiveCharacterCurrentLevel(character.exp);
         jobText.text = character.job;
@@ -124,9 +140,9 @@ public class RosterManager : MonoBehaviour
         defenseText.text = "Defense: " + character.defense.ToString();
         speedText.text = "Speed: " + character.speed;
         luckText.text = "Luck: " + character.luck.ToString();
+        livesText.text = "Lives: " + character.lives;
         characterPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
-
     }
 
     private void GenerateHeroSlotsBasedOnStartupRosterSize()
@@ -134,7 +150,8 @@ public class RosterManager : MonoBehaviour
         for (int i = 0; i < rosterSize; i++)
         {
             GameObject slot = Instantiate(characterSlot);
-            slot.transform.SetParent(characterSlotPanel.transform);
+            slot.transform.SetParent(characterSlotPanel.transform, false);
+            slot.GetComponent<ItemSlot>().id = i;
             characterSlots.Add(slot);
             //Adds an ID to each slot when it generates the slots. Used for drag/drop.
             //characterSlots[characterSlotAmount - 1].GetComponent<ItemSlot>().id = characterSlotAmount - 1;
@@ -142,24 +159,18 @@ public class RosterManager : MonoBehaviour
             //characterSlots[i].transform.SetParent(characterSlotPanel.transform);
 
             GameObject characterObj = Instantiate(characterObjectPrefab);
-            characterObj.transform.SetParent(slot.transform);
+            characterObj.transform.SetParent(slot.transform, false);
             characterObj.transform.localPosition = Vector2.zero;
             characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
             characterObj.GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i];
-
-
             characterObject.Add(characterObj);
-
             characterSlotAmount++;
-
         }
-
     }
 
     private int DetermineActiveCharacterCurrentLevel(int exp)
     {
         int charactersLevel = 0;
-
         for (int i = 0; i < expLevels.Length; i++)
         {
             if (exp >= expLevels[i] && exp <= GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetExpCap())
@@ -167,7 +178,6 @@ public class RosterManager : MonoBehaviour
                 charactersLevel = i + 1;
             }
         }
-
         return charactersLevel;
     }
 
@@ -175,19 +185,42 @@ public class RosterManager : MonoBehaviour
     {
         characterSlotAmount--;
         Destroy(characterSlots[characterSlotAmount]);
-
         ResizeSlotPanelUI();
+    }
+
+    public void RemoveACharacterSlotInBarracksUIByID(int slot)
+    {
+        //GameObject charObject = characterObject[slot];
+        characterSlotAmount--;
+        Destroy(characterSlots[slot]);
+        characterSlots.RemoveAt(slot);
+        Destroy(characterObject[slot]);
+        characterObject.RemoveAt(slot);
+        ResizeSlotPanelUI();
+        for (int i = 0; i < characterSlots.Count; i++)
+        {
+            characterSlots[i].GetComponent<ItemSlot>().id = i;
+        }
+        if (characterSlots.Count == 0)
+        {
+            message.GetComponent<Text>().text = "Barracks empty. Recruit wanderers from Caravan.";
+        }
+        else
+        {
+            message.GetComponent<Text>().text = "";
+        }
     }
 
     public void AddACharacterSlotInBarracksUI()
     {
         GameObject slot = Instantiate(characterSlot);
-        slot.transform.transform.SetParent(characterSlotPanel.transform);
+        slot.transform.transform.SetParent(characterSlotPanel.transform, false);
+        slot.GetComponent<ItemSlot>().id = characterSlotAmount;
         characterSlots.Add(slot);
         characterSlotAmount++;
 
         GameObject characterObj = Instantiate(characterObjectPrefab);
-        characterObj.transform.SetParent(slot.transform);
+        characterObj.transform.SetParent(slot.transform, false);
         characterObj.transform.localPosition = Vector2.zero;
         characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
         characterObject.Add(characterObj);

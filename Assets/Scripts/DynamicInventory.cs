@@ -15,7 +15,6 @@ public class DynamicInventory : MonoBehaviour
     GameObject itemPrefab;
     GameObject inventoryPane;
     RectTransform slotPanelRectTransform;
-    ScrollRect scrollView;
     public GameObject openButton;
     GameObject sendAllButton;
     GameObject sortButton;
@@ -42,7 +41,6 @@ public class DynamicInventory : MonoBehaviour
         sendAllButton = gameObject.transform.Find("SendAll").gameObject;
         sortButton = gameObject.transform.Find("Sort").gameObject;
         slotPanelRectTransform = slotPanel.GetComponent<RectTransform>();
-        scrollView = inventoryPane.GetComponent<ScrollRect>();
         Button open = button.GetComponent<Button>();
         open.onClick.AddListener(OpenUI);
         Button sendAll = sendAllButton.GetComponent<Button>();
@@ -93,6 +91,10 @@ public class DynamicInventory : MonoBehaviour
                     items.Remove(item.Item.ID);
                     item.Count = 0;
                     ReorganizeSlots(slotId);
+                }
+                else
+                {
+                    UpdateSlotText(slotId, item.Item.ID);
                 }
             }
         }
@@ -223,6 +225,7 @@ public class DynamicInventory : MonoBehaviour
         {
             slots[i].GetComponent<ItemSlot>().id = i;
             slots[i].GetComponentInChildren<ItemData>().slotID = i;
+            items[slots[i].GetComponentInChildren<ItemData>().GetItem().Item.ID].SlotNum = i;
         }
         Destroy(currentSlot);
         ResizeSlotPanel();
@@ -267,6 +270,18 @@ public class DynamicInventory : MonoBehaviour
         }
     }
 
+    public void UpdateSlotText(int slotID, int itemID)
+    {
+        if (items[itemID].Count > 1)
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = items[itemID].Item.Title + " x" + items[itemID].Count;
+        }
+        else
+        {
+            slots[slotID].GetComponentInChildren<Text>().text = items[itemID].Item.Title;
+        }
+    }
+
     public void OpenUI()
     {
         if (SceneManager.GetActiveScene().name == "LootScene")
@@ -276,7 +291,7 @@ public class DynamicInventory : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "FightScene")
         {
-            if (!GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting() && 
+            if (!GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting() &&
                 !GameObject.Find("FightController").GetComponent<FightSceneController>().IsPickingOption())
             {
                 gameObject.SetActive(true);

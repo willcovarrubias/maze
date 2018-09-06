@@ -35,12 +35,19 @@ public class VillageSceneController : MonoBehaviour
     }
 
     //This function will ask the player if they're sure they want to enter the maze. If so, the next scene will load.
-    public void EnterLabyrinth() //TODO: Need to add a confirmation to this, so players don't accidentally enter the labyrinth  when they didn't mean to.
+    public void EnterLabyrinth()
     {
-        if (gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() >= 0 && gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().currentHP > 0)
+        if (gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() >= 0 &&
+            gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().currentHP > 0 &&
+            gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id != -1
+           )
         {
             gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
             labyrinthConfirmation.SetActive(true);
+        }
+        else if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id == -1)
+        {
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Please set an active character from the Barracks");
         }
         else if (gameMaster.GetComponent<InventoryManager>().GetFreeSpaceCount() < 0)
         {
@@ -51,6 +58,7 @@ public class VillageSceneController : MonoBehaviour
             gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Knocked out!");
         }
     }
+
     public void EnterLabyrinthConfirmation()
     {
         GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().DestroyMenu();
@@ -69,22 +77,33 @@ public class VillageSceneController : MonoBehaviour
 
     public void BlacksmithMenu()//This'll pop up a menu that'll allow the player to upgrade the smith but also purchase weapons.
     {
-        currentMenu = Location.VillageMenu.armor;
-        GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().OpenUI();
-        //gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-        //blacksmithMenu.SetActive(true);
+        if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id != -1)
+        {
+            currentMenu = Location.VillageMenu.armor;
+            GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().OpenUI();
+        }
+        else
+        {
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Please set an active character from the Barracks");
+        }
     }
 
     public void BlacksmithMenuClose()
     {
         currentMenu = Location.VillageMenu.mainMenu;
-        //blacksmithMenu.SetActive(false);
     }
 
     public void WeaponsmithMenu()
     {
-        currentMenu = Location.VillageMenu.weapons;
-        GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().OpenUI();
+        if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id != -1)
+        {
+            currentMenu = Location.VillageMenu.weapons;
+            GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().OpenUI();
+        }
+        else
+        {
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Please set an active character from the Barracks");
+        }
     }
 
     public void WeaponsmithMenuClose()
@@ -107,15 +126,20 @@ public class VillageSceneController : MonoBehaviour
 
     public void ItemShopMenu()//This'll pop up a menu that'll allow the player to upgrade the item shop but also purchase items.
     {
-        currentMenu = Location.VillageMenu.pub;
-        GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().OpenUI();
-        //itemShopMenu.SetActive(true);
+        if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id != -1)
+        {
+            currentMenu = Location.VillageMenu.pub;
+            GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().OpenUI();
+        }
+        else
+        {
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Please set an active character from the Barracks");
+        }
     }
 
     public void ItemShopMenuClose()
     {
         currentMenu = Location.VillageMenu.mainMenu;
-        //itemShopMenu.SetActive(false);
     }
 
     public void RecruitmentUIOpen()
@@ -138,9 +162,16 @@ public class VillageSceneController : MonoBehaviour
 
     public void InventoryUIOpen()
     {
-        currentMenu = Location.VillageMenu.inventory;
-        GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
-        villInventoryUI.SetActive(true);
+        if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id != -1)
+        {
+            currentMenu = Location.VillageMenu.inventory;
+            GameMaster.gameMaster.GetComponent<InventoryManager>().OpenInventoryPanelUI();
+            villInventoryUI.SetActive(true);
+        }
+        else if (gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().id == -1)
+        {
+            gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Please set an active character from the Barracks");
+        }
     }
 
     public void InventoryUIClose()

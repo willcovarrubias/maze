@@ -48,11 +48,11 @@
 		],
 		"levels text" :
 		[
-			"Will allow the barracks to occupy 3 heroes",
-			"Will allow the barracks to occupy 4 heroes",
-			"Will allow the barracks to occupy 5 heroes",
-			"Will allow the barracks to occupy 6 heroes",
-			"Will allow the barracks to occupy 7 heroes"
+			"Will allow the barracks to occupy 3 heroes & heal more HP & MP after leaving the maze",
+			"Will allow the barracks to occupy 4 heroes & heal more HP & MP after leaving the maze",
+			"Will allow the barracks to occupy 5 heroes & heal more HP & MP after leaving the maze",
+			"Will allow the barracks to occupy 6 heroes & heal more HP & MP after leaving the maze",
+			"Will allow the barracks to occupy 7 heroes & heal more HP & MP after leaving the maze"
 		]
 	},
 	{

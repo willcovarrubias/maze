@@ -13,10 +13,10 @@ public class WanderersRefreshTime : MonoBehaviour
     GameObject refreshText;
     int refreshTime;
     int previousTime;
-    int tempPreviousTime;
+    //int tempPreviousTime;
     int currentSeconds;
 
-    private string url = "time.nist.gov";
+    string url = "time.nist.gov";
 
     void Start()
     {
@@ -49,7 +49,7 @@ public class WanderersRefreshTime : MonoBehaviour
 
     int GetTimeInSeconds()
     {
-        tempPreviousTime = currentSeconds;
+        //tempPreviousTime = currentSeconds;
         DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         currentSeconds = (int)(DateTime.UtcNow - epochStart).TotalSeconds;
         return currentSeconds;

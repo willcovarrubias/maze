@@ -197,8 +197,9 @@ public class FightSceneController : MonoBehaviour
         if (activeCharacter.currentHP <= 0)
         {
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(
-                "Recieved " + enemyAttack + " damage from " + listOfEnemies[enemyIndex].EnemyData.name + ". You have fainted.");
+                "Recieved " + enemyAttack + " damage from " + listOfEnemies[enemyIndex].EnemyData.name + ". " + activeCharacter.name + " has fainted.");
             isFighting = false;
+            StartCoroutine(Fainted());
         }
         else
         {
@@ -391,6 +392,30 @@ public class FightSceneController : MonoBehaviour
             GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory();
         }
         return "";
+    }
+
+    IEnumerator Fainted()
+    {
+        GameMaster.gameMaster.GetComponent<ActiveCharacterController>().DecreaseLives();
+        if (GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().lives > 0)
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().LoseRandomAmountOfItems();
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().LoseAllItems();
+        }
+        yield return new WaitForSeconds(3);
+        if (GameMaster.gameMaster.GetComponent<ActiveCharacterController>().GetActiveCharacter().lives > 0)
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("You somehow appear back in the village with some items gone! " + activeCharacter.name + " loses a life.");
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(activeCharacter.name + " is dead. Lost all items.");
+            GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteHero(GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter);
+        }
+        GoToVillage();
     }
 
     void LoadEnemies()

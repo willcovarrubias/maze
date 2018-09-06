@@ -30,7 +30,8 @@ public class CreateDynamicInventory : MonoBehaviour
 
     void CreateForLootScene()
     {
-        int amount = Random.Range(1, 6);
+        int maxAmount = Mathf.RoundToInt((GameMaster.gameMaster.roomCount % 20) * 0.2f) + 1;
+        int amount = Random.Range(1, maxAmount);
         int offSet = (amount - 1) * (155 / 2);
         for (int i = 0; i < amount; i++)
         {

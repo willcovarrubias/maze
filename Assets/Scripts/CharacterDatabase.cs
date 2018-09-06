@@ -124,7 +124,9 @@ public class CharacterDatabase : MonoBehaviour
 
         //PlayerPrefs.SetInt("Hero Count", amountOfSavedHeroes);
         listOfHeroes.Add(characterToRecruit);
-        listOfHeroes.Last().id = listOfHeroes.Count;
+        listOfHeroes.Last().id = (PlayerPrefs.GetInt("Hero ID"));
+        PlayerPrefs.SetInt("Hero ID", (PlayerPrefs.GetInt("Hero ID") + 1));
+        PlayerPrefs.Save();
         DeleteWanderer(characterToRecruit);
 
         //SaveNewHero(characterToRecruit, slotNumber);
@@ -136,8 +138,8 @@ public class CharacterDatabase : MonoBehaviour
     public Character CreateRandomWanderer()
     {
         string currentJob = GetRandomJob();
-        int maxHP = UnityEngine.Random.Range(3, 20);
-        int maxMP = UnityEngine.Random.Range(3, 20);
+        int maxHP = UnityEngine.Random.Range(3, 10);
+        int maxMP = UnityEngine.Random.Range(3, 10);
         Character newCharacter = new Character
         {
             id = GenerateWandererID(),
@@ -148,12 +150,12 @@ public class CharacterDatabase : MonoBehaviour
             maxMP = maxMP,
             currentHP = maxHP,
             currentMP = maxMP,
-            attack = UnityEngine.Random.Range(3, 20),
-            special = UnityEngine.Random.Range(3, 20),
-            defense = UnityEngine.Random.Range(3, 20),
-            speed = UnityEngine.Random.Range(3, 20),
-            luck = UnityEngine.Random.Range(3, 20),
-            items = UnityEngine.Random.Range(3, 20),
+            attack = UnityEngine.Random.Range(1, 10),
+            special = UnityEngine.Random.Range(1, 10),
+            defense = UnityEngine.Random.Range(1, 10),
+            speed = UnityEngine.Random.Range(1, 10),
+            luck = UnityEngine.Random.Range(1, 10),
+            items = UnityEngine.Random.Range(10, 20),
             exp = 0,
             lives = 3,
             slug = currentJob
@@ -230,30 +232,43 @@ public class CharacterDatabase : MonoBehaviour
     {
         listOfWanderers.Remove(character);
         Debug.Log("Deleted " + character.name);
-        //PlayerPrefs.Save();
     }
 
     public void DeleteAllWanderers()
     {
-        for (int i = 0; i < listOfWanderers.Count; i++)
+        listOfWanderers.Clear();
+    }
+
+    public void DeleteHero(Character character)
+    {
+        if (character == activeCharacter)
         {
-            DeleteWanderer(listOfWanderers[i]);
-            //PlayerPrefs.SetInt("Character Count", 0);
-            listOfWanderers.Clear();
+            ChangeActiveCharacter(-1);
         }
+        listOfHeroes.Remove(character);
+        Debug.Log("Deleted " + character.name);
+        GameMaster.gameMaster.Save();
     }
 
     public void ChangeActiveCharacter(int id)
     {
-        for (int i = 0; i < listOfHeroes.Count; i++)
+        if (id < 0)
         {
-            if (listOfHeroes[i].id == id)
-            {
-                activeCharacter = listOfHeroes[i];
-                //GameMaster.gameMaster.activeCharacter = activeCharacter;
-            }
+            Character character = new Character();
+            activeCharacter = character;
         }
-        //GetComponent<ActiveCharacterController>().DetermineActiveCharacterCurrentLevel();
+        else
+        {
+            for (int i = 0; i < listOfHeroes.Count; i++)
+            {
+                if (listOfHeroes[i].id == id)
+                {
+                    activeCharacter = listOfHeroes[i];
+                    //GameMaster.gameMaster.activeCharacter = activeCharacter;
+                }
+            }
+            //GetComponent<ActiveCharacterController>().DetermineActiveCharacterCurrentLevel();
+        }
         GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
     }

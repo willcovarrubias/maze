@@ -11,6 +11,7 @@ public class DialogTimer : MonoBehaviour
         if (currentTime > maxTime)
         {
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("");
+            gameObject.SetActive(false);
         }
     }
 
