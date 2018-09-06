@@ -11536,6 +11536,7 @@ MonoBehaviour:
   luckText: {fileID: 1772216725}
   expText: {fileID: 366898802}
   inventorySizeText: {fileID: 168069642}
+  livesText: {fileID: 1768931741}
   characterPortrait: {fileID: 1320558811}
 --- !u!114 &1967842531
 MonoBehaviour:

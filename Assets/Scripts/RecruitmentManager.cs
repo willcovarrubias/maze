@@ -27,7 +27,7 @@ public class RecruitmentManager : MonoBehaviour
 
     void Start()
     {
-        refreshTime = 144; //4 hours in seconds
+        refreshTime = 14400; //4 hours in seconds
         SetMaxAmountOfWanderers();
         if (PlayerPrefs.GetInt("Previous Time") == 0)
         {

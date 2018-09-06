@@ -731,4 +731,29 @@ public class InventoryManager : MonoBehaviour
             slots[playerItems[weaponID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
         }
     }
+
+    public void LoseRandomAmountOfItems()
+    {
+        if (playerItems.Count > 0)
+        {
+            int amount = Random.Range(1, playerItems.Count);
+            for (int i = 0; i < amount; i++)
+            {
+                List<int> keyList = new List<int>(playerItems.Keys);
+                int randomKey = keyList[Random.Range(0, keyList.Count)];
+                int randomAmount = Random.Range(1, playerItems[randomKey].Count);
+                RemoveItemsFromInventory(playerItems[randomKey], randomAmount, playerItems[randomKey].SlotNum);
+            }
+        }
+    }
+
+    public void LoseAllItems()
+    {
+        List<int> keyList = new List<int>(playerItems.Keys);
+        for (int i = 0; i < keyList.Count; i++)
+        {
+            int key = keyList[i];
+            RemoveWholeStackFromInventory(playerItems[key], playerItems[key].SlotNum);
+        }
+    }
 }

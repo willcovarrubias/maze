@@ -138,8 +138,8 @@ public class CharacterDatabase : MonoBehaviour
     public Character CreateRandomWanderer()
     {
         string currentJob = GetRandomJob();
-        int maxHP = UnityEngine.Random.Range(3, 20);
-        int maxMP = UnityEngine.Random.Range(3, 20);
+        int maxHP = UnityEngine.Random.Range(3, 10);
+        int maxMP = UnityEngine.Random.Range(3, 10);
         Character newCharacter = new Character
         {
             id = GenerateWandererID(),

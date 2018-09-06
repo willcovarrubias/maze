@@ -222,6 +222,13 @@ public class ActiveCharacterController : MonoBehaviour
         GameMaster.gameMaster.Save();
     }
 
+    public void DecreaseLives()
+    {
+        GetComponent<CharacterDatabase>().activeCharacter.lives--;
+        UpdateActiveCharacterVisuals();
+        GameMaster.gameMaster.Save();
+    }
+
     public void GiveExpToActiveCharacter(int amount)
     {
         if (GetActiveCharacterCurrentLevel() == levelCap)

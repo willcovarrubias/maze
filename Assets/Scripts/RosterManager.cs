@@ -21,7 +21,7 @@ public class RosterManager : MonoBehaviour
     public GameObject barracksPopUp;
 
     public GameObject message;
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
+    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText, livesText;
     public Image characterPortrait;
 
     //Building UI Stuff
@@ -93,7 +93,7 @@ public class RosterManager : MonoBehaviour
             characterObject[i].GetComponentInChildren<Text>().text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name +
                                                             "\nLv. " + DetermineActiveCharacterCurrentLevel(GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].exp) +
                                                             "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].job +
-                                                            "\nLives: 1/3 (use sprites)";
+                                                            "\nLives: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].lives + " (use sprites)";
             characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].slug);
         }
     }
@@ -140,6 +140,7 @@ public class RosterManager : MonoBehaviour
         defenseText.text = "Defense: " + character.defense.ToString();
         speedText.text = "Speed: " + character.speed;
         luckText.text = "Luck: " + character.luck.ToString();
+        livesText.text = "Lives: " + character.lives;
         characterPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
     }
