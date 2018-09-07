@@ -332,6 +332,7 @@ public class VillageInventoryManager : MonoBehaviour
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
         itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.village);
+        itemObject.GetComponentInChildren<Image>().sprite = item.Item.Sprite;
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
