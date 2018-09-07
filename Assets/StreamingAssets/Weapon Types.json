@@ -2,7 +2,7 @@
 [
 	{
 		"id" : 6000,
-		"type": "Knife",
+		"name": "Knife",
 		"rarity" : 
 		[
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
@@ -15,7 +15,7 @@
 	},
 	{
 		"id" : 6001,
-		"type": "Dagger",
+		"name": "Dagger",
 		"rarity" : 
 		[
 			2, 3, 4, 5, 6, 7, 8, 9, 10, 11
@@ -28,7 +28,7 @@
 	},
 	{
 		"id" : 6002,
-		"type": "Sword",
+		"name": "Sword",
 		"rarity" : 
 		[
 			4, 5, 6, 7, 8, 9, 10, 11
@@ -41,7 +41,7 @@
 	},
 	{
 		"id" : 6003,
-		"type": "Spear",
+		"name": "Spear",
 		"rarity" : 
 		[
 			6, 7, 8, 9, 10, 11
@@ -54,7 +54,7 @@
 	},
 	{
 		"id" : 6004,
-		"type": "Axe",
+		"name": "Axe",
 		"rarity" : 
 		[
 			8, 9, 10, 11
@@ -67,7 +67,7 @@
 	},
 	{
 		"id" : 6005,
-		"type": "Hammer",
+		"name": "Hammer",
 		"rarity" : 
 		[
 			10, 11

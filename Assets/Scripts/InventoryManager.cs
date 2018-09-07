@@ -510,6 +510,7 @@ public class InventoryManager : MonoBehaviour
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
         itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.player);
         itemObject.GetComponentInChildren<Image>().sprite = item.Item.Sprite;
+        ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
@@ -544,6 +545,30 @@ public class InventoryManager : MonoBehaviour
         }
         Destroy(currentSlot);
         ResizeSlotPanel();
+    }
+
+    public void ChangeSlotColor(GameObject slot, int id)
+    {
+        if (id >= 1000 && id < 2000)
+        {
+            slot.GetComponent<Image>().color = new Color(1, 0.5f, 0.5f);
+        }
+        else if (id >= 2000 && id < 3000)
+        {
+            slot.GetComponent<Image>().color = new Color(0.5f, 1, 0.5f);
+        }
+        else if (id >= 3000 && id < 4000)
+        {
+            slot.GetComponent<Image>().color = new Color(1, 0.75f, 0.5f);
+        }
+        else if (id >= 4000 && id < 5000)
+        {
+            slot.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1);
+        }
+        else if (id >= 10000)
+        {
+            slot.GetComponent<Image>().color = new Color(0.75f, 0.5f, 1);
+        }
     }
 
     public void ClearSlots()

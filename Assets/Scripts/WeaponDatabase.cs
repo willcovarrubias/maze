@@ -8,6 +8,7 @@ public class WeaponDatabase : MonoBehaviour
 {
     List<List<int>> weaponTypeIndexNumber = new List<List<int>>();
     List<List<int>> weaponMaterialIndexNumber = new List<List<int>>();
+    Dictionary<int, TypeAndMaterial> materialAndTypes = new Dictionary<int, TypeAndMaterial>();
 
     JsonData weaponMaterialData, weaponTypeData;
     int weaponCount;
@@ -32,6 +33,15 @@ public class WeaponDatabase : MonoBehaviour
         }
         for (int i = 0; i < weaponTypeData.Count; i++)
         {
+            TypeAndMaterial typeAndMaterial = new TypeAndMaterial();
+            typeAndMaterial.Name = weaponTypeData[i]["name"].ToString();
+            typeAndMaterial.Attack = (int)weaponTypeData[i]["attack"];
+            typeAndMaterial.Durability = (int)weaponTypeData[i]["duribility"];
+            typeAndMaterial.Special = (int)weaponTypeData[i]["special"];
+            typeAndMaterial.Speed = (int)weaponTypeData[i]["speed"];
+            typeAndMaterial.Size = (int)weaponTypeData[i]["size"];
+            typeAndMaterial.Id = (int)weaponTypeData[i]["id"];
+            materialAndTypes.Add((int)weaponTypeData[i]["id"], typeAndMaterial);
             for (int j = 0; j < weaponTypeData[i]["rarity"].Count; j++)
             {
                 weaponTypeIndexNumber[(int)weaponTypeData[i]["rarity"][j]].Add(i);
@@ -39,6 +49,15 @@ public class WeaponDatabase : MonoBehaviour
         }
         for (int i = 0; i < weaponMaterialData.Count; i++)
         {
+            TypeAndMaterial typeAndMaterial = new TypeAndMaterial();
+            typeAndMaterial.Name = weaponMaterialData[i]["name"].ToString();
+            typeAndMaterial.Attack = (int)weaponMaterialData[i]["attack"];
+            typeAndMaterial.Durability = (int)weaponMaterialData[i]["duribility"];
+            typeAndMaterial.Special = (int)weaponMaterialData[i]["special"];
+            typeAndMaterial.Speed = (int)weaponMaterialData[i]["speed"];
+            typeAndMaterial.Size = (int)weaponMaterialData[i]["size"];
+            typeAndMaterial.Id = (int)weaponMaterialData[i]["id"];
+            materialAndTypes.Add((int)weaponMaterialData[i]["id"], typeAndMaterial);
             for (int j = 0; j < weaponMaterialData[i]["rarity"].Count; j++)
             {
                 weaponMaterialIndexNumber[(int)weaponMaterialData[i]["rarity"][j]].Add(i);
@@ -58,14 +77,35 @@ public class WeaponDatabase : MonoBehaviour
         Weapons weapon = new Weapons
         {
             ID = GetNewWeaponsCount(),
-            Title = weaponMaterialData[material]["material"] + " " + weaponTypeData[type]["type"],
+            Title = weaponMaterialData[material]["name"] + " " + weaponTypeData[type]["name"],
             Attack = (int)weaponMaterialData[material]["attack"] + (int)weaponTypeData[type]["attack"],
             Special = (int)weaponMaterialData[material]["special"] + (int)weaponTypeData[type]["special"],
             Speed = (int)weaponMaterialData[material]["speed"] + (int)weaponTypeData[type]["speed"],
             Durability = (int)weaponMaterialData[material]["duribility"] + (int)weaponTypeData[type]["duribility"],
             Size = (int)weaponMaterialData[material]["size"] + (int)weaponTypeData[type]["size"],
+            TypeID = (int)weaponTypeData[type]["id"],
+            MaterialID = (int)weaponMaterialData[material]["id"],
             Sprite = Resources.Load<Sprite>("Sprites/Weapons/" + weaponTypeData[type]["id"]),
             Slug = weaponTypeData[type]["id"].ToString()
+        };
+        return weapon;
+    }
+
+    public Weapons GetWeaponFromMaterialAndType(int materialID, int typeID)
+    {
+        Weapons weapon = new Weapons
+        {
+            ID = GetNewWeaponsCount(),
+            Title = materialAndTypes[materialID].Name + " " + materialAndTypes[typeID].Name,
+            Attack = materialAndTypes[materialID].Attack + materialAndTypes[typeID].Attack,
+            Special = materialAndTypes[materialID].Special + materialAndTypes[typeID].Special,
+            Speed = materialAndTypes[materialID].Speed + materialAndTypes[typeID].Speed,
+            Durability = materialAndTypes[materialID].Durability + materialAndTypes[typeID].Durability,
+            Size = materialAndTypes[materialID].Size + materialAndTypes[typeID].Size,
+            TypeID = materialAndTypes[typeID].Id,
+            MaterialID = materialAndTypes[materialID].Id,
+            Sprite = Resources.Load<Sprite>("Sprites/Weapons/" + materialAndTypes[typeID].Id),
+            Slug = materialAndTypes[typeID].Id.ToString()
         };
         return weapon;
     }
@@ -131,6 +171,8 @@ public class Weapons : Items
     public int Special { get; set; }
     public int Speed { get; set; }
     public int Durability { get; set; }
+    public int TypeID { get; set; }
+    public int MaterialID { get; set; }
 
     public Weapons(int id, string title, int attack, int special, int speed, int durability, int size, string slug)
     {
@@ -149,4 +191,15 @@ public class Weapons : Items
     {
         this.ID = -1;
     }
+}
+
+public class TypeAndMaterial
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Attack { get; set; }
+    public int Special { get; set; }
+    public int Speed { get; set; }
+    public int Durability { get; set; }
+    public int Size { get; set; }
 }
