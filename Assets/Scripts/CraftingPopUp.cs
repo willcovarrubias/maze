@@ -53,6 +53,7 @@ public class CraftingPopUp : MonoBehaviour
             tempDuribility = weapon.Durability;
         }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
+        imageOfItem.GetComponent<Image>().sprite = craftedItem.Sprite;
         if (craftedItem.ID >= 4000 && craftedItem.ID < 5000)
         {
             Armor craftedArmor = (Armor)craftedItem;

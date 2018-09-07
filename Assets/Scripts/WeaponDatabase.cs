@@ -55,15 +55,18 @@ public class WeaponDatabase : MonoBehaviour
         typeRarity = ChangeRarity(typeRarity);
         material = weaponMaterialIndexNumber[materialRarity][Random.Range(0, weaponMaterialIndexNumber[materialRarity].Count)];
         type = weaponTypeIndexNumber[typeRarity][Random.Range(0, weaponTypeIndexNumber[typeRarity].Count)];
-        Weapons weapon = new Weapons(
-            GetNewWeaponsCount(),
-            weaponMaterialData[material]["material"] + " " + weaponTypeData[type]["type"],
-            (int)weaponMaterialData[material]["attack"] + (int)weaponTypeData[type]["attack"],
-            (int)weaponMaterialData[material]["special"] + (int)weaponTypeData[type]["special"],
-            (int)weaponMaterialData[material]["speed"] + (int)weaponTypeData[type]["speed"],
-            (int)weaponMaterialData[material]["duribility"] + (int)weaponTypeData[type]["duribility"],
-            (int)weaponMaterialData[material]["size"] + (int)weaponTypeData[type]["size"],
-            "");
+        Weapons weapon = new Weapons
+        {
+            ID = GetNewWeaponsCount(),
+            Title = weaponMaterialData[material]["material"] + " " + weaponTypeData[type]["type"],
+            Attack = (int)weaponMaterialData[material]["attack"] + (int)weaponTypeData[type]["attack"],
+            Special = (int)weaponMaterialData[material]["special"] + (int)weaponTypeData[type]["special"],
+            Speed = (int)weaponMaterialData[material]["speed"] + (int)weaponTypeData[type]["speed"],
+            Durability = (int)weaponMaterialData[material]["duribility"] + (int)weaponTypeData[type]["duribility"],
+            Size = (int)weaponMaterialData[material]["size"] + (int)weaponTypeData[type]["size"],
+            Sprite = Resources.Load<Sprite>("Sprites/Weapons/" + weaponTypeData[type]["id"]),
+            Slug = weaponTypeData[type]["id"].ToString()
+        };
         return weapon;
     }
 
@@ -139,7 +142,7 @@ public class Weapons : Items
         this.Durability = durability;
         this.Size = size;
         this.Slug = slug;
-        this.Sprite = Resources.Load<Sprite>("Items/" + slug);
+        this.Sprite = Resources.Load<Sprite>("Sprites/Weapons/" + slug);
     }
 
     public Weapons()

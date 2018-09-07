@@ -298,6 +298,7 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt(item + " Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt(item + " Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt(item + " Size" + i, weapon.Size);
+                PlayerPrefs.SetString(item + " Slug" + i, weapon.Slug);
             }
             i++;
         }
@@ -325,7 +326,8 @@ public class InventoryManager : MonoBehaviour
                 int speed = PlayerPrefs.GetInt(item + " Speed" + i);
                 int durability = PlayerPrefs.GetInt(item + " Duribility" + i);
                 int size = PlayerPrefs.GetInt(item + " Size" + i);
-                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, "");
+                string slug = PlayerPrefs.GetString(item + " Slug" + i);
+                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, slug);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else

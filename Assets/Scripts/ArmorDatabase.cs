@@ -33,6 +33,7 @@ public class ArmorDatabase : MonoBehaviour
             armor.Speed = (int)itemsData[i]["speed"];
             armor.Appendage = itemsData[i]["appendage"].ToString();
             armor.Defense = (int)itemsData[i]["defense"];
+            armor.Sprite = Resources.Load<Sprite>("Sprites/Armor/" + armor.ID);
             List<int> newList = new List<int>();
             for (int j = 0; j < itemsData[i]["rarity"].Count; j++)
             {

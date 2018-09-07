@@ -254,6 +254,7 @@ public class VillageInventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Village Item Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt("Village Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Village Item Size" + i, weapon.Size);
+                PlayerPrefs.SetString("Village Item Slug" + i, weapon.Slug);
             }
             i++;
         }
@@ -281,7 +282,8 @@ public class VillageInventoryManager : MonoBehaviour
                 int speed = PlayerPrefs.GetInt("Village Item Speed" + i);
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Village Item Size" + i);
-                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, "");
+                string slug = PlayerPrefs.GetString("Village Item Slug" + i);
+                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, slug);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else

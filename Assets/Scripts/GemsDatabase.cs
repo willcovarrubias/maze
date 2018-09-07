@@ -35,6 +35,7 @@ public class GemsDatabase : MonoBehaviour
             gem.Title = gemsData[i]["title"].ToString();
             gem.Slug = gemsData[i]["slug"].ToString();
             gem.AddedTitle = gemsData[i]["addedTitle"].ToString();
+            gem.Sprite = Resources.Load<Sprite>("Sprites/Gems/" + gem.ID);
             List<int> newList = new List<int>();
             for (int j = 0; j < gemsData[i]["rarity"].Count; j++)
             {
