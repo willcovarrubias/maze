@@ -12,7 +12,6 @@ public class PathSceneManager : MonoBehaviour
     {
         GameMaster.gameMaster.roomCount++;
         GameMaster.gameMaster.currentArea = Location.Area.maze;
-        Debug.Log("You're in the Path Scene!");
         Debug.Log("Rooms cleared so far: " + GameMaster.gameMaster.roomCount.ToString());
         if (GameMaster.gameMaster.roomCount != 0 && GameMaster.gameMaster.roomCount % 10 == 0)
         {
