@@ -35,10 +35,17 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items;
         currentSize = 0;
-        LoadInventory();
+        if (PlayerPrefs.GetInt("Exit Maze") == 0)
+        {
+            LoadInventory("Player Item");
+        }
+        else
+        {
+            LoadInventory("Temp");
+            PlayerPrefs.SetInt("Exit Maze", 0);
+        }
         Button actionButton = otherSortButton.GetComponent<Button>();
         actionButton.onClick.AddListener(OtherSortButtonAction);
         Button discardButton = sendToPlayerButton.GetComponent<Button>();
@@ -84,7 +91,7 @@ public class InventoryManager : MonoBehaviour
             {
                 playerItems[items.Item.ID].Count += amountCanFit;
                 currentSize += items.Item.Size * amountCanFit;
-                SaveInventory();
+                SaveInventory("Player Item");
                 slots[playerItems[items.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[items.Item.ID].Count;
                 slots[playerItems[items.Item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[items.Item.ID].Item.Title + " x" + playerItems[items.Item.ID].Count;
                 UpdateInventoryText();
@@ -127,7 +134,7 @@ public class InventoryManager : MonoBehaviour
         {
             playerItems[item.Item.ID].Count += item.Count;
             currentSize += item.Item.Size * item.Count;
-            SaveInventory();
+            SaveInventory("Player Item");
             slots[playerItems[item.Item.ID].SlotNum].GetComponentInChildren<ItemData>().GetItem().Count = playerItems[item.Item.ID].Count;
             slots[playerItems[item.Item.ID].SlotNum].GetComponentInChildren<Text>().text = playerItems[item.Item.ID].Item.Title + " x" + playerItems[item.Item.ID].Count;
             UpdateInventoryText();
@@ -165,7 +172,7 @@ public class InventoryManager : MonoBehaviour
                     UpdateSlotText(slotId, item);
                 }
             }
-            SaveInventory();
+            SaveInventory("Player Item");
             UpdateInventoryText();
         }
     }
@@ -177,7 +184,7 @@ public class InventoryManager : MonoBehaviour
         playerItems.Remove(items.Item.ID);
         items.Count = 0;
         ReorganizeSlots(slot);
-        SaveInventory();
+        SaveInventory("Player Item");
         UpdateInventoryText();
     }
 
@@ -200,7 +207,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
         villageInventory.GetComponent<VillageInventoryManager>().SaveVillageInventory();
-        SaveInventory();
+        SaveInventory("Player Item");
     }
 
     public void SortInventory()
@@ -256,7 +263,7 @@ public class InventoryManager : MonoBehaviour
         }
         sorting++;
         ShowEquippedOnStartUp();
-        SaveInventory();
+        SaveInventory("Player Item");
     }
 
     public void UpdateInventoryText()
@@ -273,58 +280,58 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
-    public void SaveInventory()
+    public void SaveInventory(string item)
     {
         int i = 0;
         foreach (KeyValuePair<int, Inventory> keyValue in playerItems)
         {
             int key = keyValue.Key;
-            PlayerPrefs.SetInt("Player Item ID" + i, playerItems[key].Item.ID);
-            PlayerPrefs.SetInt("Player Item Count" + i, playerItems[key].Count);
-            PlayerPrefs.SetInt("Player Item Slot" + i, playerItems[key].SlotNum);
+            PlayerPrefs.SetInt(item + " ID" + i, playerItems[key].Item.ID);
+            PlayerPrefs.SetInt(item + " Count" + i, playerItems[key].Count);
+            PlayerPrefs.SetInt(item + " Slot" + i, playerItems[key].SlotNum);
             if (IsWeapon(playerItems[key].Item.ID))
             {
                 Weapons weapon = (Weapons)playerItems[key].Item;
-                PlayerPrefs.SetString("Player Item Name" + i, weapon.Title);
-                PlayerPrefs.SetInt("Player Item Attack" + i, weapon.Attack);
-                PlayerPrefs.SetInt("Player Item Special" + i, weapon.Special);
-                PlayerPrefs.SetInt("Player Item Speed" + i, weapon.Speed);
-                PlayerPrefs.SetInt("Player Item Duribility" + i, weapon.Durability);
-                PlayerPrefs.SetInt("Player Item Size" + i, weapon.Size);
+                PlayerPrefs.SetString(item + " Name" + i, weapon.Title);
+                PlayerPrefs.SetInt(item + " Attack" + i, weapon.Attack);
+                PlayerPrefs.SetInt(item + " Special" + i, weapon.Special);
+                PlayerPrefs.SetInt(item + " Speed" + i, weapon.Speed);
+                PlayerPrefs.SetInt(item + " Duribility" + i, weapon.Durability);
+                PlayerPrefs.SetInt(item + " Size" + i, weapon.Size);
             }
             i++;
         }
-        PlayerPrefs.SetInt("Player Item Count", i);
-        PlayerPrefs.Save();
+        PlayerPrefs.SetInt(item + " Count", i);
+        GameMaster.gameMaster.PlayerPrefsSave();
     }
 
-    public void LoadInventory()
+    public void LoadInventory(string item)
     {
         Dictionary<int, Inventory> tempList = new Dictionary<int, Inventory>();
-        int itemCount = PlayerPrefs.GetInt("Player Item Count");
+        int itemCount = PlayerPrefs.GetInt(item + " Count");
         playerItems.Clear();
         currentSize = 0;
         for (int i = 0; i < itemCount; i++)
         {
-            int id = PlayerPrefs.GetInt("Player Item ID" + i);
-            int count = PlayerPrefs.GetInt("Player Item Count" + i);
-            int slotNum = PlayerPrefs.GetInt("Player Item Slot" + i);
+            int id = PlayerPrefs.GetInt(item + " ID" + i);
+            int count = PlayerPrefs.GetInt(item + " Count" + i);
+            int slotNum = PlayerPrefs.GetInt(item + " Slot" + i);
             Inventory loadedItem;
             if (IsWeapon(id))
             {
-                string title = PlayerPrefs.GetString("Player Item Name" + i);
-                int attack = PlayerPrefs.GetInt("Player Item Attack" + i);
-                int special = PlayerPrefs.GetInt("Player Item Special" + i);
-                int speed = PlayerPrefs.GetInt("Player Item Speed" + i);
-                int durability = PlayerPrefs.GetInt("Player Item Duribility" + i);
-                int size = PlayerPrefs.GetInt("Player Item Size" + i);
+                string title = PlayerPrefs.GetString(item + " Name" + i);
+                int attack = PlayerPrefs.GetInt(item + " Attack" + i);
+                int special = PlayerPrefs.GetInt(item + " Special" + i);
+                int speed = PlayerPrefs.GetInt(item + " Speed" + i);
+                int durability = PlayerPrefs.GetInt(item + " Duribility" + i);
+                int size = PlayerPrefs.GetInt(item + " Size" + i);
                 Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, "");
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
             {
-                Items item = GetComponent<ItemDatabase>().FetchItemByID(id);
-                loadedItem = new Inventory(item, count, slotNum);
+                Items newItem = GetComponent<ItemDatabase>().FetchItemByID(id);
+                loadedItem = new Inventory(newItem, count, slotNum);
             }
             tempList.Add(loadedItem.SlotNum, loadedItem);
         }
@@ -353,7 +360,7 @@ public class InventoryManager : MonoBehaviour
         playerItems.Add(items.ID, newItem);
         currentSize += items.Size * count;
         AddItemToSlots(newItem);
-        SaveInventory();
+        SaveInventory("Player Item");
         UpdateInventoryText();
     }
 
@@ -368,7 +375,7 @@ public class InventoryManager : MonoBehaviour
             }
             slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
             PlayerPrefs.SetInt("Equipped Weapon", item.ID);
-            PlayerPrefs.Save();
+            GameMaster.gameMaster.PlayerPrefsSave();
             GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
         }
     }
@@ -396,7 +403,7 @@ public class InventoryManager : MonoBehaviour
         }
         slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
         PlayerPrefs.SetInt("Equipped Hat", item.ID);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
@@ -423,7 +430,7 @@ public class InventoryManager : MonoBehaviour
         }
         slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().EquipItem();
         PlayerPrefs.SetInt("Equipped Body", item.ID);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
@@ -444,7 +451,7 @@ public class InventoryManager : MonoBehaviour
     public void UnequipHat(Items item)
     {
         PlayerPrefs.SetInt("Equipped Hat", 0);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         if (slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>())
         {
             slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
@@ -455,7 +462,7 @@ public class InventoryManager : MonoBehaviour
     public void UnequipBody(Items item)
     {
         PlayerPrefs.SetInt("Equipped Body", 0);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         if (slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>())
         {
             slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
@@ -466,7 +473,7 @@ public class InventoryManager : MonoBehaviour
     public void UnequipWeapon(Items item)
     {
         PlayerPrefs.SetInt("Equipped Weapon", 0);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         if (slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>())
         {
             slots[playerItems[item.ID].SlotNum].GetComponentInChildren<ItemData>().UnequipItem();
@@ -651,21 +658,20 @@ public class InventoryManager : MonoBehaviour
         }
         if (sceneName == "VillageScene")
         {
-            if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.inventory)
+            switch (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu)
             {
-                VillageSceneController.villageScene.GetComponent<VillageSceneController>().InventoryUIClose();
-            }
-            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.armor)
-            {
-                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().CloseUI();
-            }
-            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.pub)
-            {
-                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().CloseUI();
-            }
-            else if (VillageSceneController.villageScene.GetComponent<VillageSceneController>().currentMenu == Location.VillageMenu.weapons)
-            {
-                VillageSceneController.villageScene.GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().CloseUI();
+                case Location.VillageMenu.inventory:
+                    VillageSceneController.villageScene.GetComponent<VillageSceneController>().InventoryUIClose();
+                    break;
+                case Location.VillageMenu.armor:
+                    VillageSceneController.villageScene.GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().CloseUI();
+                    break;
+                case Location.VillageMenu.pub:
+                    VillageSceneController.villageScene.GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().CloseUI();
+                    break;
+                case Location.VillageMenu.weapons:
+                    VillageSceneController.villageScene.GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().CloseUI();
+                    break;
             }
         }
     }

@@ -32,7 +32,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                     int temp = oldWeapon.GetComponent<ItemData>().GetItem().SlotNum;
                     GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[oldWeapon.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = droppedItem.GetComponent<ItemData>().GetItem().SlotNum;
                     GameMaster.gameMaster.GetComponent<InventoryManager>().playerItems[droppedItem.GetComponent<ItemData>().GetItem().Item.ID].SlotNum = temp;
-                    GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory();
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory("Player Item");
                 }
                 oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
                 oldWeapon.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform);

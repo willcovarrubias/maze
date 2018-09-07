@@ -72,7 +72,7 @@ public class WeaponDatabase : MonoBehaviour
         int count = weaponCount;
         weaponCount++;
         PlayerPrefs.SetInt("Weapon Count", weaponCount);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         return count;
     }
 

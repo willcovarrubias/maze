@@ -258,7 +258,7 @@ public class VillageInventoryManager : MonoBehaviour
             i++;
         }
         PlayerPrefs.SetInt("Village Item Count", i);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
     }
 
     public void LoadVillageInventory()
