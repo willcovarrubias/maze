@@ -31,6 +31,7 @@ public class ActiveCharacterController : MonoBehaviour
         //nameTextObject.text = ;
     }
 
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.W))
@@ -39,8 +40,8 @@ public class ActiveCharacterController : MonoBehaviour
 
             GiveExpToActiveCharacter(100);
         }
-
     }
+    */
 
     public int GetExpCap()
     {
@@ -70,7 +71,7 @@ public class ActiveCharacterController : MonoBehaviour
 
         //float calc_level = (expLevels[activeCharacterLevel] - GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp)
 
-        
+
     }
 
     public void MoreInfoUIOpen()
@@ -94,7 +95,6 @@ public class ActiveCharacterController : MonoBehaviour
             attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
             special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
             speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
-
 
             equippedWeaponSprite.enabled = true;
             equippedWeaponSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Title);
@@ -156,7 +156,7 @@ public class ActiveCharacterController : MonoBehaviour
         }
         else
         {
-            expText.text = "XP: MAX"; 
+            expText.text = "XP: MAX";
 
         }
         activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
@@ -221,7 +221,14 @@ public class ActiveCharacterController : MonoBehaviour
         UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
     }
-    
+
+    public void DecreaseLives()
+    {
+        GetComponent<CharacterDatabase>().activeCharacter.lives--;
+        UpdateActiveCharacterVisuals();
+        GameMaster.gameMaster.Save();
+    }
+
     public void GiveExpToActiveCharacter(int amount)
     {
         if (GetActiveCharacterCurrentLevel() == levelCap)
@@ -252,7 +259,7 @@ public class ActiveCharacterController : MonoBehaviour
     public int GetActiveCharacterCurrentLevel()
     {
         int charactersLevel = 0;
-        
+
 
         for (int i = 0; i < expLevels.Length; i++)
         {
@@ -279,8 +286,8 @@ public class ActiveCharacterController : MonoBehaviour
             {
                 //HP
                 int hpRandom = Random.Range(0, 4);
-                character.maxHP += Mathf.CeilToInt( 2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod + hpRandom);
-                character.currentHP += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod +  hpRandom);
+                character.maxHP += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod + hpRandom);
+                character.currentHP += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).hpMod + hpRandom);
 
                 //MP
                 int mpRandom = Random.Range(0, 4);
@@ -314,7 +321,7 @@ public class ActiveCharacterController : MonoBehaviour
 
             }
         }
-        
+
 
     }
 }

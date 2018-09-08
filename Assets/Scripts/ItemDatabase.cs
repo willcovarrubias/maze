@@ -54,15 +54,22 @@ public class ItemDatabase : MonoBehaviour
                 amount = amountAndID.Value;
                 AddToList(chestItems, chestItemID, amount);
             }
-            else if (randomValue >= 0.05f && randomValue < 0.1f)
+            else if (randomValue >= 0.06f && randomValue < 0.1f)
             {
                 Items weapon = GetComponent<WeaponDatabase>().CreateWeapon(mazeRoomNumber);
                 chestItems.Add(new Inventory(weapon, 1, chestItems.Count));
             }
-            else
+            else if (randomValue >= 0.02f && randomValue < 0.06f)
             {
                 chestItemID = GetComponent<ArmorDatabase>().GetRandomArmorID(mazeRoomNumber);
                 AddToList(chestItems, chestItemID, 1);
+            }
+            else
+            {
+                KeyValuePair<int, int> amountAndID = GetComponent<GemsDatabase>().GetRandomGemID(mazeRoomNumber);
+                chestItemID = amountAndID.Key;
+                amount = amountAndID.Value;
+                AddToList(chestItems, chestItemID, amount);
             }
         }
         return chestItems;
@@ -91,12 +98,18 @@ public class ItemDatabase : MonoBehaviour
                 amount = amountAndID.Value;
                 AddToList(enemyItems, chestItemID, amount);
             }
-            else
+            else if (randomValue >= 0.05f && randomValue < 0.5f)
             {
                 int itemID = GetComponent<CharacterDatabase>().FetchEnemyByID(enemyID).EnemyData.itemsHolding[Random.Range(0, GetComponent<CharacterDatabase>().FetchEnemyByID(enemyID).EnemyData.itemsHolding.Count)];
                 amount = Random.Range(1, 3);
                 AddToList(enemyItems, itemID, amount);
-
+            }
+            else
+            {
+                KeyValuePair<int, int> amountAndID = GetComponent<GemsDatabase>().GetRandomGemID(mazeRoomNumber);
+                chestItemID = amountAndID.Key;
+                amount = amountAndID.Value;
+                AddToList(enemyItems, chestItemID, amount);
             }
         }
         return enemyItems;

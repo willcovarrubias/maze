@@ -50,26 +50,21 @@ public class ArmorDatabase : MonoBehaviour
     public int GetRandomArmorID(int mazeRoomNumber)
     {
         int rarity = Mathf.FloorToInt((float)mazeRoomNumber / 10);
-        int amount = Random.Range(1, 6);
         float randomValue = Random.value;
         if (randomValue >= 0.9f && randomValue < 0.95f)
         {
-            amount = Random.Range(1, 5);
             rarity = IncreaseOrDecreaseRarity(rarity, 1);
         }
         else if (randomValue >= 0.95f && randomValue < 0.95f)
         {
-            amount = Random.Range(1, 4);
             rarity = IncreaseOrDecreaseRarity(rarity, 2);
         }
         else if (randomValue >= 0.98f && randomValue < 0.99)
         {
-            amount = Random.Range(1, 3);
             rarity = IncreaseOrDecreaseRarity(rarity, 3);
         }
         else if (randomValue >= 0.99f && randomValue < 1)
         {
-            amount = 1;
             rarity = IncreaseOrDecreaseRarity(rarity, 4);
         }
         return armorID[rarity][Random.Range(0, armorID[rarity].Count)];

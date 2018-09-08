@@ -27,12 +27,39 @@ public class VillageInventoryManager : MonoBehaviour
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        maxVillageInventorySize = 1000; //TODO: Set this from upgrades
+        UpdateInventorySize();
         currentSize = 0;
         LoadVillageInventory();
         ResizeSlotPanel();
         inventoryPanel.transform.SetParent(gameMaster.transform.Find("Canvas").transform, true);
         inventoryPanel.transform.SetSiblingIndex(1);
+    }
+
+    public void UpdateInventorySize()
+    {
+        int currentLevel = GetComponent<BuildingsManager>().GetVillageInventoryLevel();
+        switch (currentLevel)
+        {
+            case 0:
+                maxVillageInventorySize = 100;
+                break;
+            case 1:
+                maxVillageInventorySize = 200;
+                break;
+            case 2:
+                maxVillageInventorySize = 500;
+                break;
+            case 3:
+                maxVillageInventorySize = 1000;
+                break;
+            case 4:
+                maxVillageInventorySize = 2000;
+                break;
+            case 5:
+                maxVillageInventorySize = 5000;
+                break;
+        }
+        UpdateInventoryText();
     }
 
     public bool MoveItemsToVillageInventory(Inventory items, int thisSlotId, int amount)

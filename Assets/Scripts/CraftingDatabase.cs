@@ -15,10 +15,9 @@ public class CraftingDatabase : MonoBehaviour
 
     void Start()
     {
-        //TODO: Set and get these from somewhere later
-        armoryLevel = 1;
-        consumablesLevel = 1;
-        weaponsLevel = 1;
+        armoryLevel = GetComponent<BuildingsManager>().GetArmorSmithLevel();
+        consumablesLevel = GetComponent<BuildingsManager>().GetItemShopLevel();
+        weaponsLevel = GetComponent<BuildingsManager>().GetWeaponSmithLevel();
         armoryCraftingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/ArmoryCrafting.json"));
         consumableCraftingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/ConsumablesCrafting.json"));
         weaponsCraftingData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/WeaponsCrafting.json"));
@@ -27,9 +26,27 @@ public class CraftingDatabase : MonoBehaviour
         RefreshWeapons();
     }
 
+    public void UpdateArmory()
+    {
+        armoryLevel = GetComponent<BuildingsManager>().GetArmorSmithLevel();
+        RefreshArmory();
+    }
+
+    public void UpdateConsumables()
+    {
+        consumablesLevel = GetComponent<BuildingsManager>().GetItemShopLevel();
+        RefreshConsumables();
+    }
+
+    public void UpdateWeapons()
+    {
+        weaponsLevel = GetComponent<BuildingsManager>().GetWeaponSmithLevel();
+        RefreshWeapons(); 
+    }
+
     public void RefreshArmory()
     {
-        //TODO: clear slots
+        armorMenu.GetComponent<CraftingMenu>().ClearSlots();
         craftableArmor.Clear();
         for (int i = 0; i < armoryCraftingData.Count; i++)
         {
@@ -58,7 +75,7 @@ public class CraftingDatabase : MonoBehaviour
 
     void RefreshConsumables()
     {
-        //TODO: clear slots
+        consumablesMenu.GetComponent<CraftingMenu>().ClearSlots();
         craftableConsumables.Clear();
         for (int i = 0; i < consumableCraftingData.Count; i++)
         {
@@ -87,7 +104,7 @@ public class CraftingDatabase : MonoBehaviour
 
     void RefreshWeapons()
     {
-        //TODO: clear slots;
+        weaponsMenu.GetComponent<CraftingMenu>().ClearSlots();
         craftableWeapons.Clear();
         for (int i = 0; i < weaponsCraftingData.Count; i++)
         {

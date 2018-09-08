@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class RecruitmentManager : MonoBehaviour
 {
-
-    GameObject gameMaster;
-    private int maxAmountOfHeroesToRecruit;
+    int maxAmountOfHeroesToRecruit;
     Character currentlyClickedCharacter;
     GameObject objectsToDestroyWhenWandererIsRecruited;
 
@@ -30,33 +28,42 @@ public class RecruitmentManager : MonoBehaviour
     void Start()
     {
         refreshTime = 14400; //4 hours in seconds
+        SetMaxAmountOfWanderers();
         if (PlayerPrefs.GetInt("Previous Time") == 0)
         {
+            UpdateListOfHeroes();
             PlayerPrefs.SetInt("Previous Time", GetTimeInSeconds());
         }
         previousTime = PlayerPrefs.GetInt("Previous Time");
         PlayerPrefs.Save();
-        gameMaster = GameObject.FindGameObjectWithTag("GameController");
-        maxAmountOfHeroesToRecruit = 5; //Set this somewhere, possibly from a village upgrade milestone. Goes up with game progress.
-        AddUIStuffFirst();
         DisplayCurrentListOfWanderers();
     }
 
-    /*
-    void Update()
+    public void SetMaxAmountOfWanderers()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        int caravanLevel = GetComponent<BuildingsManager>().GetCaravanLevel();
+        switch (caravanLevel)
         {
-            //AddHeroSlot();
-            UpdateListOfHeroes();
-            DisplayCurrentListOfWanderers();
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RemoveWanderers();
+            case 0:
+                maxAmountOfHeroesToRecruit = 2;
+                break;
+            case 1:
+                maxAmountOfHeroesToRecruit = 3;
+                break;
+            case 2:
+                maxAmountOfHeroesToRecruit = 4;
+                break;
+            case 3:
+                maxAmountOfHeroesToRecruit = 5;
+                break;
+            case 4:
+                maxAmountOfHeroesToRecruit = 6;
+                break;
+            case 5:
+                maxAmountOfHeroesToRecruit = 7;
+                break;
         }
     }
-    */
 
     public void RefreshIfEnoughTimeHasPassed()
     {
@@ -79,7 +86,7 @@ public class RecruitmentManager : MonoBehaviour
         return (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
     }
 
-    void UpdateListOfHeroes()//TODO: Add some logic here that updates the list after a certain amount of time.
+    void UpdateListOfHeroes()
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteAllWanderers();
         RemoveWanderers();
@@ -88,7 +95,7 @@ public class RecruitmentManager : MonoBehaviour
         {
             //characterSlots.RemoveAt(i);
             //Destroy(characterSlots[i]);
-            Character newWanderer = gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
+            Character newWanderer = GameMaster.gameMaster.GetComponent<CharacterDatabase>().CreateRandomWanderer();
             //characterObject[i].name = newWanderer.name;
             //characterObject[i].GetComponent<Text>().text = newWanderer.name;
             //characterObject[i].GetComponent<CharacterData>().character = newWanderer;
@@ -104,24 +111,25 @@ public class RecruitmentManager : MonoBehaviour
         GameMaster.gameMaster.Save();
     }
 
-
     void AddUIStuffFirst()
     {
         for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
         {
             GameObject slot = Instantiate(characterSlot);
-            slot.transform.SetParent(characterSlotPanel.transform);
+            slot.transform.SetParent(characterSlotPanel.transform, false);
             slot.GetComponent<ItemSlot>().id = i;
             characterSlots.Add(slot);
 
             GameObject characterObj = Instantiate(characterObjectPrefab);
-            characterObj.transform.SetParent(slot.transform);
+            characterObj.transform.SetParent(slot.transform, false);
             characterObj.transform.localPosition = Vector2.zero;
             characterObject.Add(characterObj);
         }
     }
+
     void DisplayCurrentListOfWanderers()
     {
+        RemoveWanderers();
         AddUIStuffFirst();
         for (int i = 0; i < GameMaster.gameMaster.characterDB.listOfWanderers.Count; i++)
         {
@@ -136,15 +144,15 @@ public class RecruitmentManager : MonoBehaviour
             */
 
             //Debug.Log("This is NOT null");
-            characterObject[i].name = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
-            characterObject[i].GetComponentInChildren<Text>().text = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-                "\n: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
-                "\nHP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxHP +
-                "\nMP: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxMP;
+            characterObject[i].name = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
+            characterObject[i].GetComponentInChildren<Text>().text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
+                "\n: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
+                "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxHP +
+                "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxMP;
 
-            characterObject[i].GetComponent<CharacterData>().character = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
-            characterObject[i].GetComponent<CharacterData>().thisObjectsID = gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
-            characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].slug);
+            characterObject[i].GetComponent<CharacterData>().character = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i];
+            characterObject[i].GetComponent<CharacterData>().thisObjectsID = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id;
+            characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].slug);
 
             //Debug.Log("Wanderer: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
             //          "\nID: " + gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].id);
@@ -169,11 +177,18 @@ public class RecruitmentManager : MonoBehaviour
 
     public void FinalizeRecruitment()
     {
-        characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
-        characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
-        Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
-        GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
-        CaravanAdvancedUIClose();
+        if (GetComponent<RosterManager>().GetMaxRosterSize() > GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count)
+        {
+            characterObject.Remove(objectsToDestroyWhenWandererIsRecruited);
+            characterSlots.Remove(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+            Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
+            GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
+            CaravanAdvancedUIClose();
+        }
+        else
+        {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Barracks Full");
+        }
     }
 
     public void SetCurrentlyClickedCharacter(Character characterClicked, GameObject objectToDestroy)

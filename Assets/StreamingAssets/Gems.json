@@ -1,0 +1,49 @@
+
+[
+	{
+		"id": 2000,
+		"title": "Attack Gem 1",
+		"addedTitle" : "Attack 1",
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 2,
+		"special": 0,
+		"speed": 0,
+		"duribility": 0,
+		"size": 2,
+		"slug": "00"
+	},
+	{
+		"id": 2001,
+		"title": "Attack Gem 2",
+		"addedTitle" : "Attack 2",
+		"rarity" : 
+		[
+			4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 5,
+		"special": 0,
+		"speed": 0,
+		"duribility": 0,
+		"size": 2,
+		"slug": "00"
+	},
+	{
+		"id": 2002,
+		"title": "Attack Gem 3",
+		"addedTitle" : "Attack 3",
+		"rarity" : 
+		[
+			8, 9, 10, 11
+		],
+		"attack": 10,
+		"special": 0,
+		"speed": 0,
+		"duribility": 0,
+		"size": 2,
+		"slug": "00"
+	}
+]
+	
