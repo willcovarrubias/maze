@@ -14,6 +14,7 @@ public class VillageSceneController : MonoBehaviour
 
     private void Start()
     {
+        GameMaster.gameMaster.currentArea = Location.Area.village;
         villageScene = this;
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         inventoryUI = gameMaster.transform.Find("Canvas/InventoryPanel").gameObject;
@@ -21,6 +22,7 @@ public class VillageSceneController : MonoBehaviour
         labyrinthConfirmation.SetActive(false);
         barracksMenu.SetActive(false);
         currentMenu = Location.VillageMenu.mainMenu;
+        GameMaster.gameMaster.PlayerPrefsSave();
     }
 
     public void MainMenu()
@@ -66,6 +68,8 @@ public class VillageSceneController : MonoBehaviour
         GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingPopUp>().DestroyUI();
         GetComponent<VillageInventoryManager>().DestroyPanel();
+        GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory("Temp");
+        PlayerPrefs.SetInt("Exit Maze", 1);
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
         SceneManager.LoadScene("PathScene");
     }

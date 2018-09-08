@@ -196,6 +196,8 @@ public class DynamicInventory : MonoBehaviour
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
         itemObject.GetComponentInChildren<ItemData>().SetLocation(location);
+        itemObject.GetComponentInChildren<Image>().sprite = item.Item.Sprite;
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;

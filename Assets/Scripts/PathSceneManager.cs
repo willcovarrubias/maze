@@ -11,7 +11,7 @@ public class PathSceneManager : MonoBehaviour
     private void Start()
     {
         GameMaster.gameMaster.roomCount++;
-        Debug.Log("You're in the Path Scene!");
+        GameMaster.gameMaster.currentArea = Location.Area.maze;
         Debug.Log("Rooms cleared so far: " + GameMaster.gameMaster.roomCount.ToString());
         if (GameMaster.gameMaster.roomCount != 0 && GameMaster.gameMaster.roomCount % 10 == 0)
         {
@@ -76,6 +76,7 @@ public class PathSceneManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(healAmount);
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().IncreaseMP(healAmount);
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Restored HP & MP by " + (healAmount * GameMaster.gameMaster.roomCount / 10));
+        PlayerPrefs.SetInt("Exit Maze", 0);
         SceneManager.LoadScene("VillageScene");
     }
 

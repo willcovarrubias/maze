@@ -389,7 +389,7 @@ public class FightSceneController : MonoBehaviour
                 UpdatePlayerStats();
                 return weaponName;
             }
-            GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory();
+            GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory("Player Item");
         }
         return "";
     }

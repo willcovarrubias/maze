@@ -110,16 +110,20 @@ public class CraftingDatabase : MonoBehaviour
         {
             if ((int)weaponsCraftingData[i]["level"] <= weaponsLevel)
             {
+                Weapons weapon = new Weapons();
+                weapon = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetWeaponFromMaterialAndType((int)weaponsCraftingData[i]["material id"], (int)weaponsCraftingData[i]["type id"]);
                 CraftableItem item = new CraftableItem();
                 Dictionary<int, int> materials = new Dictionary<int, int>();
                 item.SlotNum = i;
                 item.CraftedItemID = 0;
-                item.Weapon.Title = weaponsCraftingData[i]["title"].ToString();
-                item.Weapon.Attack = (int)weaponsCraftingData[i]["attack"];
-                item.Weapon.Durability = (int)weaponsCraftingData[i]["duribilty"];
-                item.Weapon.Special = (int)weaponsCraftingData[i]["special"];
-                item.Weapon.Speed = (int)weaponsCraftingData[i]["speed"];
-                item.Weapon.Size = (int)weaponsCraftingData[i]["size"];
+                item.Weapon.Title = weapon.Title;
+                item.Weapon.Attack = weapon.Attack;
+                item.Weapon.Durability = weapon.Durability;
+                item.Weapon.Special = weapon.Special;
+                item.Weapon.Speed = weapon.Speed;
+                item.Weapon.Size = weapon.Size;
+                item.Weapon.Sprite = weapon.Sprite;
+                item.Weapon.Slug = weapon.Slug;
                 item.Level = (int)weaponsCraftingData[i]["level"];
                 for (int j = 0; j < weaponsCraftingData[i]["materials"].Count; j++)
                 {

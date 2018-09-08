@@ -126,7 +126,7 @@ public class CharacterDatabase : MonoBehaviour
         listOfHeroes.Add(characterToRecruit);
         listOfHeroes.Last().id = (PlayerPrefs.GetInt("Hero ID"));
         PlayerPrefs.SetInt("Hero ID", (PlayerPrefs.GetInt("Hero ID") + 1));
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         DeleteWanderer(characterToRecruit);
 
         //SaveNewHero(characterToRecruit, slotNumber);

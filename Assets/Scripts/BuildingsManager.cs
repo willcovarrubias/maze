@@ -83,7 +83,7 @@ public class BuildingsManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Barracks");
         PlayerPrefs.SetInt("barracks", barracksLevel + 1);
         barracksLevel = PlayerPrefs.GetInt("barracks");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         SetBuildingsText();
     }
 
@@ -92,7 +92,7 @@ public class BuildingsManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Wanderers Caravan");
         PlayerPrefs.SetInt("caravan", caravanLevel + 1);
         caravanLevel = PlayerPrefs.GetInt("caravan");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         SetBuildingsText();
         GetComponent<RecruitmentManager>().SetMaxAmountOfWanderers();
     }
@@ -102,7 +102,7 @@ public class BuildingsManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Armor Smith");
         PlayerPrefs.SetInt("armorSmith", armorSmithLevel + 1);
         armorSmithLevel = PlayerPrefs.GetInt("armorSmith");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         SetBuildingsText();
         GetComponent<CraftingDatabase>().UpdateArmory();
         armorSmithMenuButton.SetActive(true);
@@ -113,7 +113,7 @@ public class BuildingsManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Weapon Smith");
         PlayerPrefs.SetInt("weaponSmith", weaponSmithLevel + 1);
         weaponSmithLevel = PlayerPrefs.GetInt("weaponSmith");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         SetBuildingsText();
         GetComponent<CraftingDatabase>().UpdateWeapons();
         weaponSmithMenuButton.SetActive(true);
@@ -124,7 +124,7 @@ public class BuildingsManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Item Shop");
         PlayerPrefs.SetInt("itemShop", itemShopLevel + 1);
         itemShopLevel = PlayerPrefs.GetInt("itemShop");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         SetBuildingsText();
         GetComponent<CraftingDatabase>().UpdateConsumables();
         itemShopMenuButton.SetActive(true);
@@ -135,7 +135,7 @@ public class BuildingsManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Upgraded Village Inventory");
         PlayerPrefs.SetInt("villageInvetory", villageInventoryLevel + 1);
         villageInventoryLevel = PlayerPrefs.GetInt("villageInvetory");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         SetBuildingsText();
         GetComponent<VillageInventoryManager>().UpdateInventorySize();
     }

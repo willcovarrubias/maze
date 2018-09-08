@@ -46,12 +46,6 @@ public class BuildingDatabase : MonoBehaviour
         return levelMaterials;
     }
 
-    Dictionary<int, int> GetMaterialsNeededForBuilding(int level, int building)
-    {
-        Dictionary<int, int> materials = new Dictionary<int, int>();
-        return materials;
-    }
-
     void PrintBuildings()
     {
         for (int i = 0; i < buildings.Count; i++)

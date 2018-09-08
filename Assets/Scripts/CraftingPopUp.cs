@@ -39,10 +39,12 @@ public class CraftingPopUp : MonoBehaviour
         }
         if (item.CraftedItemID != 0)
         {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.gameObject, item.CraftedItemID);
             craftedItem = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID);
         }
         else
         {
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.gameObject, 10000);
             Weapons weapon = CreateWeaponFromItem(item.Weapon);
             weapon.ID = GameMaster.gameMaster.GetComponent<WeaponDatabase>().GetNewWeaponsCount();
             craftedItem = weapon;
@@ -53,6 +55,7 @@ public class CraftingPopUp : MonoBehaviour
             tempDuribility = weapon.Durability;
         }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
+        imageOfItem.GetComponent<Image>().sprite = craftedItem.Sprite;
         if (craftedItem.ID >= 4000 && craftedItem.ID < 5000)
         {
             Armor craftedArmor = (Armor)craftedItem;
