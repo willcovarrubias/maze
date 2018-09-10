@@ -25,6 +25,47 @@ public class VillageSceneController : MonoBehaviour
         GameMaster.gameMaster.PlayerPrefsSave();
     }
 
+    void Update()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            CheckWhichObjectPressed();
+        }
+    }
+
+    void CheckWhichObjectPressed()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 20))
+        {
+            switch (hit.collider.name)
+            {
+                case "Maze":
+                    EnterLabyrinth();
+                    break;
+                case "Barracks":
+                    BarracksMenu();
+                    break;
+                case "Caravan":
+                    RecruitmentUIOpen();
+                    break;
+                case "Inventory":
+                    InventoryUIOpen();
+                    break;
+                case "Armor":
+                    BlacksmithMenu();
+                    break;
+                case "Weapon":
+                    WeaponsmithMenu();
+                    break;
+                case "Item":
+                    ItemShopMenu();
+                    break;
+            }
+        }
+    }
+
     public void MainMenu()
     {
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();

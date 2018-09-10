@@ -27,13 +27,25 @@ public class BuildingsManager : MonoBehaviour
         {
             armorSmithMenuButton.SetActive(true);
         }
+        else
+        {
+            armorSmithMenuButton.SetActive(false); 
+        }
         if (weaponSmithLevel > 0)
         {
             weaponSmithMenuButton.SetActive(true);
         }
+        else
+        {
+            weaponSmithMenuButton.SetActive(false);
+        }
         if (itemShopLevel > 0)
         {
             itemShopMenuButton.SetActive(true);
+        }
+        else
+        {
+            itemShopMenuButton.SetActive(false);
         }
         SetBuildingsText();
     }
