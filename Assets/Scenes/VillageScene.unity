@@ -465,7 +465,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5041874622d88418da8e659cb0cf19b0, type: 3}
-  m_Color: {r: 0.9411765, g: 0.956, b: 0.9558824, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6168,7 +6168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad02457c7772f4f66a2deae218bf28ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingColor: {r: 0.716, g: 0.828, b: 1, a: 1}
+  startingColor: {r: 0.72794116, g: 0.835232, b: 1, a: 1}
   endingColor: {r: 0.25490198, g: 0.3019608, b: 0.43529412, a: 1}
 --- !u!212 &900710416
 SpriteRenderer:
@@ -6351,17 +6351,17 @@ Prefab:
     - target: {fileID: 224488051541225022, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224082865343174456, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224318092453679156, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224522046964611600, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
@@ -6371,7 +6371,15 @@ Prefab:
     - target: {fileID: 224615350810988830, guid: 38ad271bcd792874493c3a4342348643,
         type: 2}
       propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796283533518344, guid: 38ad271bcd792874493c3a4342348643, type: 2}
+      propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856104890471736, guid: 38ad271bcd792874493c3a4342348643, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 38ad271bcd792874493c3a4342348643, type: 2}

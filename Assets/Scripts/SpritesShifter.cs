@@ -15,11 +15,10 @@ public class SpritesShifter : MonoBehaviour
     protected void Start()
     {
         //change color based on z positon
-        SpriteRenderer = GetComponent<SpriteRenderer>();
         var distance = Mathf.Abs(transform.position.z);
         var ratio = Mathf.Clamp01((distance - MinDistance) / (MaxDistance - MinDistance));
         Color lerped = Color.Lerp(startingColor, endingColor, ratio);
-        SpriteRenderer.color = lerped;
+        GetComponent<Renderer>().material.color = lerped * 1.05f;
         //create shadow
         GameObject shadow = Instantiate(gameObject, transform, true);
         for (int i = 0; i < shadow.transform.childCount; i++)
