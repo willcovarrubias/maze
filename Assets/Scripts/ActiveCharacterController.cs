@@ -18,7 +18,7 @@ public class ActiveCharacterController : MonoBehaviour
     static int expCap = 1600;
     int levelCap = 5;
 
-    int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
+    int[] expLevels = { 0, 200, 400, 800, 1600 };
 
     void Start()
     {
@@ -55,7 +55,7 @@ public class ActiveCharacterController : MonoBehaviour
     {
         if (GetActiveCharacterCurrentLevel() < levelCap)
         {
-            float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+            float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
             SetXPBar(calc_Level);
         }
         else
@@ -128,7 +128,8 @@ public class ActiveCharacterController : MonoBehaviour
 
             if (GetActiveCharacterCurrentLevel() < levelCap)
             {
-                nameText.text = nameTextObject.text + "\nEXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+                nameText.text = nameTextObject.text + "\nEXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + 
+                    "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
             }
             else
             {
