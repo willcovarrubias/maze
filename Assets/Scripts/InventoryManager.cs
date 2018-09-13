@@ -46,6 +46,7 @@ public class InventoryManager : MonoBehaviour
             LoadInventory("Temp");
             PlayerPrefs.SetInt("Exit Maze", 0);
         }
+        SaveInventory("Player Item");
         Button actionButton = otherSortButton.GetComponent<Button>();
         actionButton.onClick.AddListener(OtherSortButtonAction);
         Button discardButton = sendToPlayerButton.GetComponent<Button>();
@@ -269,6 +270,12 @@ public class InventoryManager : MonoBehaviour
     public void UpdateInventoryText()
     {
         inventoryText.GetComponent<Text>().text = "Limit: " + currentSize + " / " + maxInventorySize;
+        GetComponent<ActiveCharacterController>().UpdateStats();
+    }
+
+    public int GetCurrentSize()
+    {
+        return currentSize;
     }
 
     public bool CanFitInInventory(int itemSize)
