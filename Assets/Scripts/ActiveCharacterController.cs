@@ -77,66 +77,74 @@ public class ActiveCharacterController : MonoBehaviour
 
     public void UpdateActiveCharacterVisuals()
     {
-        int attack = GetComponent<CharacterDatabase>().activeCharacter.attack;
-        int special = GetComponent<CharacterDatabase>().activeCharacter.special;
-        int defense = GetComponent<CharacterDatabase>().activeCharacter.defense;
-        int speed = GetComponent<CharacterDatabase>().activeCharacter.speed;
-        if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+        if (GetComponent<CharacterDatabase>().activeCharacter.id == -1)
         {
-            attack += GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
-            special += GetComponent<InventoryManager>().GetEquippedWeapon().Special;
-            speed += GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
-        }
-        if (GetComponent<InventoryManager>().GetEquippedHatID() > 0)
-        {
-            defense += GetComponent<InventoryManager>().GetEquippedHat().Defense;
-            speed += GetComponent<InventoryManager>().GetEquippedHat().Speed;
-        }
-        if (GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
-        {
-            defense += GetComponent<InventoryManager>().GetEquippedBody().Defense;
-            speed += GetComponent<InventoryManager>().GetEquippedBody().Speed;
-        }
-
-        nameTextObject.text = GetComponent<CharacterDatabase>().activeCharacter.name +
-            "\n" + GetComponent<CharacterDatabase>().activeCharacter.job +
-            "\nLevel " + GetActiveCharacterCurrentLevel();
-        UpdateStats();
-        equippedText.text = "";
-        if (GetComponent<InventoryManager>().GetEquippedHatID() > 0)
-        {
-            equippedText.text += GetComponent<InventoryManager>().GetEquippedHat().Title;
-        }
-        equippedText.text += "\n";
-        if (GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
-        {
-            equippedText.text += GetComponent<InventoryManager>().GetEquippedBody().Title;
-        }
-        equippedText.text += "\n";
-        if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
-        {
-            equippedText.text += GetComponent<InventoryManager>().GetEquippedWeapon().Title 
-                + " (" + GetComponent<InventoryManager>().GetEquippedWeapon().Durability + ")";
-        }
-
-        GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
-        if (GetActiveCharacterCurrentLevel() < levelCap)
-        {
-            nameText.text = nameTextObject.text += "\n EXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+            activeCharacterPanel.SetActive(false);
         }
         else
         {
-            nameText.text = nameTextObject.text += "\nEXP: MAX";
+            activeCharacterPanel.SetActive(true);
+            int attack = GetComponent<CharacterDatabase>().activeCharacter.attack;
+            int special = GetComponent<CharacterDatabase>().activeCharacter.special;
+            int defense = GetComponent<CharacterDatabase>().activeCharacter.defense;
+            int speed = GetComponent<CharacterDatabase>().activeCharacter.speed;
+            if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+            {
+                attack += GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
+                special += GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+                speed += GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
+            }
+            if (GetComponent<InventoryManager>().GetEquippedHatID() > 0)
+            {
+                defense += GetComponent<InventoryManager>().GetEquippedHat().Defense;
+                speed += GetComponent<InventoryManager>().GetEquippedHat().Speed;
+            }
+            if (GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
+            {
+                defense += GetComponent<InventoryManager>().GetEquippedBody().Defense;
+                speed += GetComponent<InventoryManager>().GetEquippedBody().Speed;
+            }
+
+            nameTextObject.text = GetComponent<CharacterDatabase>().activeCharacter.name +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.job +
+                "\nLevel " + GetActiveCharacterCurrentLevel();
+            UpdateStats();
+            equippedText.text = "";
+            if (GetComponent<InventoryManager>().GetEquippedHatID() > 0)
+            {
+                equippedText.text += GetComponent<InventoryManager>().GetEquippedHat().Title;
+            }
+            equippedText.text += "\n";
+            if (GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
+            {
+                equippedText.text += GetComponent<InventoryManager>().GetEquippedBody().Title;
+            }
+            equippedText.text += "\n";
+            if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+            {
+                equippedText.text += GetComponent<InventoryManager>().GetEquippedWeapon().Title
+                    + " (" + GetComponent<InventoryManager>().GetEquippedWeapon().Durability + ")";
+            }
+
+            if (GetActiveCharacterCurrentLevel() < levelCap)
+            {
+                nameText.text = nameTextObject.text + "\nEXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+            }
+            else
+            {
+                nameText.text = nameTextObject.text + "\nEXP: MAX";
+            }
+            moreStatsText.text = GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GetComponent<CharacterDatabase>().activeCharacter.maxHP +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GetComponent<CharacterDatabase>().activeCharacter.maxMP +
+                "\n" + GetComponent<InventoryManager>().GetCurrentSize() + "/" + GetComponent<CharacterDatabase>().activeCharacter.items +
+                "\n" + attack + "\n" + defense + "\n" + special + "\n" + speed +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.luck +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.lives;
+            moreEquippedText.text = equippedText.text;
+            activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GetComponent<CharacterDatabase>().activeCharacter.slug);
+            UpdateEXPBar();
         }
-        moreStatsText.text = GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GetComponent<CharacterDatabase>().activeCharacter.maxHP +
-            "\n" + GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GetComponent<CharacterDatabase>().activeCharacter.maxMP +
-            "\n" + GetComponent<InventoryManager>().GetCurrentSize() + "/" + GetComponent<CharacterDatabase>().activeCharacter.items +
-            "\n" + attack + "\n" + defense + "\n" + special + "\n" + speed +
-            "\n" + GetComponent<CharacterDatabase>().activeCharacter.luck + 
-            "\n" + GetComponent<CharacterDatabase>().activeCharacter.lives;
-        moreEquippedText.text = equippedText.text;
-        activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GetComponent<CharacterDatabase>().activeCharacter.slug);
-        UpdateEXPBar();
+        GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
     }
 
     public void UpdateStats()
