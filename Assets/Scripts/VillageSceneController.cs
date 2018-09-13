@@ -27,7 +27,7 @@ public class VillageSceneController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && currentMenu == Location.VillageMenu.mainMenu)
         {
             CheckWhichObjectPressed();
         }
@@ -104,6 +104,7 @@ public class VillageSceneController : MonoBehaviour
 
     public void EnterLabyrinthConfirmation()
     {
+        currentMenu = Location.VillageMenu.other;
         GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().DestroyMenu();
@@ -117,6 +118,7 @@ public class VillageSceneController : MonoBehaviour
 
     public void EnterLabyrinthCancel()
     {
+        currentMenu = Location.VillageMenu.mainMenu;
         labyrinthConfirmation.SetActive(false);
     }
 
@@ -158,14 +160,14 @@ public class VillageSceneController : MonoBehaviour
 
     public void BarracksMenu()//This'll pop up a menu that'll allow the player to upgrade the barracks but also select a character.
     {
+        currentMenu = Location.VillageMenu.other;
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-        //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = 3;
         barracksMenu.SetActive(true);
     }
 
     public void BarracksMenuClose()
     {
-        //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = -1;
+        currentMenu = Location.VillageMenu.mainMenu;
         barracksMenu.SetActive(false);
     }
 
@@ -189,6 +191,7 @@ public class VillageSceneController : MonoBehaviour
 
     public void RecruitmentUIOpen()
     {
+        currentMenu = Location.VillageMenu.other;
         if (!gameObject.GetComponent<WanderersRefreshTime>())
         {
             gameObject.AddComponent<WanderersRefreshTime>();
@@ -198,6 +201,7 @@ public class VillageSceneController : MonoBehaviour
 
     public void RecruitmentUIClose()
     {
+        currentMenu = Location.VillageMenu.mainMenu;
         if (gameObject.GetComponent<WanderersRefreshTime>())
         {
             Destroy(gameObject.GetComponent<WanderersRefreshTime>());
