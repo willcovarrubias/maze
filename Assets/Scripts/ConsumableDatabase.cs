@@ -32,6 +32,7 @@ public class ConsumableDatabase : MonoBehaviour
             item.Slug = itemsData[i]["slug"].ToString();
             item.Healing = (int)itemsData[i]["healing"];
             item.MP = (int)itemsData[i]["mp"];
+            item.Sprite = Resources.Load<Sprite>("Sprites/Consumables/" + item.ID);
             List<int> newList = new List<int>();
             for (int j = 0; j < itemsData[i]["rarity"].Count; j++)
             {

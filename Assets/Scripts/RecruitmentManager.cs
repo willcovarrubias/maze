@@ -35,7 +35,7 @@ public class RecruitmentManager : MonoBehaviour
             PlayerPrefs.SetInt("Previous Time", GetTimeInSeconds());
         }
         previousTime = PlayerPrefs.GetInt("Previous Time");
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
         DisplayCurrentListOfWanderers();
     }
 
@@ -74,7 +74,7 @@ public class RecruitmentManager : MonoBehaviour
             int remainder = timePassed % refreshTime;
             previousTime = currTime - remainder;
             PlayerPrefs.SetInt("Previous Time", previousTime);
-            PlayerPrefs.Save();
+            GameMaster.gameMaster.PlayerPrefsSave();
             UpdateListOfHeroes();
             DisplayCurrentListOfWanderers();
         }

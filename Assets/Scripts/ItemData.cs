@@ -35,31 +35,22 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         currentPanel = transform.parent.parent.parent.parent.gameObject;
     }
 
-    /*
-    void Update()
-    {
-        if (Input.GetKeyDown("space"))
-        {
-            Debug.Log(id + " " + item.Item.ID);
-        }
-    }
-    */
-
     public void UnequipItem()
     {
-        if (transform.childCount > 0)
+        if (transform.Find("Equipped"))
         {
-            Destroy(transform.GetChild(0).gameObject);
+            Destroy(transform.Find("Equipped").gameObject);
         }
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
 
     public void EquipItem()
     {
-        if (transform.childCount == 0)
+        if (!transform.Find("Equipped"))
         {
             GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, transform, false);
-            equippedSprite.transform.localPosition = new Vector3(200, 0, 0);
+            equippedSprite.transform.localPosition = new Vector3(-235, 0, 0);
+            equippedSprite.name = "Equipped";
         }
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
     }
@@ -98,9 +89,9 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             if (item.Count > 1)
             {
                 temp = Instantiate(transform.gameObject, transform.parent, true);
-                for (int i = 0; i < transform.childCount; i++)
+                if (transform.Find("Equipped"))
                 {
-                    Destroy(transform.GetChild(i).gameObject);
+                    Destroy(transform.Find("Equipped").gameObject);
                 }
                 if (item.Count > 3)
                 {
@@ -140,9 +131,9 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             if (item.Count > 0)
             {
-                for (int i = 0; i < transform.childCount; i++)
+                if (transform.Find("Equipped"))
                 {
-                    Destroy(transform.GetChild(i).gameObject);
+                    Destroy(transform.Find("Equipped").gameObject);
                 }
                 this.transform.SetParent(currentSlot.transform);
                 this.transform.position = currentSlot.transform.position;

@@ -30,6 +30,7 @@ public class MaterialDatabase : MonoBehaviour
             material.Size = (int)itemsData[i]["size"];
             material.Title = itemsData[i]["title"].ToString();
             material.Slug = itemsData[i]["slug"].ToString();
+            material.Sprite = Resources.Load<Sprite>("Sprites/Materials/" + material.ID);
             List<int> newList = new List<int>();
             for (int j = 0; j < itemsData[i]["rarity"].Count; j++)
             {

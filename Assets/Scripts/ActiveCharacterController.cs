@@ -4,24 +4,21 @@ using UnityEngine.UI;
 
 public class ActiveCharacterController : MonoBehaviour
 {
-
     public GameObject activeCharacterPanel;
-    public GameObject expBarFront;
-
-    public Text nameTextObject;
+    public Text nameTextObject, statsValueText, equippedText;
 
     //UI stuff for MoreInfo Panel
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText;
-    public Image activeHeroPortrait, equippedWeaponSprite, equippedHatSprite, equippedBodySprite;
+    public Text nameText, moreStatsText, moreEquippedText;
+    public Image activeHeroPortrait;
     public GameObject activeCharacterMoreInfoPanel;
     public GameObject expBarMoreInfo;
 
     Character activeCharacter;
     Weapons currentlyEquippedWeapon;
-    public int expCap = 1600;
+    static int expCap = 1600;
     int levelCap = 5;
 
-    int[] expLevels = new int[5] { 0, 200, 400, 800, 1600 };
+    int[] expLevels = { 0, 200, 400, 800, 1600 };
 
     void Start()
     {
@@ -50,9 +47,6 @@ public class ActiveCharacterController : MonoBehaviour
 
     public void SetXPBar(float exp)
     {
-        expBarFront.transform.localScale = new Vector3(exp, expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
-        expBarFront.transform.localScale = new Vector3(Mathf.Clamp(exp, 0f, 1f), expBarFront.transform.localScale.y, expBarFront.transform.localScale.z);
-
         expBarMoreInfo.transform.localScale = new Vector3(exp, expBarMoreInfo.transform.localScale.y, expBarMoreInfo.transform.localScale.z);
         expBarMoreInfo.transform.localScale = new Vector3(Mathf.Clamp(exp, 0f, 1f), expBarMoreInfo.transform.localScale.y, expBarMoreInfo.transform.localScale.z);
     }
@@ -61,17 +55,14 @@ public class ActiveCharacterController : MonoBehaviour
     {
         if (GetActiveCharacterCurrentLevel() < levelCap)
         {
-            float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+            float calc_Level = (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) / (expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
             SetXPBar(calc_Level);
         }
         else
         {
-            SetXPBar(.95f);
+            SetXPBar(1);
         }
-
         //float calc_level = (expLevels[activeCharacterLevel] - GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp)
-
-
     }
 
     public void MoreInfoUIOpen()
@@ -86,81 +77,85 @@ public class ActiveCharacterController : MonoBehaviour
 
     public void UpdateActiveCharacterVisuals()
     {
-        int attack = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.attack;
-        int special = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.special;
-        int defense = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.defense;
-        int speed = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.speed;
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+        if (GetComponent<CharacterDatabase>().activeCharacter.id == -1)
         {
-            attack += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
-            special += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Special;
-            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
-
-            equippedWeaponSprite.enabled = true;
-            equippedWeaponSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeapon().Title);
+            activeCharacterPanel.SetActive(false);
         }
         else
         {
-            equippedWeaponSprite.enabled = false;
-        }
+            activeCharacterPanel.SetActive(true);
+            int attack = GetComponent<CharacterDatabase>().activeCharacter.attack;
+            int special = GetComponent<CharacterDatabase>().activeCharacter.special;
+            int defense = GetComponent<CharacterDatabase>().activeCharacter.defense;
+            int speed = GetComponent<CharacterDatabase>().activeCharacter.speed;
+            if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+            {
+                attack += GetComponent<InventoryManager>().GetEquippedWeapon().Attack;
+                special += GetComponent<InventoryManager>().GetEquippedWeapon().Special;
+                speed += GetComponent<InventoryManager>().GetEquippedWeapon().Speed;
+            }
+            if (GetComponent<InventoryManager>().GetEquippedHatID() > 0)
+            {
+                defense += GetComponent<InventoryManager>().GetEquippedHat().Defense;
+                speed += GetComponent<InventoryManager>().GetEquippedHat().Speed;
+            }
+            if (GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
+            {
+                defense += GetComponent<InventoryManager>().GetEquippedBody().Defense;
+                speed += GetComponent<InventoryManager>().GetEquippedBody().Speed;
+            }
 
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() > 0)
-        {
-            defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Defense;
-            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Speed;
+            nameTextObject.text = GetComponent<CharacterDatabase>().activeCharacter.name +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.job +
+                "\nLevel " + GetActiveCharacterCurrentLevel();
+            UpdateStats();
+            equippedText.text = "";
+            if (GetComponent<InventoryManager>().GetEquippedHatID() > 0)
+            {
+                equippedText.text += GetComponent<InventoryManager>().GetEquippedHat().Title;
+            }
+            equippedText.text += "\n";
+            if (GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
+            {
+                equippedText.text += GetComponent<InventoryManager>().GetEquippedBody().Title;
+            }
+            equippedText.text += "\n";
+            if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
+            {
+                equippedText.text += GetComponent<InventoryManager>().GetEquippedWeapon().Title
+                    + " (" + GetComponent<InventoryManager>().GetEquippedWeapon().Durability + ")";
+            }
 
-            equippedHatSprite.enabled = true;
-            equippedHatSprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHat().Title);
+            if (GetActiveCharacterCurrentLevel() < levelCap)
+            {
+                nameText.text = nameTextObject.text + "\nEXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + 
+                    "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
+            }
+            else
+            {
+                nameText.text = nameTextObject.text + "\nEXP: MAX";
+            }
+            moreStatsText.text = GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GetComponent<CharacterDatabase>().activeCharacter.maxHP +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GetComponent<CharacterDatabase>().activeCharacter.maxMP +
+                "\n" + GetComponent<InventoryManager>().GetCurrentSize() + "/" + GetComponent<CharacterDatabase>().activeCharacter.items +
+                "\n" + attack + "\n" + defense + "\n" + special + "\n" + speed +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.luck +
+                "\n" + GetComponent<CharacterDatabase>().activeCharacter.lives;
+            moreEquippedText.text = equippedText.text;
+            activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GetComponent<CharacterDatabase>().activeCharacter.slug);
+            UpdateEXPBar();
         }
-        else
-        {
-            equippedHatSprite.enabled = false;
-        }
-
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() > 0)
-        {
-            defense += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Defense;
-            speed += GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Speed;
-
-            equippedBodySprite.enabled = true;
-            equippedBodySprite.sprite = Resources.Load<Sprite>("Art/EquipmentSprites/" + GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBody().Title);
-        }
-        else
-        {
-            equippedBodySprite.enabled = false;
-        }
-
-        nameTextObject.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name +
-            "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job +
-            "\nLv. " + GetActiveCharacterCurrentLevel() +
-            "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP +
-            "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);
+    }
 
-        nameText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.name;
-        levelText.text = "Lv. " + GetActiveCharacterCurrentLevel().ToString();
-        jobText.text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
-        hpText.text = "HP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentHP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxHP;
-        mpText.text = "MP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.currentMP + "/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.maxMP;
-        inventorySizeText.text = "Carry Amount: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.items;
-        attackText.text = "Attack: " + attack;
-        defenseText.text = "Defense: " + defense;
-        specialText.text = "Special: " + special;
-        speedText.text = "Speed: " + speed;
-        luckText.text = "Luck: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.luck.ToString();
-
-        if (GetActiveCharacterCurrentLevel() < levelCap)
-        {
-            expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
-
-        }
-        else
-        {
-            expText.text = "XP: MAX";
-
-        }
-        activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.slug);
-        UpdateEXPBar();
+    public void UpdateStats()
+    {
+        statsValueText.text = GetComponent<CharacterDatabase>().activeCharacter.currentHP +
+            "/" + GetComponent<CharacterDatabase>().activeCharacter.maxHP +
+            "\n" + GetComponent<CharacterDatabase>().activeCharacter.currentMP +
+            "/" + GetComponent<CharacterDatabase>().activeCharacter.maxMP +
+            "\n" + GetComponent<InventoryManager>().GetCurrentSize() +
+            "/" + GetComponent<CharacterDatabase>().activeCharacter.items;
     }
 
     public Character GetActiveCharacter()
@@ -180,11 +175,6 @@ public class ActiveCharacterController : MonoBehaviour
             }
         }
     }
-
-    void DestroyActiveWeapon()
-    {
-    }
-
 
     public void DecreaseHP(int amount)
     {
@@ -251,16 +241,11 @@ public class ActiveCharacterController : MonoBehaviour
         }
         UpdateActiveCharacterVisuals();
         GameMaster.gameMaster.Save();
-
-
     }
 
-    //TODO: This gives me an out of bounds error if level 4 and going to level 5
     public int GetActiveCharacterCurrentLevel()
     {
         int charactersLevel = 0;
-
-
         for (int i = 0; i < expLevels.Length; i++)
         {
             if (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp >= expLevels[i] && GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp <= expCap)
@@ -278,8 +263,6 @@ public class ActiveCharacterController : MonoBehaviour
     public void LevelUpLogic(Character character)
     {
         string charactersJob = GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.job;
-
-
         for (int i = 0; i < GameMaster.gameMaster.GetComponent<ProfessionDatabase>().GetCountOfProfessionsList(); i++)
         {
             if (GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).title == charactersJob)
@@ -317,11 +300,7 @@ public class ActiveCharacterController : MonoBehaviour
                 //Size
                 int sizeRandom = Random.Range(0, 4);
                 character.items += Mathf.CeilToInt(2 * (float)GameMaster.gameMaster.GetComponent<ProfessionDatabase>().FetchProfessionByID(i).itemsMod + sizeRandom);
-
-
             }
         }
-
-
     }
 }

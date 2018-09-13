@@ -49,6 +49,8 @@ public class ItemPopUp : MonoBehaviour
         currentSlot = slot;
         itemHolder = holder;
         currentLocation = location;
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.gameObject, item.Item.ID);
+        imageOfItem.GetComponent<Image>().sprite = item.Item.Sprite;
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
             ConsumableText(stats);

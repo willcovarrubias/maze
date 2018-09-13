@@ -254,11 +254,12 @@ public class VillageInventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Village Item Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt("Village Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Village Item Size" + i, weapon.Size);
+                PlayerPrefs.SetString("Village Item Slug" + i, weapon.Slug);
             }
             i++;
         }
         PlayerPrefs.SetInt("Village Item Count", i);
-        PlayerPrefs.Save();
+        GameMaster.gameMaster.PlayerPrefsSave();
     }
 
     public void LoadVillageInventory()
@@ -281,7 +282,8 @@ public class VillageInventoryManager : MonoBehaviour
                 int speed = PlayerPrefs.GetInt("Village Item Speed" + i);
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Village Item Size" + i);
-                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, "");
+                string slug = PlayerPrefs.GetString("Village Item Slug" + i);
+                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, slug);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -330,6 +332,8 @@ public class VillageInventoryManager : MonoBehaviour
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
         itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.village);
+        itemObject.GetComponentInChildren<Image>().sprite = item.Item.Sprite;
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;

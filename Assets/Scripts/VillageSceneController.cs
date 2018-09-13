@@ -14,6 +14,7 @@ public class VillageSceneController : MonoBehaviour
 
     private void Start()
     {
+        GameMaster.gameMaster.currentArea = Location.Area.village;
         villageScene = this;
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         inventoryUI = gameMaster.transform.Find("Canvas/InventoryPanel").gameObject;
@@ -21,6 +22,48 @@ public class VillageSceneController : MonoBehaviour
         labyrinthConfirmation.SetActive(false);
         barracksMenu.SetActive(false);
         currentMenu = Location.VillageMenu.mainMenu;
+        GameMaster.gameMaster.PlayerPrefsSave();
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonUp(0) && currentMenu == Location.VillageMenu.mainMenu)
+        {
+            CheckWhichObjectPressed();
+        }
+    }
+
+    void CheckWhichObjectPressed()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 20))
+        {
+            switch (hit.collider.name)
+            {
+                case "Maze":
+                    EnterLabyrinth();
+                    break;
+                case "Barracks":
+                    BarracksMenu();
+                    break;
+                case "Caravan":
+                    RecruitmentUIOpen();
+                    break;
+                case "Inventory":
+                    InventoryUIOpen();
+                    break;
+                case "Armor":
+                    BlacksmithMenu();
+                    break;
+                case "Weapon":
+                    WeaponsmithMenu();
+                    break;
+                case "Item":
+                    ItemShopMenu();
+                    break;
+            }
+        }
     }
 
     public void MainMenu()
@@ -61,17 +104,21 @@ public class VillageSceneController : MonoBehaviour
 
     public void EnterLabyrinthConfirmation()
     {
+        currentMenu = Location.VillageMenu.other;
         GetComponent<CraftingDatabase>().weaponsMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingDatabase>().consumablesMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingDatabase>().armorMenu.GetComponent<CraftingMenu>().DestroyMenu();
         GetComponent<CraftingPopUp>().DestroyUI();
         GetComponent<VillageInventoryManager>().DestroyPanel();
+        GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory("Temp");
+        PlayerPrefs.SetInt("Exit Maze", 1);
         GameMaster.gameMaster.roomCount = -1; //Resets the room counter each time the hero starts a new adventure.
         SceneManager.LoadScene("PathScene");
     }
 
     public void EnterLabyrinthCancel()
     {
+        currentMenu = Location.VillageMenu.mainMenu;
         labyrinthConfirmation.SetActive(false);
     }
 
@@ -113,14 +160,14 @@ public class VillageSceneController : MonoBehaviour
 
     public void BarracksMenu()//This'll pop up a menu that'll allow the player to upgrade the barracks but also select a character.
     {
+        currentMenu = Location.VillageMenu.other;
         gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
-        //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = 3;
         barracksMenu.SetActive(true);
     }
 
     public void BarracksMenuClose()
     {
-        //canvasForAllMenusInVillageScene.GetComponent<Canvas>().sortingOrder = -1;
+        currentMenu = Location.VillageMenu.mainMenu;
         barracksMenu.SetActive(false);
     }
 
@@ -144,6 +191,7 @@ public class VillageSceneController : MonoBehaviour
 
     public void RecruitmentUIOpen()
     {
+        currentMenu = Location.VillageMenu.other;
         if (!gameObject.GetComponent<WanderersRefreshTime>())
         {
             gameObject.AddComponent<WanderersRefreshTime>();
@@ -153,6 +201,7 @@ public class VillageSceneController : MonoBehaviour
 
     public void RecruitmentUIClose()
     {
+        currentMenu = Location.VillageMenu.mainMenu;
         if (gameObject.GetComponent<WanderersRefreshTime>())
         {
             Destroy(gameObject.GetComponent<WanderersRefreshTime>());
@@ -191,5 +240,10 @@ public class VillageSceneController : MonoBehaviour
     {
         currentMenu = Location.VillageMenu.mainMenu;
         upgradeMenu.SetActive(false);
+    }
+
+    public void ChangeCurrentMenu()
+    {
+        currentMenu = Location.VillageMenu.mainMenu;
     }
 }

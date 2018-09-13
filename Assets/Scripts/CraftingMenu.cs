@@ -30,15 +30,15 @@ public class CraftingMenu : MonoBehaviour
         items.Add(item);
         if (isWeapon)
         {
-            AddItemToSlots(item, item.Weapon.Title);
+            AddItemToSlots(item, item.Weapon.Title, true);
         }
         else
         {
-            AddItemToSlots(item, GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title);
+            AddItemToSlots(item, GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Title, false);
         }
     }
 
-    void AddItemToSlots(CraftableItem item, string itemName)
+    void AddItemToSlots(CraftableItem item, string itemName, bool isWeapon)
     {
         GameObject itemObject = Instantiate(itemPrefab);
         AddDynamicSlot();
@@ -51,6 +51,16 @@ public class CraftingMenu : MonoBehaviour
         itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
         itemObject.GetComponent<Text>().text = itemName;
+        if (isWeapon)
+        {
+            itemObject.GetComponentInChildren<Image>().sprite = item.Weapon.Sprite;
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, 10000);
+        }
+        else
+        {
+            itemObject.GetComponentInChildren<Image>().sprite = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Sprite;
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.CraftedItemID);
+        }
         ResizeSlotPanel();
     }
 
@@ -91,6 +101,7 @@ public class CraftingMenu : MonoBehaviour
     public void CloseUI()
     {
         gameObject.SetActive(false);
+        VillageSceneController.villageScene.GetComponent<VillageSceneController>().ChangeCurrentMenu();
     }
 
     public void DestroyMenu()
