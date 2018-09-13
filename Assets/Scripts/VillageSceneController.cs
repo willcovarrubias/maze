@@ -241,4 +241,9 @@ public class VillageSceneController : MonoBehaviour
         currentMenu = Location.VillageMenu.mainMenu;
         upgradeMenu.SetActive(false);
     }
+
+    public void ChangeCurrentMenu()
+    {
+        currentMenu = Location.VillageMenu.mainMenu;
+    }
 }

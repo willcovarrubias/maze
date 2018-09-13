@@ -101,6 +101,7 @@ public class CraftingMenu : MonoBehaviour
     public void CloseUI()
     {
         gameObject.SetActive(false);
+        VillageSceneController.villageScene.GetComponent<VillageSceneController>().ChangeCurrentMenu();
     }
 
     public void DestroyMenu()

@@ -1202,7 +1202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.7529412}
-  m_EffectDistance: {x: -5, y: 5}
+  m_EffectDistance: {x: -4, y: 4}
   m_UseGraphicAlpha: 1
 --- !u!114 &114059721918932146
 MonoBehaviour:
@@ -3233,7 +3233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.7529412}
-  m_EffectDistance: {x: -5, y: 5}
+  m_EffectDistance: {x: -4, y: 4}
   m_UseGraphicAlpha: 1
 --- !u!114 &114773654493405394
 MonoBehaviour:
@@ -3585,7 +3585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.7529412}
-  m_EffectDistance: {x: -5, y: 5}
+  m_EffectDistance: {x: -4, y: 4}
   m_UseGraphicAlpha: 1
 --- !u!114 &114924976069006748
 MonoBehaviour:
