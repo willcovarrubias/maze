@@ -92,9 +92,9 @@ public class GemsInventory : MonoBehaviour
         if (slotId == selectedGem)
         {
             gem = null;
-            if (slots[selectedGem].transform.GetChild(0).transform.childCount > 0 && selectedGem >= 0)
+            if (slots[selectedGem].transform.GetChild(0).transform.Find("Equipped") && selectedGem >= 0)
             {
-                Destroy(slots[selectedGem].transform.GetChild(0).transform.GetChild(0).gameObject);
+                Destroy(slots[selectedGem].transform.GetChild(0).transform.Find("Equipped").gameObject);
             }
             selectedGem = -1;
         }
@@ -103,7 +103,8 @@ public class GemsInventory : MonoBehaviour
             selectedGem = slotId;
             gem = (Gem)item;
             GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, slots[slotId].transform.GetChild(0).transform, false);
-            equippedSprite.transform.localPosition = new Vector3(200, 0, 0);
+            equippedSprite.transform.localPosition = new Vector3(-235, 0, 0);
+            equippedSprite.name = "Equipped";
         }
         GetComponent<CraftingPopUp>().ChangeGem(gem);
     }

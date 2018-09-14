@@ -11,7 +11,7 @@ public class ItemPopUp : MonoBehaviour
     GameObject gameMaster;
     GameObject itemHolder;
     int currentSlot;
-    GameObject imageOfItem, nameOfItem, statsOfItem;
+    GameObject imageOfItem, nameOfItem, statsOfItem, valueOfItem;
     GameObject popUp, action, discard1, discardAll, move1, moveAll, exit;
     Location.WhereAmI currentLocation;
 
@@ -22,6 +22,7 @@ public class ItemPopUp : MonoBehaviour
         imageOfItem = transform.Find("Canvas/ItemPopUp/Background/SpriteHolder/Image").gameObject;
         nameOfItem = transform.Find("Canvas/ItemPopUp/Background/Name").gameObject;
         statsOfItem = transform.Find("Canvas/ItemPopUp/Background/StatsHolder/Stats").gameObject;
+        valueOfItem = transform.Find("Canvas/ItemPopUp/Background/StatsHolder/Value").gameObject;
         action = popUp.transform.Find("Background/Action").gameObject;
         discard1 = popUp.transform.Find("Background/ThrowAway1").gameObject;
         discardAll = popUp.transform.Find("Background/ThrowAwayAll").gameObject;
@@ -45,6 +46,7 @@ public class ItemPopUp : MonoBehaviour
     public void ShowItemPopUp(Inventory i, int slot, GameObject holder, Location.WhereAmI location)
     {
         string stats = "";
+        string value = "";
         item = i;
         currentSlot = slot;
         itemHolder = holder;
@@ -53,59 +55,68 @@ public class ItemPopUp : MonoBehaviour
         imageOfItem.GetComponent<Image>().sprite = item.Item.Sprite;
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
-            ConsumableText(stats);
+            ConsumableText(stats, value);
         }
         else if (item.Item.ID >= 2000 && item.Item.ID < 3000)
         {
-            GemText(stats);
+            GemText(stats, value);
         }
         else if (item.Item.ID >= 3000 && item.Item.ID < 4000)
         {
-            MaterialText(stats);
+            MaterialText(stats, value);
         }
         else if (item.Item.ID >= 4000 && item.Item.ID < 5000)
         {
-            ArmorText(stats);
+            ArmorText(stats, value);
         }
         else if (item.Item.ID >= 10000)
         {
-            WeaponText(stats);
+            WeaponText(stats, value);
         }
         UpdateButtons(i);
         popUp.SetActive(true);
     }
 
-    void ConsumableText(string stats)
+    void ConsumableText(string stats, string value)
     {
         Consumable consumable = (Consumable)item.Item;
         UpdateCount();
-        stats += "Consumable\nHP " + (consumable.Healing > 0 ? "+" : "") + consumable.Healing +
-                 "\nMP " + (consumable.MP > 0 ? "+" : "") + consumable.MP + "\nWgt " + item.Item.Size;
+        stats += "Type\nHP\nMP\nWeight";
+        value += "Consumable\n" + (consumable.Healing > 0 ? "+" : "") + consumable.Healing +
+            "\n" + (consumable.MP > 0 ? "+" : "") + consumable.MP +
+            "\n" + item.Item.Size;
         statsOfItem.GetComponent<Text>().text = stats;
+        valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(true);
         action.GetComponentInChildren<Text>().text = "Consume";
     }
 
-    void GemText(string stats)
+    void GemText(string stats, string value)
     {
         Gem gem = (Gem)item.Item;
         UpdateCount();
-        stats += "Gem\nAtk " + (gem.Attack > 0 ? "+" : "") + gem.Attack + "\nSpec " + (gem.Special > 0 ? "+" : "") + gem.Special +
-                 "\nSpd " + (gem.Speed > 0 ? "+" : "") + gem.Speed + "\nDu " + (gem.Durability > 0 ? "+" : "") + gem.Durability +
-                 "\nWgt " + item.Item.Size;
+        stats += "Type\nAttack\nSpecial\nSpeed\nDuribility\nWeight";
+        value += "Gem\n" + (gem.Attack > 0 ? "+" : "") + gem.Attack +
+            "\n" + (gem.Special > 0 ? "+" : "") + gem.Special +
+            "\n" + (gem.Speed > 0 ? "+" : "") + gem.Speed +
+            "\n" + (gem.Durability > 0 ? "+" : "") + gem.Durability +
+            "\n" + item.Item.Size;
         statsOfItem.GetComponent<Text>().text = stats;
+        valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(false);
     }
 
-    void MaterialText(string stats)
+    void MaterialText(string stats, string value)
     {
         UpdateCount();
-        stats += "Material" + "\nWgt " + item.Item.Size;
+        stats += "Type\nWeight";
+        value += "Material\n" + item.Item.Size;
         statsOfItem.GetComponent<Text>().text = stats;
+        valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(false);
     }
 
-    void ArmorText(string stats)
+    void ArmorText(string stats, string value)
     {
         Armor armor = (Armor)item.Item;
         if (armor.Appendage == "head")
@@ -131,12 +142,17 @@ public class ItemPopUp : MonoBehaviour
             }
         }
         UpdateCount();
-        stats += "Armor\nDef " + armor.Defense + "\nSpd " + armor.Speed + "\nApp " + armor.Appendage + "\nWgt " + item.Item.Size;
+        stats += "Type\nApendage\nDefense\nSpeed\nWeight";
+        value += "Armor\n" + armor.Appendage +
+            "\n" + (armor.Defense > 0 ? "+" : "") + armor.Defense +
+            "\n" + (armor.Speed > 0 ? "+" : "") + armor.Speed +
+            "\n" + item.Item.Size;
         statsOfItem.GetComponent<Text>().text = stats;
+        valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(true);
     }
 
-    void WeaponText(string stats)
+    void WeaponText(string stats, string value)
     {
         Weapons weap = (Weapons)item.Item;
         if (GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
@@ -148,9 +164,14 @@ public class ItemPopUp : MonoBehaviour
             action.GetComponentInChildren<Text>().text = "Unequip";
         }
         UpdateCount();
-        stats += "Weapon\nAt " + weap.Attack + "\nSpec " + weap.Special + "\nSpd " + weap.Speed + "\nDu " + weap.Durability +
-                  "\nWgt " + item.Item.Size;
+        stats += "Type\nAttack\nSpecial\nSpeed\nDuribilty\nWeight";
+        value += "Weapon\n" + (weap.Attack > 0 ? "+" : "") + weap.Attack +
+            "\n" + (weap.Special > 0 ? "+" : "") + weap.Special +
+            "\n" + (weap.Speed > 0 ? "+" : "") + weap.Speed +
+            "\n" + weap.Durability +
+            "\n" + item.Item.Size;
         statsOfItem.GetComponent<Text>().text = stats;
+        valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(true);
     }
 
