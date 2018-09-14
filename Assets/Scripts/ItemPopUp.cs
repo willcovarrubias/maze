@@ -19,9 +19,9 @@ public class ItemPopUp : MonoBehaviour
     {
         gameMaster = GameObject.FindGameObjectWithTag("GameController");
         popUp = transform.Find("Canvas/ItemPopUp").gameObject;
-        imageOfItem = transform.Find("Canvas/ItemPopUp/Background/Image").gameObject;
+        imageOfItem = transform.Find("Canvas/ItemPopUp/Background/SpriteHolder/Image").gameObject;
         nameOfItem = transform.Find("Canvas/ItemPopUp/Background/Name").gameObject;
-        statsOfItem = transform.Find("Canvas/ItemPopUp/Background/Stats").gameObject;
+        statsOfItem = transform.Find("Canvas/ItemPopUp/Background/StatsHolder/Stats").gameObject;
         action = popUp.transform.Find("Background/Action").gameObject;
         discard1 = popUp.transform.Find("Background/ThrowAway1").gameObject;
         discardAll = popUp.transform.Find("Background/ThrowAwayAll").gameObject;
@@ -49,7 +49,7 @@ public class ItemPopUp : MonoBehaviour
         currentSlot = slot;
         itemHolder = holder;
         currentLocation = location;
-        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.gameObject, item.Item.ID);
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.transform.parent.gameObject, item.Item.ID);
         imageOfItem.GetComponent<Image>().sprite = item.Item.Sprite;
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
