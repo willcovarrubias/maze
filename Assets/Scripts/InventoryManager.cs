@@ -736,14 +736,14 @@ public class InventoryManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "LootScene" || SceneManager.GetActiveScene().name == "VillageScene" || SceneManager.GetActiveScene().name == "FightScene")
         {
-            inventoryName.transform.position = new Vector3(originalPosition.x, inventoryName.transform.position.y, originalPosition.z);
-            inventoryText.transform.position = new Vector3(originalPosition.x, inventoryText.transform.position.y, originalPosition.z);
+            inventoryName.transform.parent.transform.position = new Vector3(originalPosition.x, inventoryName.transform.position.y, originalPosition.z);
+            inventoryText.transform.parent.transform.position = new Vector3(originalPosition.x, inventoryText.transform.position.y, originalPosition.z);
             scrollView.transform.position = new Vector3(originalPosition.x, originalPosition.y, originalPosition.z);
         }
         else
         {
-            inventoryName.transform.position = new Vector3(Screen.width / 2, inventoryName.transform.position.y, originalPosition.z);
-            inventoryText.transform.position = new Vector3(Screen.width / 2, inventoryText.transform.position.y, originalPosition.z);
+            inventoryName.transform.parent.transform.position = new Vector3(Screen.width / 2, inventoryName.transform.position.y, originalPosition.z);
+            inventoryText.transform.parent.transform.position = new Vector3(Screen.width / 2, inventoryText.transform.position.y, originalPosition.z);
             scrollView.transform.position = new Vector3(Screen.width / 2, originalPosition.y, originalPosition.z);
         }
     }
