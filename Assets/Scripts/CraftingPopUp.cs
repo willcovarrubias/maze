@@ -186,6 +186,7 @@ public class CraftingPopUp : MonoBehaviour
             weapon.Durability = tempDuribility + gem.Durability;
             weapon.Special = tempSpecial + gem.Special;
             craftedItem = weapon;
+            gemImage.GetComponent<Image>().sprite = newGem.Sprite;
             gemImage.SetActive(true);
         }
         else
