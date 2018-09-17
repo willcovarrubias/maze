@@ -16,9 +16,11 @@ public class GemsInventory : MonoBehaviour
     public ScrollRect scrollView;
     int selectedGem;
     Gem gem;
+    GameObject equippedGemSlot;
 
     public void InitalizeSlots()
     {
+        equippedGemSlot = null;
         selectedGem = -1;
         gem = null;
         ClearSlots();
@@ -72,7 +74,7 @@ public class GemsInventory : MonoBehaviour
     void ResizeSlotPanel()
     {
         slotPanelRectTransform.Translate(0, (slotAmount * -35), 0);
-        slotPanelRectTransform.sizeDelta = new Vector2(407.4f, (slotAmount * 70));
+        slotPanelRectTransform.sizeDelta = new Vector2(slotPanelRectTransform.sizeDelta.x, (slotAmount * 70));
     }
 
     public void ClearSlots()
@@ -91,23 +93,39 @@ public class GemsInventory : MonoBehaviour
 
     public void SelectGem(int slotId, Items item)
     {
-        if (slotId == selectedGem)
+        if (equippedGemSlot != null && slotId != selectedGem)
         {
-            gem = null;
-            if (slots[selectedGem].transform.GetChild(0).transform.Find("Equipped") && selectedGem >= 0)
-            {
-                Destroy(slots[selectedGem].transform.GetChild(0).transform.Find("Equipped").gameObject);
-            }
-            selectedGem = -1;
+            RemoveGem();
+            AddGem(slotId, item);
+        }
+        else if (equippedGemSlot != null && slotId == selectedGem)
+        {
+            RemoveGem();
         }
         else
         {
-            selectedGem = slotId;
-            gem = (Gem)item;
-            GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, slots[slotId].transform.GetChild(0).transform, false);
-            equippedSprite.transform.localPosition = new Vector3(-235, 0, 0);
-            equippedSprite.name = "Equipped";
+            AddGem(slotId, item);
         }
         GetComponent<CraftingPopUp>().ChangeGem(gem);
+    }
+
+    void RemoveGem()
+    {
+        gem = null;
+        if (equippedGemSlot.transform.Find("Equipped") && selectedGem >= 0)
+        {
+            Destroy(equippedGemSlot.transform.Find("Equipped").gameObject);
+        }
+        selectedGem = -1;
+    }
+
+    void AddGem(int slotId, Items item)
+    {
+        equippedGemSlot = slots[slotId].transform.GetChild(0).gameObject;
+        selectedGem = slotId;
+        gem = (Gem)item;
+        GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, equippedGemSlot.transform, false);
+        equippedSprite.transform.localPosition = new Vector3(-235, 0, 0);
+        equippedSprite.name = "Equipped";
     }
 }
