@@ -44,6 +44,21 @@
 		"duribility": 0,
 		"size": 2,
 		"slug": "00"
+	},
+	{
+		"id": 2003,
+		"title": "Speed Gem 1",
+		"addedTitle" : "Speed 1",
+		"rarity" : 
+		[
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+		],
+		"attack": 0,
+		"special": 0,
+		"speed": 2,
+		"duribility": 0,
+		"size": 2,
+		"slug": "00"
 	}
 ]
 	

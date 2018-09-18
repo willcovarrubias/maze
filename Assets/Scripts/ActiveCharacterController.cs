@@ -143,6 +143,7 @@ public class ActiveCharacterController : MonoBehaviour
                 "\n" + GetComponent<CharacterDatabase>().activeCharacter.lives;
             moreEquippedText.text = equippedText.text;
             activeHeroPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GetComponent<CharacterDatabase>().activeCharacter.slug);
+            activeHeroPortrait.preserveAspect = true;
             UpdateEXPBar();
         }
         GetComponent<InventoryManager>().ChangeMaxInventorySize(GetComponent<CharacterDatabase>().activeCharacter.items);

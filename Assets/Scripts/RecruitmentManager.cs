@@ -17,8 +17,9 @@ public class RecruitmentManager : MonoBehaviour
     public List<GameObject> characterObject = new List<GameObject>();
     public int characterSlotAmount;
     public List<GameObject> characterSlots = new List<GameObject>();
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText;
+    public Text nameText, statsText, statsValueText;
     public Image wandererPortrait;
+    public GameObject actionButton1, actionButton2;
     public GameObject caravanPopUPObject;
     public GameObject refreshTimeText;
 
@@ -146,7 +147,7 @@ public class RecruitmentManager : MonoBehaviour
             //Debug.Log("This is NOT null");
             characterObject[i].name = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name;
             characterObject[i].GetComponentInChildren<Text>().text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].name +
-                "\n: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
+                "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].job +
                 "\nHP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxHP +
                 "\nMP: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfWanderers[i].maxMP;
 
@@ -162,16 +163,22 @@ public class RecruitmentManager : MonoBehaviour
     public void PopulateCaravanPopUp(Character character)
     {
         nameText.text = character.name;
-        //levelText.text = "Lv. " + activeCharacterLevel.ToString();
-        jobText.text = character.job;
-        hpText.text = "HP: " + character.maxHP.ToString();
-        mpText.text = "MP: " + character.maxMP.ToString();
-        attackText.text = "Attack: " + character.attack.ToString();
-        specialText.text = "Special: " + character.special.ToString();
-        defenseText.text = "Defense: " + character.defense.ToString();
-        speedText.text = "Speed: " + character.speed;
-        luckText.text = "Luck: " + character.luck.ToString();
+        statsText.text = "<b>Stats</b>\nLevel\nJob\nHP\nMP\nAttack\nSpecial\nDefense\nSpeed\nLuck\nInventory\nLives";
+        statsValueText.text = "\n" + "INSERT LEVEL\n" + character.job +
+            "\n" + character.currentHP + "/" + character.maxHP +
+            "\n" + character.currentMP + "/" + character.maxMP +
+            "\n" + character.attack +
+            "\n" + character.special +
+            "\n" + character.defense +
+            "\n" + character.speed +
+            "\n" + character.luck +
+            "\n" + character.items +
+            "\n" + character.lives;
         wandererPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
+        actionButton1.GetComponentInChildren<Text>().text = "Recruit";
+        actionButton1.GetComponent<Button>().onClick.RemoveAllListeners();
+        actionButton1.GetComponent<Button>().onClick.AddListener(FinalizeRecruitment);
+        actionButton2.SetActive(false);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
     }
 
@@ -184,6 +191,7 @@ public class RecruitmentManager : MonoBehaviour
             Destroy(objectsToDestroyWhenWandererIsRecruited.transform.parent.gameObject);
             GameMaster.gameMaster.GetComponent<CharacterDatabase>().RecruitHero(currentlyClickedCharacter);
             CaravanAdvancedUIClose();
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Recruited " + currentlyClickedCharacter.name);
         }
         else
         {

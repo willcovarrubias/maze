@@ -20,7 +20,7 @@ public class RosterManager : MonoBehaviour
     public RectTransform slotPanelRectTransform;
     public GameObject barracksPopUp;
 
-    public GameObject message;
+    public GameObject message, amount;
     public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText, livesText;
     public Image characterPortrait;
 
@@ -75,6 +75,7 @@ public class RosterManager : MonoBehaviour
     {
         //This should update every time the roster is populated so that the newest size of the roster is reflected.
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
+        amount.GetComponent<Text>().text = "Availability: " + rosterSize + "/" + GetMaxRosterSize();
         if (rosterSize == 0)
         {
             message.GetComponent<Text>().text = "Barracks empty. Recruit wanderers from Caravan.";
@@ -91,9 +92,9 @@ public class RosterManager : MonoBehaviour
 
             characterObject[i].name = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name;
             characterObject[i].GetComponentInChildren<Text>().text = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].name +
-                                                            "\nLv. " + DetermineActiveCharacterCurrentLevel(GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].exp) +
-                                                            "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].job +
-                                                            "\nLives: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].lives + " (use sprites)";
+                "\n" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].job +
+                "\nLvl: " + DetermineActiveCharacterCurrentLevel(GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].exp) +
+                "\nLives: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].lives;
             characterObject[i].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes[i].slug);
         }
     }
@@ -111,6 +112,7 @@ public class RosterManager : MonoBehaviour
     public void SetActiveCharacter()
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().ChangeActiveCharacter(currentlyClickedCharacter.id);
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(currentlyClickedCharacter.name + " is now active");
         RosterAdvancedUIClose();
     }
 
@@ -118,6 +120,7 @@ public class RosterManager : MonoBehaviour
     {
         RemoveACharacterSlotInBarracksUIByID(currentSlotId);
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().DeleteHero(currentlyClickedCharacter);
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox("Dismissed " + currentlyClickedCharacter.name);
         RosterAdvancedUIClose();
     }
 
@@ -147,6 +150,12 @@ public class RosterManager : MonoBehaviour
 
     private void GenerateHeroSlotsBasedOnStartupRosterSize()
     {
+        for (int i = 0; i < characterSlots.Count; i++)
+        {
+            Destroy(characterSlots[i].gameObject);
+        }
+        characterSlots.Clear();
+        characterObject.Clear();
         for (int i = 0; i < rosterSize; i++)
         {
             GameObject slot = Instantiate(characterSlot);
@@ -225,6 +234,8 @@ public class RosterManager : MonoBehaviour
         characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
         characterObject.Add(characterObj);
 
+        GenerateHeroSlotsBasedOnStartupRosterSize();
+        PopulateCurrentRoster();
         ResizeSlotPanelUI();
     }
 
@@ -232,7 +243,7 @@ public class RosterManager : MonoBehaviour
     {
         //Sets the slot panel RectTransform's size dependent on how many slots there are. This allows for the scrolling logic to work.
         //TODO: Maybe figure out a way to not hard code these values below?
-        slotPanelRectTransform.Translate(0, (int)(Mathf.Ceil((float)characterSlotAmount / 2) * -250), 0);
-        slotPanelRectTransform.sizeDelta = new Vector2(590, (Mathf.Ceil((float)characterSlotAmount / 2) * 155));
+        //slotPanelRectTransform.Translate(0, (int)(Mathf.Ceil((float)characterSlotAmount / 2) * -250), 0);
+        //slotPanelRectTransform.sizeDelta = new Vector2(slotPanelRectTransform.sizeDelta.x, (Mathf.Ceil((float)characterSlotAmount / 2) * slotPanelRectTransform.sizeDelta.y));
     }
 }
