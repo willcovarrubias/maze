@@ -125,7 +125,7 @@ public class GemsInventory : MonoBehaviour
         selectedGem = slotId;
         gem = (Gem)item;
         GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, equippedGemSlot.transform, false);
-        equippedSprite.transform.localPosition = new Vector3(-235, 0, 0);
+        equippedSprite.transform.localPosition = new Vector3(-237.5f, 0, 0);
         equippedSprite.name = "Equipped";
     }
 }

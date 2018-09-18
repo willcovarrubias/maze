@@ -181,18 +181,20 @@ public class ItemPopUp : MonoBehaviour
         discardAll.GetComponentInChildren<Text>().text = "Discard All";
         if (inventory.Count > 1)
         {
+            discard1.SetActive(true);
             discardAll.SetActive(true);
+            move1.SetActive(true);
+            moveAll.SetActive(true);
         }
         else
         {
             discardAll.SetActive(false);
+            moveAll.SetActive(false);
         }
         if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "VillageScene")
         {
             if (VillageSceneController.villageScene.currentMenu == Location.VillageMenu.inventory)
             {
-                move1.SetActive(true);
-                moveAll.SetActive(true);
                 move1.GetComponentInChildren<Text>().text = "Send to village";
                 moveAll.GetComponentInChildren<Text>().text = "Send all to village";
             }
@@ -204,16 +206,12 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.player && SceneManager.GetActiveScene().name == "LootScene")
         {
-            move1.SetActive(true);
-            moveAll.SetActive(true);
             move1.GetComponentInChildren<Text>().text = "Send to chest";
             moveAll.GetComponentInChildren<Text>().text = "Send all to chest";
         }
         else if (currentLocation == Location.WhereAmI.village || currentLocation == Location.WhereAmI.temp)
         {
             action.SetActive(false);
-            move1.SetActive(true);
-            moveAll.SetActive(true);
             move1.GetComponentInChildren<Text>().text = "Send to inventory";
             moveAll.GetComponentInChildren<Text>().text = "Send all to inventory";
         }
@@ -236,6 +234,7 @@ public class ItemPopUp : MonoBehaviour
             nameOfItem.GetComponent<Text>().text = item.Item.Title;
             itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
         }
+        UpdateButtons(item);
     }
 
     public void Close()
