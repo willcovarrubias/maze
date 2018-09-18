@@ -163,8 +163,10 @@ public class RecruitmentManager : MonoBehaviour
     public void PopulateCaravanPopUp(Character character)
     {
         nameText.text = character.name;
-        statsText.text = "<b>Stats</b>\nLevel\nJob\nHP\nMP\nAttack\nSpecial\nDefense\nSpeed\nLuck\nInventory\nLives";
-        statsValueText.text = "\n" + "INSERT LEVEL\n" + character.job +
+        statsText.text = "<b>Stats</b>\nLevel\nEXP\nJob\nHP\nMP\nAttack\nSpecial\nDefense\nSpeed\nLuck\nInventory\nLives";
+        statsValueText.text = "\n1" +
+            "\n" + character.exp +
+            "\n" + character.job +
             "\n" + character.currentHP + "/" + character.maxHP +
             "\n" + character.currentMP + "/" + character.maxMP +
             "\n" + character.attack +

@@ -49,7 +49,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (!transform.Find("Equipped"))
         {
             GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, transform, false);
-            equippedSprite.transform.localPosition = new Vector3(-235, 0, 0);
+            equippedSprite.transform.localPosition = new Vector3(-237.5f, 0, 0);
             equippedSprite.name = "Equipped";
         }
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();

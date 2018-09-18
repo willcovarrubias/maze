@@ -21,8 +21,9 @@ public class RosterManager : MonoBehaviour
     public GameObject barracksPopUp;
 
     public GameObject message, amount;
-    public Text nameText, levelText, jobText, hpText, mpText, attackText, specialText, defenseText, speedText, luckText, expText, inventorySizeText, livesText;
+    public Text nameText, statsText, statsValueText;
     public Image characterPortrait;
+    public GameObject actionButton1, actionButton2;
 
     //Building UI Stuff
     int currentSlotId;
@@ -60,16 +61,6 @@ public class RosterManager : MonoBehaviour
                 return 0;
         }
     }
-
-    /*
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("List of heros count: " + GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count);
-        }
-    }
-    */
 
     public void PopulateCurrentRoster()
     {
@@ -133,18 +124,24 @@ public class RosterManager : MonoBehaviour
     {
         currentSlotId = slotID;
         nameText.text = character.name;
-        levelText.text = "Lv. " + DetermineActiveCharacterCurrentLevel(character.exp);
-        jobText.text = character.job;
-        hpText.text = "HP: " + character.currentHP + " / " + character.maxHP;
-        mpText.text = "MP: " + character.currentMP + " / " + character.maxMP;
-        inventorySizeText.text = "Carry Amount: " + character.items;
-        attackText.text = "Attack: " + character.attack.ToString();
-        specialText.text = "Special: " + character.special.ToString();
-        defenseText.text = "Defense: " + character.defense.ToString();
-        speedText.text = "Speed: " + character.speed;
-        luckText.text = "Luck: " + character.luck.ToString();
-        livesText.text = "Lives: " + character.lives;
+        statsText.text = "<b>Stats</b>\nLevel\nEXP\nJob\nHP\nMP\nAttack\nSpecial\nDefense\nSpeed\nLuck\nInventory\nLives";
+        statsValueText.text = "\n" + DetermineActiveCharacterCurrentLevel(character.exp) +
+            "\n" + character.exp +
+            "\n " + character.job +
+            "\n" + character.currentHP + "/" + character.maxHP +
+            "\n" + character.currentMP + "/" + character.maxMP +
+            "\n" + character.attack +
+            "\n" + character.special +
+            "\n" + character.defense +
+            "\n" + character.speed +
+            "\n" + character.luck +
+            "\n" + character.items +
+            "\n" + character.lives;
         characterPortrait.sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + character.slug);
+        actionButton1.GetComponentInChildren<Text>().text = "Set Active";
+        actionButton1.GetComponent<Button>().onClick.RemoveAllListeners();
+        actionButton1.GetComponent<Button>().onClick.AddListener(SetActiveCharacter);
+        actionButton2.SetActive(true);
         //expText.text = "XP: " + (GameMaster.gameMaster.GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[activeCharacterLevel - 1]) + "/" + (float)(expLevels[activeCharacterLevel] - expLevels[activeCharacterLevel - 1]);
     }
 
@@ -218,9 +215,10 @@ public class RosterManager : MonoBehaviour
         {
             message.GetComponent<Text>().text = "";
         }
+        amount.GetComponent<Text>().text = "Availability: " + characterSlots.Count + "/" + GetMaxRosterSize();
     }
 
-    public void AddACharacterSlotInBarracksUI()
+    public void AddACharacterSlotInBarracksUI(Character newHero)
     {
         GameObject slot = Instantiate(characterSlot);
         slot.transform.transform.SetParent(characterSlotPanel.transform, false);
@@ -232,11 +230,21 @@ public class RosterManager : MonoBehaviour
         characterObj.transform.SetParent(slot.transform, false);
         characterObj.transform.localPosition = Vector2.zero;
         characterObj.GetComponent<CharacterData>().characterIsAlreadyRecruited = true;
+        characterObj.GetComponent<CharacterData>().character = newHero;
+        characterObj.GetComponent<CharacterData>().thisObjectsID = newHero.id;
+        characterObj.name = newHero.name;
+        characterObj.GetComponentInChildren<Text>().text = newHero.name +
+            "\n" + newHero.job +
+            "\nLvl: " + DetermineActiveCharacterCurrentLevel(newHero.exp) +
+            "\nLives: " + newHero.lives;
+        characterObj.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Art/CharacterSprites/" + newHero.slug);
         characterObject.Add(characterObj);
 
-        GenerateHeroSlotsBasedOnStartupRosterSize();
-        PopulateCurrentRoster();
+        //GenerateHeroSlotsBasedOnStartupRosterSize();
+        //PopulateCurrentRoster();
         ResizeSlotPanelUI();
+        rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
+        amount.GetComponent<Text>().text = "Availability: " + rosterSize + "/" + GetMaxRosterSize();
     }
 
     void ResizeSlotPanelUI()
