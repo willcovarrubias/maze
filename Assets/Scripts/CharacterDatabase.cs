@@ -130,7 +130,7 @@ public class CharacterDatabase : MonoBehaviour
         DeleteWanderer(characterToRecruit);
 
         //SaveNewHero(characterToRecruit, slotNumber);
-        villageManager.GetComponent<RosterManager>().AddACharacterSlotInBarracksUI();
+        villageManager.GetComponent<RosterManager>().AddACharacterSlotInBarracksUI(characterToRecruit);
         GameMaster.gameMaster.Save();
         Debug.Log("Recruited: " + characterToRecruit.name);
     }
