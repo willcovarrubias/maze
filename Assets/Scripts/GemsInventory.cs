@@ -49,7 +49,7 @@ public class GemsInventory : MonoBehaviour
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
         itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.gems);
-        itemObject.GetComponentInChildren<Image>().sprite = item.Item.Sprite;
+        itemObject.transform.Find("Image/Image").GetComponent<Image>().sprite = item.Item.Sprite;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (item.Count == 1)
         {

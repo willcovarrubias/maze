@@ -516,7 +516,7 @@ public class InventoryManager : MonoBehaviour
         itemObject.GetComponentInChildren<ItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<ItemData>().SetItem(item);
         itemObject.GetComponentInChildren<ItemData>().SetLocation(Location.WhereAmI.player);
-        itemObject.GetComponentInChildren<Image>().sprite = item.Item.Sprite;
+        itemObject.transform.Find("Image/Image").GetComponent<Image>().sprite = item.Item.Sprite;
         ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
