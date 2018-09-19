@@ -338,7 +338,7 @@ public class VillageInventoryManager : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
-            itemObject.GetComponent<Text>().text = item.Item.Title;
+            itemObject.GetComponentInChildren<Text>().text = item.Item.Title;
             if (IsWeapon(item.Item.ID))
             {
                 GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Item);
@@ -346,7 +346,7 @@ public class VillageInventoryManager : MonoBehaviour
         }
         else
         {
-            itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
+            itemObject.GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
         }
 
         ResizeSlotPanel();

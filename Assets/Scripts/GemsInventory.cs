@@ -53,11 +53,11 @@ public class GemsInventory : MonoBehaviour
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (item.Count == 1)
         {
-            itemObject.GetComponent<Text>().text = item.Item.Title;
+            itemObject.GetComponentInChildren<Text>().text = item.Item.Title;
         }
         else
         {
-            itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
+            itemObject.GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
         }
         ResizeSlotPanel();
     }
@@ -125,7 +125,7 @@ public class GemsInventory : MonoBehaviour
         selectedGem = slotId;
         gem = (Gem)item;
         GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, equippedGemSlot.transform, false);
-        equippedSprite.transform.localPosition = new Vector3(-237.5f, 0, 0);
+        equippedSprite.transform.localPosition = new Vector3(-129, 0, 0);
         equippedSprite.name = "Equipped";
     }
 }

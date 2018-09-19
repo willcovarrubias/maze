@@ -524,7 +524,7 @@ public class InventoryManager : MonoBehaviour
         ChangeSlotColor(itemObject.transform.parent.gameObject, item.Item.ID);
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
-            itemObject.GetComponent<Text>().text = item.Item.Title;
+            itemObject.GetComponentInChildren<Text>().text = item.Item.Title;
             if (IsWeapon(item.Item.ID))
             {
                 ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Item);
@@ -532,7 +532,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            itemObject.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
+            itemObject.GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
         }
         ResizeSlotPanel();
     }
@@ -568,6 +568,30 @@ public class InventoryManager : MonoBehaviour
         if (weapon.MaterialID == 7000)
         {
             image.GetComponent<Image>().color = new Color(0.75f, 0.5f, 0.25f);
+        }
+        else if (weapon.MaterialID == 7001)
+        {
+            image.GetComponent<Image>().color = new Color(0.5f, 0.35f, 0.3f);
+        }
+        else if (weapon.MaterialID == 7002)
+        {
+            image.GetComponent<Image>().color = new Color(1, 0.5f, 0.25f);
+        }
+        else if (weapon.MaterialID == 7003)
+        {
+            image.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+        }
+        else if (weapon.MaterialID == 7004)
+        {
+            image.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
+        }
+        else if (weapon.MaterialID == 7005)
+        {
+            image.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f);
+        }
+        else if (weapon.MaterialID == 7006)
+        {
+            image.GetComponent<Image>().color = new Color(0.25f, 0.75f, 1);
         }
     }
 

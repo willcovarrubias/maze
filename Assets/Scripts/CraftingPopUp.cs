@@ -43,6 +43,7 @@ public class CraftingPopUp : MonoBehaviour
         {
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.transform.parent.gameObject, item.CraftedItemID);
             craftedItem = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID);
+            imageOfItem.GetComponent<Image>().color = Color.white;
         }
         else
         {
@@ -56,6 +57,7 @@ public class CraftingPopUp : MonoBehaviour
             tempSpecial = weapon.Special;
             tempDuribility = weapon.Durability;
             tempMaterial = weapon.MaterialID;
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(imageOfItem, weapon);
         }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
         imageOfItem.GetComponent<Image>().sprite = craftedItem.Sprite;

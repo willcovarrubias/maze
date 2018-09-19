@@ -53,6 +53,7 @@ public class ItemPopUp : MonoBehaviour
         currentLocation = location;
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.transform.parent.gameObject, item.Item.ID);
         imageOfItem.GetComponent<Image>().sprite = item.Item.Sprite;
+        imageOfItem.GetComponent<Image>().color = Color.white;
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
             ConsumableText(stats, value);
@@ -173,6 +174,7 @@ public class ItemPopUp : MonoBehaviour
         statsOfItem.GetComponent<Text>().text = stats;
         valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(true);
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(imageOfItem, item.Item);
     }
 
     void UpdateButtons(Inventory inventory)
@@ -227,12 +229,12 @@ public class ItemPopUp : MonoBehaviour
         if (item.Count > 1)
         {
             nameOfItem.GetComponent<Text>().text = item.Item.Title + " x" + item.Count;
-            itemHolder.GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+            itemHolder.GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
         }
         else
         {
             nameOfItem.GetComponent<Text>().text = item.Item.Title;
-            itemHolder.GetComponentInParent<Text>().text = item.Item.Title;
+            itemHolder.GetComponentInChildren<Text>().text = item.Item.Title;
         }
         UpdateButtons(item);
     }
