@@ -11,8 +11,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
      */
 
     public int id;
-    GameObject gameMaster;
-    GameObject villageSceneController;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -22,10 +20,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             if (droppedItem.GetComponent<ItemData>().GetCurrentLocation() == Location.WhereAmI.player &&
                 droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.player)
             {
-                if (gameMaster == null)
-                {
-                    gameMaster = GameObject.FindGameObjectWithTag("GameController");
-                }
                 Transform oldWeapon = this.transform.GetChild(0);
                 if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
                 {
@@ -35,8 +29,8 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                     GameMaster.gameMaster.GetComponent<InventoryManager>().SaveInventory("Player Item");
                 }
                 oldWeapon.GetComponent<ItemData>().slotID = droppedItem.slotID;
-                oldWeapon.transform.SetParent(gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform);
-                oldWeapon.transform.position = gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform.position;
+                oldWeapon.transform.SetParent(GameMaster.gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform);
+                oldWeapon.transform.position = GameMaster.gameMaster.GetComponent<InventoryManager>().slots[droppedItem.slotID].transform.position;
                 droppedItem.slotID = id;
                 droppedItem.transform.SetParent(this.transform);
                 droppedItem.transform.position = this.transform.position;
@@ -46,7 +40,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             else if (droppedItem.GetComponent<ItemData>().GetCurrentLocation() == Location.WhereAmI.village &&
                      droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.village)
             {
-                villageSceneController = GameObject.FindGameObjectWithTag("VillageSceneManager");
+                GameObject villageSceneController = VillageSceneController.villageScene.gameObject;
                 Transform oldWeapon = this.transform.GetChild(0);
                 if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
                 {
@@ -61,8 +55,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 droppedItem.slotID = id;
                 droppedItem.transform.SetParent(this.transform);
                 droppedItem.transform.position = this.transform.position;
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(oldWeapon.transform.parent.gameObject, oldWeapon.GetComponent<ItemData>().GetItem().Item.ID);
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(droppedItem.transform.parent.gameObject, droppedItem.GetComponent<ItemData>().GetItem().Item.ID);
+                if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(oldWeapon.transform.parent.gameObject, oldWeapon.GetComponent<ItemData>().GetItem().Item.ID);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(droppedItem.transform.parent.gameObject, droppedItem.GetComponent<ItemData>().GetItem().Item.ID);
+                }
             }
             else if (droppedItem.GetComponent<ItemData>().GetCurrentLocation() == Location.WhereAmI.temp &&
                      droppedItem.GetComponent<ItemData>().GetGoingToLocation() == Location.WhereAmI.temp)
@@ -81,8 +78,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 droppedItem.slotID = id;
                 droppedItem.transform.SetParent(this.transform);
                 droppedItem.transform.position = this.transform.position;
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(oldWeapon.transform.parent.gameObject, oldWeapon.GetComponent<ItemData>().GetItem().Item.ID);
-                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(droppedItem.transform.parent.gameObject, droppedItem.GetComponent<ItemData>().GetItem().Item.ID);
+                if (oldWeapon.GetComponent<ItemData>().GetItem() != null)
+                {
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(oldWeapon.transform.parent.gameObject, oldWeapon.GetComponent<ItemData>().GetItem().Item.ID);
+                    GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(droppedItem.transform.parent.gameObject, droppedItem.GetComponent<ItemData>().GetItem().Item.ID);
+                }
             }
         }
     }
