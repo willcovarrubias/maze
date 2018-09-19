@@ -56,6 +56,7 @@ public class CraftingPopUp : MonoBehaviour
             tempSpecial = weapon.Special;
             tempDuribility = weapon.Durability;
             tempMaterial = weapon.MaterialID;
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(imageOfItem, weapon);
         }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
         imageOfItem.GetComponent<Image>().sprite = craftedItem.Sprite;

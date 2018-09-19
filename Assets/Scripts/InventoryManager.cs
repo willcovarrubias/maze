@@ -569,6 +569,30 @@ public class InventoryManager : MonoBehaviour
         {
             image.GetComponent<Image>().color = new Color(0.75f, 0.5f, 0.25f);
         }
+        else if (weapon.MaterialID == 7001)
+        {
+            image.GetComponent<Image>().color = new Color(0.5f, 0.35f, 0.3f);
+        }
+        else if (weapon.MaterialID == 7002)
+        {
+            image.GetComponent<Image>().color = new Color(1, 0.5f, 0.25f);
+        }
+        else if (weapon.MaterialID == 7003)
+        {
+            image.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+        }
+        else if (weapon.MaterialID == 7004)
+        {
+            image.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
+        }
+        else if (weapon.MaterialID == 7005)
+        {
+            image.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f);
+        }
+        else if (weapon.MaterialID == 7006)
+        {
+            image.GetComponent<Image>().color = new Color(0.25f, 0.75f, 1);
+        }
     }
 
     public void ChangeSlotColor(GameObject slot, int id)
