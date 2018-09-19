@@ -8,7 +8,7 @@ public class ActiveCharacterController : MonoBehaviour
     public Text nameTextObject, statsValueText, equippedText;
 
     //UI stuff for MoreInfo Panel
-    public Text nameText, moreStatsText, moreEquippedText;
+    public Text nameText, moreStatsText, moreEquipped, moreEquippedText;
     public Image activeHeroPortrait;
     public GameObject activeCharacterMoreInfoPanel;
     public GameObject expBarMoreInfo;
@@ -122,13 +122,21 @@ public class ActiveCharacterController : MonoBehaviour
             equippedText.text += "\n";
             if (GetComponent<InventoryManager>().GetEquippedWeaponID() > 0)
             {
-                equippedText.text += GetComponent<InventoryManager>().GetEquippedWeapon().Title
-                    + " (" + GetComponent<InventoryManager>().GetEquippedWeapon().Durability + ")";
+                string text = GetComponent<InventoryManager>().GetEquippedWeapon().Title +
+                    " (" + GetComponent<InventoryManager>().GetEquippedWeapon().Durability + ")";
+                if (text.Length > 23)
+                {
+                    equippedText.text += "<size=" + (23- (text.Length - 23)) + ">" + text + "</size>";
+                }
+                else
+                {
+                    equippedText.text += text;
+                }
             }
 
             if (GetActiveCharacterCurrentLevel() < levelCap)
             {
-                nameText.text = nameTextObject.text + "\nEXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) + 
+                nameText.text = nameTextObject.text + "\nEXP " + (GetComponent<CharacterDatabase>().activeCharacter.exp - (float)expLevels[GetActiveCharacterCurrentLevel() - 1]) +
                     "/" + (float)(expLevels[GetActiveCharacterCurrentLevel()] - expLevels[GetActiveCharacterCurrentLevel() - 1]);
             }
             else
