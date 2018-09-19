@@ -43,6 +43,7 @@ public class CraftingPopUp : MonoBehaviour
         {
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.transform.parent.gameObject, item.CraftedItemID);
             craftedItem = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID);
+            imageOfItem.GetComponent<Image>().color = Color.white;
         }
         else
         {

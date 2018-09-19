@@ -50,7 +50,7 @@ public class CraftingMenu : MonoBehaviour
         itemObject.AddComponent<CraftableItemData>();
         itemObject.GetComponentInChildren<CraftableItemData>().slotID = slotAmount - 1;
         itemObject.GetComponentInChildren<CraftableItemData>().SetItem(item);
-        itemObject.GetComponent<Text>().text = itemName;
+        itemObject.GetComponentInChildren<Text>().text = itemName;
         if (isWeapon)
         {
             itemObject.transform.Find("Image/Image").GetComponent<Image>().sprite = item.Weapon.Sprite;

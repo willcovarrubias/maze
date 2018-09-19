@@ -49,7 +49,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (!transform.Find("Equipped"))
         {
             GameObject equippedSprite = Instantiate(GameMaster.gameMaster.GetComponent<InventoryManager>().equippedCheckMark, transform, false);
-            equippedSprite.transform.localPosition = new Vector3(-237.5f, 0, 0);
+            equippedSprite.transform.localPosition = new Vector3(-129, 0, 0);
             equippedSprite.name = "Equipped";
         }
         GameMaster.gameMaster.GetComponent<ActiveCharacterController>().UpdateActiveCharacterVisuals();
@@ -95,14 +95,14 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 }
                 if (item.Count > 3)
                 {
-                    temp.GetComponent<Text>().text = item.Item.Title + " x" + (item.Count - 1);
+                    temp.GetComponentInChildren<Text>().text = item.Item.Title + " x" + (item.Count - 1);
                 }
                 else
                 {
-                    temp.GetComponent<Text>().text = item.Item.Title;
+                    temp.GetComponentInChildren<Text>().text = item.Item.Title;
                 }
             }
-            GetComponent<Text>().text = item.Item.Title;
+            GetComponentInChildren<Text>().text = item.Item.Title;
             offsetToReturnItem = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent.parent.parent.parent);
             this.transform.position = eventData.position - offsetToReturnItem;
@@ -283,11 +283,11 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if (item.Count == 1)
         {
-            GetComponentInParent<Text>().text = item.Item.Title;
+            GetComponentInChildren<Text>().text = item.Item.Title;
         }
         else if (item.Count > 0)
         {
-            GetComponentInParent<Text>().text = item.Item.Title + " x" + item.Count;
+            GetComponentInChildren<Text>().text = item.Item.Title + " x" + item.Count;
         }
         else
         {
