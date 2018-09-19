@@ -124,6 +124,7 @@ public class CraftingDatabase : MonoBehaviour
                 item.Weapon.Size = weapon.Size;
                 item.Weapon.Sprite = weapon.Sprite;
                 item.Weapon.Slug = weapon.Slug;
+                item.Weapon.MaterialID = weapon.MaterialID;
                 item.Level = (int)weaponsCraftingData[i]["level"];
                 for (int j = 0; j < weaponsCraftingData[i]["materials"].Count; j++)
                 {

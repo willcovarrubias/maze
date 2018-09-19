@@ -55,6 +55,7 @@ public class CraftingMenu : MonoBehaviour
         {
             itemObject.transform.Find("Image/Image").GetComponent<Image>().sprite = item.Weapon.Sprite;
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, 10000);
+            GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Weapon);
         }
         else
         {

@@ -9,7 +9,7 @@ public class CraftingPopUp : MonoBehaviour
     public GameObject craftButton, exitButton, gemButton;
     Items craftedItem;
     string tempItemName;
-    int tempAttack, tempSpecial, tempSpeed, tempDuribility;
+    int tempAttack, tempSpecial, tempSpeed, tempDuribility, tempMaterial;
     Gem gem;
 
     void Start()
@@ -55,6 +55,7 @@ public class CraftingPopUp : MonoBehaviour
             tempSpeed = weapon.Speed;
             tempSpecial = weapon.Special;
             tempDuribility = weapon.Durability;
+            tempMaterial = weapon.MaterialID;
         }
         nameOfItem.GetComponent<Text>().text = craftedItem.Title;
         imageOfItem.GetComponent<Image>().sprite = craftedItem.Sprite;
@@ -185,6 +186,7 @@ public class CraftingPopUp : MonoBehaviour
             weapon.Speed = tempSpeed + gem.Speed;
             weapon.Durability = tempDuribility + gem.Durability;
             weapon.Special = tempSpecial + gem.Special;
+            weapon.MaterialID = tempMaterial;
             craftedItem = weapon;
             gemImage.GetComponent<Image>().sprite = newGem.Sprite;
             gemImage.SetActive(true);
@@ -203,6 +205,7 @@ public class CraftingPopUp : MonoBehaviour
             weapon.Speed = tempSpeed;
             weapon.Durability = tempDuribility;
             weapon.Special = tempSpecial;
+            weapon.MaterialID = tempMaterial;
             craftedItem = weapon;
             gemImage.SetActive(false);
         }
@@ -222,6 +225,7 @@ public class CraftingPopUp : MonoBehaviour
         weapon.Sprite = tempItem.Sprite;
         weapon.Title = tempItem.Title;
         weapon.ID = item.ID;
+        weapon.MaterialID = tempItem.MaterialID;
         return weapon;
     }
 

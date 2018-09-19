@@ -211,6 +211,10 @@ public class DynamicInventory : MonoBehaviour
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
+            if (IsWeapon(item.Item.ID))
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Item);
+            }
         }
         else
         {

@@ -174,7 +174,7 @@ public class Weapons : Items
     public int TypeID { get; set; }
     public int MaterialID { get; set; }
 
-    public Weapons(int id, string title, int attack, int special, int speed, int durability, int size, string slug)
+    public Weapons(int id, string title, int attack, int special, int speed, int durability, int size, string slug, int materialID)
     {
         this.ID = id;
         this.Title = title;
@@ -184,6 +184,7 @@ public class Weapons : Items
         this.Durability = durability;
         this.Size = size;
         this.Slug = slug;
+        this.MaterialID = materialID;
         this.Sprite = Resources.Load<Sprite>("Sprites/Weapons/" + slug);
     }
 

@@ -307,6 +307,7 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt(item + " Speed" + i, weapon.Speed);
                 PlayerPrefs.SetInt(item + " Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt(item + " Size" + i, weapon.Size);
+                PlayerPrefs.SetInt(item + " Material" + i, weapon.MaterialID);
                 PlayerPrefs.SetString(item + " Slug" + i, weapon.Slug);
             }
             i++;
@@ -335,8 +336,9 @@ public class InventoryManager : MonoBehaviour
                 int speed = PlayerPrefs.GetInt(item + " Speed" + i);
                 int durability = PlayerPrefs.GetInt(item + " Duribility" + i);
                 int size = PlayerPrefs.GetInt(item + " Size" + i);
+                int materialID = PlayerPrefs.GetInt(item + " Material" + i);
                 string slug = PlayerPrefs.GetString(item + " Slug" + i);
-                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, slug);
+                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, slug, materialID);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -523,6 +525,10 @@ public class InventoryManager : MonoBehaviour
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
+            if (IsWeapon(item.Item.ID))
+            {
+                ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Item);
+            }
         }
         else
         {
@@ -554,6 +560,15 @@ public class InventoryManager : MonoBehaviour
         }
         Destroy(currentSlot);
         ResizeSlotPanel();
+    }
+
+    public void ChangeWeaponColor(GameObject image, Items item)
+    {
+        Weapons weapon = (Weapons)item;
+        if (weapon.MaterialID == 7000)
+        {
+            image.GetComponent<Image>().color = new Color(0.75f, 0.5f, 0.25f);
+        }
     }
 
     public void ChangeSlotColor(GameObject slot, int id)
