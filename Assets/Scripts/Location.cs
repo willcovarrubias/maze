@@ -8,5 +8,5 @@ public class Location : MonoBehaviour
 
     public enum VillageMenu { mainMenu, inventory, armor, weapons, pub, upgrade, other }
 
-    public enum Area { village, maze}
+    public enum Area { village, maze }
 }

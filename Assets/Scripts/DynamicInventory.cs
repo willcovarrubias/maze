@@ -14,6 +14,7 @@ public class DynamicInventory : MonoBehaviour
     GameObject slotPrefab;
     GameObject itemPrefab;
     GameObject inventoryPane;
+    GameObject inventoryName;
     RectTransform slotPanelRectTransform;
     public GameObject openButton;
     GameObject sendAllButton;
@@ -40,6 +41,7 @@ public class DynamicInventory : MonoBehaviour
         slotPanel = inventoryPane.transform.Find("SlotPanel").gameObject;
         sendAllButton = gameObject.transform.Find("SendAll").gameObject;
         sortButton = gameObject.transform.Find("Sort").gameObject;
+        inventoryName = gameObject.transform.Find("NameImage/Text").gameObject;
         slotPanelRectTransform = slotPanel.GetComponent<RectTransform>();
         Button open = button.GetComponent<Button>();
         open.onClick.AddListener(OpenUI);
@@ -48,6 +50,14 @@ public class DynamicInventory : MonoBehaviour
         Button sort = sortButton.GetComponent<Button>();
         sort.onClick.AddListener(SortInventory);
         InitalizeSlots(createdItems);
+        if (SceneManager.GetActiveScene().name == "LootScene")
+        {
+            inventoryName.GetComponent<Text>().text = "Chest";
+        }
+        else if (SceneManager.GetActiveScene().name == "FightScene")
+        {
+            inventoryName.GetComponent<Text>().text = button.GetComponent<EnemyHolder>().GetEnemyData().EnemyData.name;
+        }
     }
 
     public void MoveItemsToHere(Inventory item, int thisSlotId, int amount)
@@ -201,6 +211,10 @@ public class DynamicInventory : MonoBehaviour
         if (IsWeapon(item.Item.ID) || item.Count == 1)
         {
             itemObject.GetComponent<Text>().text = item.Item.Title;
+            if (IsWeapon(item.Item.ID))
+            {
+                GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Item);
+            }
         }
         else
         {

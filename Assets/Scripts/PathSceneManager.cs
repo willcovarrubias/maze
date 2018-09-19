@@ -8,7 +8,7 @@ public class PathSceneManager : MonoBehaviour
     public GameObject pathRoom2Doors, pathRoom3Doors, pathRoomEscape;
     public GameObject mainSubMenu;
 
-    private void Start()
+    void Start()
     {
         GameMaster.gameMaster.roomCount++;
         GameMaster.gameMaster.currentArea = Location.Area.maze;
@@ -23,7 +23,32 @@ public class PathSceneManager : MonoBehaviour
         }
     }
 
-    private void RandomizePathRoomType()
+    void Update()
+    {
+        if (Input.GetMouseButtonUp(0) && !GameMaster.gameMaster.GetComponent<InventoryManager>().inventoryOpened)
+        {
+            CheckWhichObjectPressed();
+        }
+    }
+
+
+    void CheckWhichObjectPressed()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 20))
+        {
+            Debug.Log(hit.collider.name);
+            switch (hit.collider.name)
+            {
+                case "Light":
+                    SelectPath();
+                    break;
+            }
+        }
+    }
+
+    void RandomizePathRoomType()
     {
         int roomType = Random.Range(0, 2);
         if (roomType == 0)

@@ -104,6 +104,7 @@ public class RosterManager : MonoBehaviour
     {
         GameMaster.gameMaster.GetComponent<CharacterDatabase>().ChangeActiveCharacter(currentlyClickedCharacter.id);
         GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(currentlyClickedCharacter.name + " is now active");
+        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeInventoryName();
         RosterAdvancedUIClose();
     }
 
@@ -245,6 +246,7 @@ public class RosterManager : MonoBehaviour
         ResizeSlotPanelUI();
         rosterSize = GameMaster.gameMaster.GetComponent<CharacterDatabase>().listOfHeroes.Count;
         amount.GetComponent<Text>().text = "Availability: " + rosterSize + "/" + GetMaxRosterSize();
+        message.GetComponent<Text>().text = "";
     }
 
     void ResizeSlotPanelUI()

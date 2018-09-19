@@ -170,18 +170,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 20
+    m_MaxSize: 28
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ARMOR CRAFTING
+  m_Text: Armor Smith
 --- !u!222 &5164168
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2572,11 +2572,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 20
+    m_MaxSize: 28
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -5501,18 +5501,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 20
+    m_MaxSize: 28
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONSUMABLES CRAFTING
+  m_Text: Item Shop
 --- !u!222 &871766183
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6404,18 +6404,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 20
+    m_MaxSize: 28
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: WEAPON CRAFTING
+  m_Text: Weapon Smith
 --- !u!222 &1009612845
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11223,45 +11223,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 114980353357672630, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224448672082144552, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.10998535
-      objectReference: {fileID: 0}
-    - target: {fileID: 224286692984639272, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.10998535
-      objectReference: {fileID: 0}
-    - target: {fileID: 224097097441150842, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.10998535
-      objectReference: {fileID: 0}
-    - target: {fileID: 224971314685283766, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.7000122
-      objectReference: {fileID: 0}
-    - target: {fileID: 224879571762613098, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.23501587
-      objectReference: {fileID: 0}
-    - target: {fileID: 224074298410275256, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 1.2000122
-      objectReference: {fileID: 0}
-    - target: {fileID: 224644237304051172, guid: 38ad271bcd792874493c3a4342348643,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.018432617
+    - target: {fileID: 1486915783470432, guid: 38ad271bcd792874493c3a4342348643, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 38ad271bcd792874493c3a4342348643, type: 2}
@@ -17194,7 +17158,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: GEMS FROM VILLAGE INVENTORY
+  m_Text: Gems From Village Inventory
 --- !u!222 &1942387511
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17362,18 +17326,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 20
+    m_MaxSize: 28
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: VILLAGE INVENTORY
+  m_Text: Village's Inventory
 --- !u!222 &1953198717
 CanvasRenderer:
   m_ObjectHideFlags: 0
