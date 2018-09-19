@@ -32,9 +32,11 @@ public class InventoryManager : MonoBehaviour
     GameObject villageInventory;
     int sorting;
     Vector3 originalPosition;
+    public bool inventoryOpened;
 
     void Start()
     {
+        ChangeInventoryName();
         maxInventorySize = GetComponent<ActiveCharacterController>().GetActiveCharacter().items;
         currentSize = 0;
         if (PlayerPrefs.GetInt("Exit Maze") == 0)
@@ -648,6 +650,7 @@ public class InventoryManager : MonoBehaviour
 
     public void OpenInventoryPanelUI()
     {
+        inventoryOpened = true;
         inventoryPanel.SetActive(true);
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
@@ -683,6 +686,7 @@ public class InventoryManager : MonoBehaviour
 
     public void CloseInventoryPanelUI()
     {
+        inventoryOpened = false;
         inventoryPanel.SetActive(false);
         currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
@@ -752,6 +756,11 @@ public class InventoryManager : MonoBehaviour
     {
         maxInventorySize = amount;
         UpdateInventoryText();
+    }
+
+    public void ChangeInventoryName()
+    {
+        inventoryName.GetComponent<Text>().text = GetComponent<ActiveCharacterController>().GetActiveCharacter().name + "'s Inventory";
     }
 
     void ShowEquippedOnStartUp()

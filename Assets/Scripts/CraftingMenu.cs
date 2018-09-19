@@ -53,12 +53,12 @@ public class CraftingMenu : MonoBehaviour
         itemObject.GetComponent<Text>().text = itemName;
         if (isWeapon)
         {
-            itemObject.GetComponentInChildren<Image>().sprite = item.Weapon.Sprite;
+            itemObject.transform.Find("Image/Image").GetComponent<Image>().sprite = item.Weapon.Sprite;
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, 10000);
         }
         else
         {
-            itemObject.GetComponentInChildren<Image>().sprite = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Sprite;
+            itemObject.transform.Find("Image/Image").GetComponent<Image>().sprite = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(item.CraftedItemID).Sprite;
             GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(itemObject.transform.parent.gameObject, item.CraftedItemID);
         }
         ResizeSlotPanel();
