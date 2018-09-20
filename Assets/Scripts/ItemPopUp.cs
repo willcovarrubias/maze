@@ -8,18 +8,17 @@ public class ItemPopUp : MonoBehaviour
 {
     Inventory item;
     Weapons weapon;
-    GameObject gameMaster;
     GameObject itemHolder;
     int currentSlot;
-    GameObject imageOfItem, nameOfItem, statsOfItem, valueOfItem;
+    GameObject imageOfItem, nameOfItem, statsOfItem, valueOfItem, gemImage;
     GameObject popUp, action, discard1, discardAll, move1, moveAll, exit;
     Location.WhereAmI currentLocation;
 
     void Start()
     {
-        gameMaster = GameObject.FindGameObjectWithTag("GameController");
         popUp = transform.Find("Canvas/ItemPopUp").gameObject;
         imageOfItem = transform.Find("Canvas/ItemPopUp/Background/SpriteHolder/Image").gameObject;
+        gemImage = imageOfItem.transform.Find("GemImage").gameObject;
         nameOfItem = transform.Find("Canvas/ItemPopUp/Background/Name").gameObject;
         statsOfItem = transform.Find("Canvas/ItemPopUp/Background/StatsHolder/Stats").gameObject;
         valueOfItem = transform.Find("Canvas/ItemPopUp/Background/StatsHolder/Value").gameObject;
@@ -51,9 +50,10 @@ public class ItemPopUp : MonoBehaviour
         currentSlot = slot;
         itemHolder = holder;
         currentLocation = location;
-        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.transform.parent.gameObject, item.Item.ID);
+        GetComponent<InventoryManager>().ChangeSlotColor(imageOfItem.transform.parent.transform.parent.gameObject, item.Item.ID);
         imageOfItem.GetComponent<Image>().sprite = item.Item.Sprite;
         imageOfItem.GetComponent<Image>().color = Color.white;
+        gemImage.SetActive(false);
         if (item.Item.ID >= 1000 && item.Item.ID < 2000)
         {
             ConsumableText(stats, value);
@@ -174,7 +174,12 @@ public class ItemPopUp : MonoBehaviour
         statsOfItem.GetComponent<Text>().text = stats;
         valueOfItem.GetComponent<Text>().text = value;
         action.SetActive(true);
-        GameMaster.gameMaster.GetComponent<InventoryManager>().ChangeWeaponColor(imageOfItem, item.Item);
+        if (weap.GemID != 0)
+        {
+            gemImage.SetActive(true);
+            gemImage.GetComponent<Image>().sprite = GetComponent<ItemDatabase>().FetchItemByID(weap.GemID).Sprite;
+        }
+        GetComponent<InventoryManager>().ChangeWeaponColor(imageOfItem, item.Item);
     }
 
     void UpdateButtons(Inventory inventory)
@@ -264,8 +269,8 @@ public class ItemPopUp : MonoBehaviour
     {
         string dialog = "";
         Consumable consumable = (Consumable)item.Item;
-        gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
-        gameMaster.GetComponent<ActiveCharacterController>().IncreaseHP(consumable.MP);
+        GetComponent<ActiveCharacterController>().IncreaseHP(consumable.Healing);
+        GetComponent<ActiveCharacterController>().IncreaseHP(consumable.MP);
         if (consumable.Healing > 0)
         {
             dialog += "Recovered " + consumable.Healing + " HP.";
@@ -282,7 +287,7 @@ public class ItemPopUp : MonoBehaviour
         {
             dialog += "Lost " + consumable.MP + " MP.";
         }
-        gameMaster.GetComponent<InventoryManager>().ChangeDialogBox(dialog);
+        GetComponent<InventoryManager>().ChangeDialogBox(dialog);
         ThrowAwayOne();
         CheckIfUsedItemDuringFight();
     }
@@ -292,24 +297,24 @@ public class ItemPopUp : MonoBehaviour
         Armor piece = (Armor)item.Item;
         if (piece.Appendage == "head")
         {
-            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
+            if (GetComponent<InventoryManager>().GetEquippedHatID() != item.Item.ID)
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedHat(item.Item);
+                GetComponent<InventoryManager>().SetEquippedHat(item.Item);
             }
             else
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipHat(item.Item);
+                GetComponent<InventoryManager>().UnequipHat(item.Item);
             }
         }
         else if (piece.Appendage == "chest")
         {
-            if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
+            if (GetComponent<InventoryManager>().GetEquippedBodyID() != item.Item.ID)
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedBody(item.Item);
+                GetComponent<InventoryManager>().SetEquippedBody(item.Item);
             }
             else
             {
-                GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipBody(item.Item);
+                GetComponent<InventoryManager>().UnequipBody(item.Item);
             }
         }
         CheckIfUsedItemDuringFight();
@@ -318,13 +323,13 @@ public class ItemPopUp : MonoBehaviour
 
     void WeaponAction()
     {
-        if (GameMaster.gameMaster.GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
+        if (GetComponent<InventoryManager>().GetEquippedWeaponID() != item.Item.ID)
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
+            GetComponent<InventoryManager>().SetEquippedWeapon(item.Item);
         }
         else
         {
-            GameMaster.gameMaster.GetComponent<InventoryManager>().UnequipWeapon(item.Item);
+            GetComponent<InventoryManager>().UnequipWeapon(item.Item);
         }
         CheckIfUsedItemDuringFight();
         Close();
@@ -334,7 +339,7 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            gameMaster.GetComponent<InventoryManager>().RemoveItemsFromInventory(item, 1, currentSlot);
+            GetComponent<InventoryManager>().RemoveItemsFromInventory(item, 1, currentSlot);
             if (item.Count > 0)
             {
                 UpdateCount();
@@ -377,7 +382,7 @@ public class ItemPopUp : MonoBehaviour
     {
         if (currentLocation == Location.WhereAmI.player)
         {
-            gameMaster.GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item, currentSlot);
+            GetComponent<InventoryManager>().RemoveWholeStackFromInventory(item, currentSlot);
             Destroy(itemHolder);
             Close();
         }
@@ -421,12 +426,12 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1, true, null);
+            bool movedAll = GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1, true, null);
             CloseOrUpdate(movedAll);
         }
         else if (currentLocation == Location.WhereAmI.temp)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
+            bool movedAll = GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, 1, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
             CloseOrUpdate(movedAll);
         }
     }
@@ -449,12 +454,12 @@ public class ItemPopUp : MonoBehaviour
         }
         else if (currentLocation == Location.WhereAmI.village)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, true, null);
+            bool movedAll = GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, true, null);
             CloseOrUpdate(movedAll);
         }
         else if (currentLocation == Location.WhereAmI.temp)
         {
-            bool movedAll = gameMaster.GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
+            bool movedAll = GetComponent<InventoryManager>().MoveItemsToPlayerInventory(item, currentSlot, item.Count, false, itemHolder.transform.parent.parent.parent.parent.gameObject);
             CloseOrUpdate(movedAll);
         }
     }
@@ -468,7 +473,7 @@ public class ItemPopUp : MonoBehaviour
             if (GameObject.Find("FightController").GetComponent<FightSceneController>().IsFighting())
             {
                 Close();
-                GameMaster.gameMaster.GetComponent<InventoryManager>().CloseInventoryPanelUI();
+                GetComponent<InventoryManager>().CloseInventoryPanelUI();
             }
         }
     }
@@ -487,7 +492,7 @@ public class ItemPopUp : MonoBehaviour
 
     GameObject GetActivePanel()
     {
-        GameObject panel = gameMaster.transform.GetChild(0).gameObject;
+        GameObject panel = transform.GetChild(0).gameObject;
         for (int i = 0; i < panel.transform.childCount; i++)
         {
             if (panel.transform.GetChild(i).gameObject.activeInHierarchy == true && panel.transform.GetChild(i).gameObject.name == "InventoryPanel(Clone)")

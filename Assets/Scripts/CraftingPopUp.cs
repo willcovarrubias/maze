@@ -126,7 +126,7 @@ public class CraftingPopUp : MonoBehaviour
                     VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().RemoveItemsFromVillageInventory(
                         VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[gem.ID],
                         1,
-                        VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[gem.ID].Count);
+                        VillageSceneController.villageScene.GetComponent<VillageInventoryManager>().villageItems[gem.ID].SlotNum);
                 }
                 if (craftedItem.ID >= 10000)
                 {
@@ -189,6 +189,7 @@ public class CraftingPopUp : MonoBehaviour
             weapon.Durability = tempDuribility + gem.Durability;
             weapon.Special = tempSpecial + gem.Special;
             weapon.MaterialID = tempMaterial;
+            weapon.GemID = gem.ID;
             craftedItem = weapon;
             gemImage.GetComponent<Image>().sprite = newGem.Sprite;
             gemImage.SetActive(true);
@@ -208,6 +209,7 @@ public class CraftingPopUp : MonoBehaviour
             weapon.Durability = tempDuribility;
             weapon.Special = tempSpecial;
             weapon.MaterialID = tempMaterial;
+            weapon.GemID = 0;
             craftedItem = weapon;
             gemImage.SetActive(false);
         }
@@ -228,6 +230,7 @@ public class CraftingPopUp : MonoBehaviour
         weapon.Title = tempItem.Title;
         weapon.ID = item.ID;
         weapon.MaterialID = tempItem.MaterialID;
+        weapon.GemID = tempItem.GemID;
         return weapon;
     }
 
