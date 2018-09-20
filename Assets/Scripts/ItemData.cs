@@ -93,7 +93,7 @@ public class ItemData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 {
                     Destroy(transform.Find("Equipped").gameObject);
                 }
-                if (item.Count > 3)
+                if (item.Count > 2)
                 {
                     temp.GetComponentInChildren<Text>().text = item.Item.Title + " x" + (item.Count - 1);
                 }
