@@ -255,6 +255,7 @@ public class VillageInventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt("Village Item Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt("Village Item Size" + i, weapon.Size);
                 PlayerPrefs.SetInt("Village Material" + i, weapon.MaterialID);
+                PlayerPrefs.SetInt("Village Gem" + i, weapon.GemID);
                 PlayerPrefs.SetString("Village Item Slug" + i, weapon.Slug);
             }
             i++;
@@ -284,8 +285,9 @@ public class VillageInventoryManager : MonoBehaviour
                 int duribility = PlayerPrefs.GetInt("Village Item Duribility" + i);
                 int size = PlayerPrefs.GetInt("Village Item Size" + i);
                 int materialID = PlayerPrefs.GetInt("Village Material" + i);
+                int gemID = PlayerPrefs.GetInt("Village Gem" + i);
                 string slug = PlayerPrefs.GetString("Village Item Slug" + i);
-                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, slug, materialID);
+                Weapons weapon = new Weapons(id, title, attack, special, speed, duribility, size, slug, materialID, gemID);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -441,4 +443,6 @@ public class Inventory
         this.Count = count;
         this.SlotNum = slot;
     }
+
+    public Inventory(){}
 }

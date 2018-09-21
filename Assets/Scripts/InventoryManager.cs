@@ -57,6 +57,26 @@ public class InventoryManager : MonoBehaviour
         ShowEquippedOnStartUp();
     }
 
+    /*
+     * Add any item you want here
+     */
+
+    /*
+    public void Update()
+    {
+        if (Input.GetKeyDown("z"))
+        {
+            Inventory inventory = new Inventory();
+            inventory.Item = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(3000);
+            inventory.Count = 10;
+            AddBoughtItem(inventory);
+            inventory.Item = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(2000);
+            inventory.Count = 5;
+            AddBoughtItem(inventory);
+        }
+    }
+    */
+
     public bool MoveItemsToPlayerInventory(Inventory items, int thisSlotId, int amount, bool fromVillage, GameObject panel)
     {
         bool movedAll = false;
@@ -308,6 +328,7 @@ public class InventoryManager : MonoBehaviour
                 PlayerPrefs.SetInt(item + " Duribility" + i, weapon.Durability);
                 PlayerPrefs.SetInt(item + " Size" + i, weapon.Size);
                 PlayerPrefs.SetInt(item + " Material" + i, weapon.MaterialID);
+                PlayerPrefs.SetInt(item + " Gem" + i, weapon.GemID);
                 PlayerPrefs.SetString(item + " Slug" + i, weapon.Slug);
             }
             i++;
@@ -337,8 +358,9 @@ public class InventoryManager : MonoBehaviour
                 int durability = PlayerPrefs.GetInt(item + " Duribility" + i);
                 int size = PlayerPrefs.GetInt(item + " Size" + i);
                 int materialID = PlayerPrefs.GetInt(item + " Material" + i);
+                int gemID = PlayerPrefs.GetInt(item + " Gem" + i);
                 string slug = PlayerPrefs.GetString(item + " Slug" + i);
-                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, slug, materialID);
+                Weapons weapon = new Weapons(id, title, attack, special, speed, durability, size, slug, materialID, gemID);
                 loadedItem = new Inventory(weapon, count, slotNum);
             }
             else
@@ -528,6 +550,7 @@ public class InventoryManager : MonoBehaviour
             if (IsWeapon(item.Item.ID))
             {
                 ChangeWeaponColor(itemObject.transform.Find("Image/Image").gameObject, item.Item);
+                AddGemToSlot(itemObject.transform.Find("Image/Image").gameObject, item.Item);
             }
         }
         else
@@ -565,33 +588,42 @@ public class InventoryManager : MonoBehaviour
     public void ChangeWeaponColor(GameObject image, Items item)
     {
         Weapons weapon = (Weapons)item;
-        if (weapon.MaterialID == 7000)
+        switch (weapon.MaterialID)
         {
-            image.GetComponent<Image>().color = new Color(0.75f, 0.5f, 0.25f);
+            case 7000:
+                image.GetComponent<Image>().color = new Color(0.75f, 0.5f, 0.25f);
+                break;
+            case 7001:
+                image.GetComponent<Image>().color = new Color(0.5f, 0.35f, 0.3f);
+                break;
+            case 7002:
+                image.GetComponent<Image>().color = new Color(1, 0.5f, 0.25f);
+                break;
+            case 7003:
+                image.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+                break;
+            case 7004:
+                image.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
+                break;
+            case 7005:
+                image.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f);
+                break;
+            case 7006:
+                image.GetComponent<Image>().color = new Color(0.25f, 0.75f, 1);
+                break;
         }
-        else if (weapon.MaterialID == 7001)
+    }
+
+    public void AddGemToSlot(GameObject image, Items item)
+    {
+        Weapons weapon = (Weapons)item;
+        if (weapon.GemID >= 2000)
         {
-            image.GetComponent<Image>().color = new Color(0.5f, 0.35f, 0.3f);
-        }
-        else if (weapon.MaterialID == 7002)
-        {
-            image.GetComponent<Image>().color = new Color(1, 0.5f, 0.25f);
-        }
-        else if (weapon.MaterialID == 7003)
-        {
-            image.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
-        }
-        else if (weapon.MaterialID == 7004)
-        {
-            image.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
-        }
-        else if (weapon.MaterialID == 7005)
-        {
-            image.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f);
-        }
-        else if (weapon.MaterialID == 7006)
-        {
-            image.GetComponent<Image>().color = new Color(0.25f, 0.75f, 1);
+            GameObject gemImage = Instantiate(equippedCheckMark, image.transform, false);
+            gemImage.GetComponent<Image>().sprite = GameMaster.gameMaster.GetComponent<ItemDatabase>().FetchItemByID(weapon.GemID).Sprite;
+            gemImage.transform.localPosition = new Vector3(4, -4, 0);
+            gemImage.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            gemImage.name = "Gem";
         }
     }
 

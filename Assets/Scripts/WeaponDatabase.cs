@@ -173,8 +173,9 @@ public class Weapons : Items
     public int Durability { get; set; }
     public int TypeID { get; set; }
     public int MaterialID { get; set; }
+    public int GemID { get; set; }
 
-    public Weapons(int id, string title, int attack, int special, int speed, int durability, int size, string slug, int materialID)
+    public Weapons(int id, string title, int attack, int special, int speed, int durability, int size, string slug, int materialID, int gemID)
     {
         this.ID = id;
         this.Title = title;
@@ -185,6 +186,7 @@ public class Weapons : Items
         this.Size = size;
         this.Slug = slug;
         this.MaterialID = materialID;
+        this.GemID = gemID;
         this.Sprite = Resources.Load<Sprite>("Sprites/Weapons/" + slug);
     }
 
